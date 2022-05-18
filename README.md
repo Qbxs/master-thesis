@@ -1,1 +1,1 @@
-# master-thesis
+# Master Thesis about implementing type classes in dualsub
