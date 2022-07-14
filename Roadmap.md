@@ -30,6 +30,7 @@ instance Show (Nat /\ Bool)
 ## 3 Implement instance chains?
 
 Implement [instance chains](https://web.cecs.pdx.edu/~mpj/pubs/instancechains.pdf) to allow control over constraint resolver and avoid *overlapping instances*.
+This might be helpful to resolve the correct instance definition for ambiguous occurences.
 
 ## 4 Implement Multi-Param type classes?
 
