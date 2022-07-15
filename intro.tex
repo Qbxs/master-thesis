@@ -5,7 +5,17 @@
 \chapter{Introduction}\label{ch:intro}
 
 
-In many programming languages type classes are a powerful tool to generalize functions over different data types.
+In many functional programming languages such as Haskel, type classes are a powerful tool to generalize functions over different data types.
+This allows us e.g. to use the \mintinline{Haskell}|+| operator both on \mintinline{Haskell}|Int| and \mintinline{Haskell}|Float| types.
 Another approach to overloading functions is subtyping, i.e. if a value of a certain type is expected we can also supply a value of a more specific type that is subsumed by the general type.
+For example, since the type of natural numbers \mintinline{text}|Nat| is a subtype of the integers \mintinline{text}|Int|, we can supply a value of type \mintinline{text}|Nat| for any function that expects an \mintinline{text}|Int|.
 
-Although these approaches do not serve the same purpose it is uncommon to find both concepts in the same language.
+Although these approaches do not serve exactly the same purpose it is uncommon to find both concepts in the same language.
+In this work, I am going to show how it is possible to implement type classes in a language that supports subtyping.
+There are unique challenges when bringing both together because instances for certain types are going to be ambiguous.
+
+The Haskell type \mintinline{Haskell}|Either a b| roughly corresponds to the lattice type \mintinline{text}|a \/ b|.
+Given a type class \mintinline{Haskell}|C :: * -> *| and instances \mintinline{Haskell}|C a| and \mintinline{Haskell}|C b| the instance \mintinline{Haskell}|C (Either a b)| has to be defined by hand which can be easily done by pattern-matching and using the given instances.
+However, instances for lattice types are neither explicit nor straightforward:
+Since \mintinline{text}|a \/ b| does not have a uniquely-determined(?) constructor we might just implicitly derive \mintinline{text}|C (a \/ b)| from the given instances.
+However, this would make instances undecidable if we later on decide to implement an explicit instance of \mintinline{text}|C (a \/ b)|.

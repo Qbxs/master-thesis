@@ -14,6 +14,9 @@
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption}
 \usepackage[utf8]{inputenc}
 \usepackage[toc,page]{appendix}
+\usepackage{minted}
+
+
 
 \textwidth 14cm
 \textheight 22cm
@@ -27,6 +30,9 @@
 \pagestyle{headings}
 
 \sloppy
+
+% not working as intended
+% \newcommand{\textHaskell}{1}{\mint{Haskell}|$1|}
 
 \begin{document}
 
@@ -200,10 +206,7 @@ Write here your acknowledgements.
 \addcontentsline{toc}{chapter}{Bibliography}
 
 \bibliographystyle{alpha}
-\bibliography{mylit}
-%% Obige Anweisung legt fest, dass BibTeX-Datei `mylit.bib' verwendet
-%% wird. Hier koennen mehrere Dateinamen mit Kommata getrennt aufgelistet
-%% werden.
+\bibliography{literature}
 
 \cleardoublepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
