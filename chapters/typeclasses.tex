@@ -1,0 +1,55 @@
+\chapter{Type Classes}\label{ch:typeclasses}
+
+In order to generalize functions over data types there have been several proposals to abstract over types in different programming languages:
+Amongst others,
+\begin{itemize}
+\item Parametric polymorphism: we can define functions without knowing the concrete representation of the arguments and result types (e.g. \texttt{id : a -> a}) % cite something
+\item ad-hoc polymorphism: in some mostly imperative languages it is possible to simply overload functions (e.g. we may define \texttt{+} both on integers and on float values, the correct implementation is then picked based on the argument type) % cite...
+\item and type classes. Combining both approaches (making ad-polymorphism less ad-hoc) we can define classes and corresponding functions and then use them to constrain valid argument types when defining a function that relies on these type class functions \cite{wadlerblott}
+\end{itemize}
+
+\section{Type Classes}
+% overloading vs type classes
+% paper by wadler
+
+If our type system doesn't allow for ad-hoc polymorphism it may seem neccessary to write verbose code for basic function with respect to every concrete type it should be used for.
+An intuitive example for this (that is also the motivation for type classes in the original proposal) are arithmetic operators.
+We simply cannot define \texttt{(+) : Int -> Int -> Int} and then also \texttt{(+) : Float -> Float -> Float} in a different implementation, on which both types definetly rely on under the hood.
+But these types have nonetheless something in common. Namely that they both stand for \emph{numerical} values, that hence support the usual arithmetic operations, like addition, multiplication, division and so on.
+
+The idea of type classes is to generalise attributes of types with appropriate function.
+The class \mintinline{Haskell}|Num| in Haskell expects that we can implement a number of numerical functions for a type $\tau$ if it is ought to be a member of the \mintinline{Haskell}|Num| type class.
+
+Shortened definition of the \mintinline{Haskell}|Num| type class in Haskell.
+% \footnote[1]{As can be found in the default \texttt{Prelude}: \url{https://hackage.haskell.org/package/base-4.16.2.0/docs/Prelude.html#t:Num}}
+
+\begin{minted}{Haskell}
+class  Num a  where
+    (+), (-), (*)       :: a -> a -> a
+\end{minted}
+
+An instance would look like:
+
+\begin{minted}{Haskell}
+instance  Num Int  where
+    (+) = intAdd
+    (-) = intMinus
+    (*) = intMul
+\end{minted}
+
+
+
+
+
+% later:
+
+In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs.
+
+\cite{wadlerblott}
+
+\section{The problem of type class coherence}
+% for each type there t may be globally at most one instance C t defined
+% can already be tricky in a modular system
+% more challenging with subtyping
+
+Uniqueness or non-ambiguity of type classes.
