@@ -1,0 +1,37 @@
+\chapter{Type Inference} \label{ch:inference}
+
+Type checking of instance declarations:
+
+\begin{mathpar}
+  \inferrule{\mathcal{D}}{}
+\end{mathpar}
+
+\begin{lstlisting}
+  instance Foo Bar { ... }
+\end{lstlisting}
+
+  \begin{minted}[escapeinside=??]{text}
+    instance ?$\tau$? C {
+       Method?$_1$?(?$x_1,...,x_n,k_1,...,k_n$?) => cmd
+    };
+  \end{minted}
+
+Type checking of type class method calls:
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\mathcal{D}$}
+    \alwaysSingleLine
+    \UnaryInfC{$x:\sigma \to \tau \to \sigma, y: \tau\vdash \lambda z.xz(yz) : \sigma \to \sigma$}
+      \introd
+    \UnaryInfC{$x:\sigma \to \tau \to \sigma\vdash \lambda yz.xz(yz) : \tau \to \sigma \to \sigma$}
+      \introd
+    \UnaryInfC{$\vdash \lambda xyz.xz(yz) : (\sigma \to \tau \to \sigma) \to (\tau \to \sigma \to \sigma)$}
+    \AxiomC{$x:\sigma,y:\tau\vdash x : \sigma$}
+      \introd
+    \UnaryInfC{$x:\sigma\vdash \lambda y.x : \tau \to \sigma$}
+      \introd
+    \UnaryInfC{$\vdash \lambda xy.x : \sigma \to \tau \to \sigma$}
+      \elim
+    \BinaryInfC{$\vdash (\lambda xyz.xz(yz)) (\lambda xy.x) : \tau \to \sigma \to \sigma$}
+  \end{prooftree}

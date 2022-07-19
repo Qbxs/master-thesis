@@ -14,9 +14,39 @@
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption}
 \usepackage[utf8]{inputenc}
 \usepackage[toc,page]{appendix}
+
+\usepackage[hyphens]{url} % 'hyphens' option allows line breaks after "-" characters
+\usepackage[colorlinks,urlcolors=blue]{hyperref} % optional
+
+\usepackage{listings}
+% basic duo style
+\lstdefinestyle{duoStyle}{%
+    morekeywords={instance, class, >>, CBV, CBN, +, -, =>, case, of, cocase, mu, def, prd, cns, cmd, :=},
+    keywordstyle=\ttfamily\bfseries\color{blue!80!black},
+    %numbers=none, % do not uncomment! issues when used inside arrays!
+    mathescape=true
+    %moredelim=**[is][\bfseries]{|}{|}
+}
+\lstset{style=duoStyle}
+
 \usepackage{minted}
 
 
+\usepackage{bussproofs}
+\EnableBpAbbreviations
+\def\ScoreOverhang{0pt}
+\def\buildNoScoreTight{% Make an hbox with no score
+ \global\setbox\myBoxD=\hbox{\vbox{\vskip0pt}}% 0pt instead of 1pt
+}
+\def\noLine{% noLine with less space between lines
+ \gdef\buildScore{\buildNoScoreTight}%
+ \ignorespaces%
+}
+
+\newcommand{\elim}{\RightLabel{($\to$E)}}
+\newcommand{\introd}{\RightLabel{($\to$I)}}
+
+\usepackage{mathpartir}
 
 \textwidth 14cm
 \textheight 22cm
@@ -46,7 +76,7 @@
   {\large Mathematisch-Naturwissenschaftliche Fakult\"at \\
 Wilhelm-Schickard-Institut f\"ur Informatik\\[4cm]}
   {\huge Master Thesis Informatics\\[2cm]}
-  {\Large\bf  Title of thesis\\[1.5cm]}
+  {\Large\bf  Type Class Coherence with Subtyping\\[1.5cm]}
  {\large Pascal Engel}\\[0.5cm]
 Datum\\[4cm]
 {\small\bf Reviewers}\\[0.5cm]
@@ -170,23 +200,27 @@ Write here your acknowledgements.
 \setcounter{page}{1}
 
 %% Introduction
-\input{intro}
+\input{chapters/intro}
 \cleardoublepage
 
 %% 
-\input{typeclasses}
+\input{chapters/typeclasses}
 \cleardoublepage
 
 %% 
-\input{subtyping}
+\input{chapters/subtyping}
 \cleardoublepage
 
 %%
-\input{results}
+\input{chapters/typeinference}
 \cleardoublepage
 
 %%
-\input{discussion}
+\input{chapters/results}
+\cleardoublepage
+
+%%
+\input{chapters/discussion}
 \cleardoublepage
 
 
