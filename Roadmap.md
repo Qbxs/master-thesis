@@ -3,10 +3,14 @@
 ## 1 Minimum Viable Product
 
   - Syntax for `class` and `instance` declarations
-  - Implement constraint solver
+  - Implement basic constraint solver
   - Implement evaluation
 
-## 2 Resolving Constraints with Subtyping
+## 2 Considerations for Type Class Coherence
+
+For any type T there may be at most one instance so that (Class T) can be derived.
+
+## 3 Resolving Constraints with Subtyping
 
 Given
 
@@ -27,12 +31,13 @@ and\or:
 instance Show (Nat /\ Bool)
 ~~~
 
-## 3 Implement instance chains?
+## 4 Implement instance chains?
 
+A possible solution to make class coherence explicit.
 Implement [instance chains](https://web.cecs.pdx.edu/~mpj/pubs/instancechains.pdf) to allow control over constraint resolver and avoid *overlapping instances*.
 This might be helpful to resolve the correct instance definition for ambiguous occurences.
 
-## 4 Implement Multi-Param type classes?
+## 5 Implement Multi-Param type classes?
 
 Multi-parameter type classes can be used to express relations, e.g.:
 
@@ -40,3 +45,30 @@ Multi-parameter type classes can be used to express relations, e.g.:
 class Elem e l where
   elem :: e -> l -> Bool
 ~~~
+
+Because duality restricts the occurence of a type to be either covariant or contravariant, it may be neccessary for certain type classes to be multi-parameter type classes.
+E.g. we cannot write:
+
+~~~
+class Semigroup(+a : CBV) {
+  Append(a,a,return a)
+};
+~~~
+
+but instead need to write something like:
+
+~~~
+class Semigroup(+a : CBV, -b : CBN) {
+  Append(a,a,return b)
+};
+~~~
+
+with according instances like:
+
+~~~
+instance Semigroup Nat Nat {
+  Append(n,m,k) => n+m >> k
+};
+~~~
+
+Also consider [functional dependencies](https://web.cecs.pdx.edu/~mpj/pubs/fundeps-esop2000.pdf)
