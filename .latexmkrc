@@ -4,6 +4,7 @@
 #add -synctex=1 option to pdflatex
 push @extra_pdflatex_options, '-synctex=1' ;
 push @extra_pdflatex_options, '-interaction=nonstopmode' ;
+push @extra_pdflatex_options, '-shell-escape' ;
 
 #generate pdf instead of dvi
 $pdf_mode=1;
