@@ -8,7 +8,7 @@ Amongst others,
 \item and type classes. Combining both approaches (making ad-polymorphism less ad-hoc) we can define classes and corresponding functions and then use them to constrain valid argument types when defining a function that relies on these type class functions \cite{wadlerblott}
 \end{itemize}
 
-\section{Type Classes}
+\section{Type Classes}\label{sec:typeclasses}
 % overloading vs type classes
 % paper by wadler
 
@@ -21,7 +21,7 @@ The idea of type classes is to generalise attributes of types with appropriate f
 The class \mintinline{Haskell}|Num| in Haskell expects that we can implement a number of numerical functions for a type $\tau$ if it is ought to be a member of the \mintinline{Haskell}|Num| type class.
 
 Shortened definition of the \mintinline{Haskell}|Num| type class in Haskell.
-% \footnote[1]{As can be found in the default \texttt{Prelude}: \url{https://hackage.haskell.org/package/base-4.16.2.0/docs/Prelude.html#t:Num}}
+\footnote{As can be found in the default \texttt{Prelude}: \url{https://hackage.haskell.org/package/base-4.16.2.0/docs/Prelude.html}}
 
 \begin{minted}{Haskell}
 class  Num a  where
@@ -42,12 +42,15 @@ instance  Num Int  where
 
 
 % later:
+% category theory: functors, monoids, monads, etc.
 
 In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs.
 
 \cite{wadlerblott}
 
-\section{The problem of type class coherence}
+\section{Multi parameter type classes}\label{sec:multiparam}
+
+\section{The problem of type class coherence}\label{sec:coherence}
 % for each type there t may be globally at most one instance C t defined
 % can already be tricky in a modular system
 % more challenging with subtyping
