@@ -25,11 +25,17 @@ do we have:
 instance Show (Bool \/ Nat)
 ~~~
 
-and\or:
+Even though this could work for `Show`. How would we derive `instance Ord (Bool \/ Nat)`? It is impossible to define `Equals(x : Bool, y : Nat)` generally.
+If I know how to compare booleans which each other and natural numbers with each other, I cannot derive knowledge on how to compare booleans with natural numbers.
+
+What about:
 
 ~~~
 instance Show (Nat /\ Bool)
 ~~~
+
+When the meet is empty (neither `a < b`, nor `b < a`), this instance is trivial and would be equivalent to `instance Show Bot` which we could argue is a trivial instance for every type class.
+Otherwise, if `a < b` or `b < a` then only one instance may be defined in order to guarantee class coherence, so the problem may not arise.
 
 ## 4 Implement instance chains?
 
