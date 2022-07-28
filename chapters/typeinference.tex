@@ -35,3 +35,18 @@ Type checking of type class method calls:
       \elim
     \BinaryInfC{$\vdash (\lambda xyz.xz(yz)) (\lambda xy.x) : \tau \to \sigma \to \sigma$}
   \end{prooftree}
+
+  % Main thesis for class coherence with subtyping
+  Given \texttt{instance C a} and $sub < a$ and $a < sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
+
+  Could we just use the most specific instance? This might have unexpected results.
+  E.g. if we have \texttt{NonEmptyList < List}, we may not know during compilation whether \texttt{NonEmptyList} or \texttt{List} is being picked.
+  ~Generally to infer the mose specific type seems very hard. In this example filtering a \texttt{NonEmptyList} may or may not return an empty list and we may just have to assume that it is possibly empty.
+  This may lead to hard to track behaviour when using overlapping instances.
+
+  We should always check in an instance declaration whether this constraint globally holds. \\
+  To guarantee modularity we also have to check this for module imports (possibly hiding instances).
+
+  Discuss instance chains:
+  We can relax this constraint by defining an explicit order in which instances should be picked/resolved.
+  \cite{morris2010instance}

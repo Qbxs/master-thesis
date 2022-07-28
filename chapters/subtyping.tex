@@ -1,4 +1,14 @@
 
 \chapter{Subtyping}\label{ch:subtyping}
 
-\section{}
+\section{Motivation}\label{sec:subtypemotivation}
+
+In many cases the specific semantics of types exhibit a hierarchy.
+In Object-oriented programming this hierarchy is given in the form of sub- and superclasses.
+We can express the relationship between super- and subclasses, or more generally super- and subtypes,
+in the form that all properties of the superclass is also exhibited in the subclass. \cite{subtyping}
+
+In the case of OO-languages this means that, if the class \texttt{SubC} is a subclass of \texttt{SuperC},
+than any method defined in \texttt{SuperC} is also going to be defined for objects of \texttt{SubC}.
+This enables us to use an object \texttt{SubC} wherever a \texttt{SuperC} is expected.
+
