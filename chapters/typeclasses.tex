@@ -65,10 +65,10 @@ In Haskell
 
 
 \begin{tikzcd}
-    &  & \mintinline{Haskell}|Ord (Maybe a)| \arrow[llddd, "\footnotesize\mintinline{Haskell}|class Eq a => Ord a|"'] \arrow[rrddd, "\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|"] &  &                            \\
+    &  & \mintinline{Haskell}|Ord (Maybe a)| \arrow[llddd, "{\footnotesize\mintinline{Haskell}|class Eq a => Ord a|}"'] \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|}"] &  &                            \\
     &  &                                &  &                            \\
     &  &                                &  &                            \\
-    \mintinline{Haskell}|Eq (Maybe a)| \arrow[rrddd, "\footnotesize\mintinline{Haskell}|instance Eq a => Eq (Maybe a)|"'] &  &                                &  & \mintinline{Haskell}|Ord a| \arrow[llddd, "\footnotesize \mintinline{Haskell}|class Eq a => Ord a|"] \\
+    \mintinline{Haskell}|Eq (Maybe a)| \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Eq a => Eq (Maybe a)|}"'] &  &                                &  & \mintinline{Haskell}|Ord a| \arrow[llddd, "{\footnotesize \mintinline{Haskell}|class Eq a => Ord a|}"] \\
     &  &                                &  &                            \\
     &  &                                &  &                            \\
     &  & \mintinline{Haskell}|Eq a|                  &  &                           

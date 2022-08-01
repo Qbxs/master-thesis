@@ -39,9 +39,21 @@ Type checking of type class method calls:
   % Main thesis for class coherence with subtyping
   Given \texttt{instance C a} and $sub < a$ and $a < sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
 
+  Consider we have \texttt{Nat :< Int}.
+  We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
+  For integers on the other hand, we might prefer to choose addition as operator and 0 as neutral element, so we can expand to monoid to a group.
+
+  Building programs on top of these instances is going to get tedious as it will often occur that the more specific \texttt{Nat} type will be inferred,
+  even if only want to deal with integers.
+  Using the append operator exposed by the Monoid typeclass, therefore may lead to unexpected behavior.
+  % Note for a good example, we need a good notion of type inference for this case, which is currently not implemented.
+
+  In the simple arithmetic expression $(a \oplus b) \oplus c$ $\oplus$ can have two different meanings based on the inferred types of $a,b$ and $c$.
+  Since type inferrence with subtyping is generally not quite obvious it may seem 
+
   Could we just use the most specific instance? This might have unexpected results.
   E.g. if we have \texttt{NonEmptyList < List}, we may not know during compilation whether \texttt{NonEmptyList} or \texttt{List} is being picked.
-  ~Generally to infer the mose specific type seems very hard. In this example filtering a \texttt{NonEmptyList} may or may not return an empty list and we may just have to assume that it is possibly empty.
+  ~Generally to infer the most specific type seems very hard. In this example filtering a \texttt{NonEmptyList} may or may not return an empty list and we may just have to assume that it is possibly empty.
   This may lead to hard to track behaviour when using overlapping instances.
 
   We should always check in an instance declaration whether this constraint globally holds. \\
