@@ -9,6 +9,14 @@ We can express the relationship between super- and subclasses, or more generally
 in the form that all properties of the superclass is also exhibited in the subclass. \cite{subtyping}
 
 In the case of OO-languages this means that, if the class \texttt{SubC} is a subclass of \texttt{SuperC},
-than any method defined in \texttt{SuperC} is also going to be defined for objects of \texttt{SubC}.
+then any method defined in \texttt{SuperC} is also going to be defined for objects of \texttt{SubC}.
 This enables us to use an object \texttt{SubC} wherever a \texttt{SuperC} is expected.
 
+We denote $T \leq S$ for $T$ is a subtype of $S$.
+Syntactically, this implies that if we have obatined the judgement $e : T$, we also have $e : S$.
+Therefore, we can use $e$ in any context that expects the usage of a term of type $S$.
+Semantically, the subtyping relation can be understood analogously to sets in terms of the subset relationship $\subseteq$,
+meaning all terms $e$ of type $T$ are also of type $S$.
+\cite{reynolds_1998}
+
+This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype.
