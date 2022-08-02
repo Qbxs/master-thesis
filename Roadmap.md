@@ -63,7 +63,9 @@ class Semigroup(+a : CBV) {
 };
 ~~~
 
-but instead need to write something like:
+since `a` occurs both covariantly and contravariantly.
+
+Instead we need to write something like:
 
 ~~~
 class Semigroup(+a : CBV, -b : CBN) {
