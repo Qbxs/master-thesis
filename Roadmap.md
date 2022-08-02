@@ -8,7 +8,9 @@
 
 ## 2 Considerations for Type Class Coherence
 
-For any type T there may be at most one instance so that (Class T) can be derived.
+For any type `T` and type class `C` there may be at most one instance so that `(C T)` can be derived.
+Therefore, if `T :< S`, then `instance C T` and `instance C S` cannot be defined in the same environment.
+Resolving instances if it was would be problematic (TODO: give examples where consistency might fail).
 
 ## 3 Resolving Constraints with Subtyping
 
@@ -73,7 +75,7 @@ with according instances like:
 
 ~~~
 instance Semigroup Nat Nat {
-  Append(n,m,k) => n+m >> k
+  Append(n,m,k) => n*m >> k
 };
 ~~~
 
