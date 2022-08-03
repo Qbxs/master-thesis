@@ -36,7 +36,7 @@ What about:
 instance Show (Nat /\ Bool)
 ~~~
 
-When the meet is empty (neither `a < b`, nor `b < a`), this instance is trivial and would be equivalent to `instance Show Bot` which we could argue is a trivial instance for every type class.
+Generally, when the meet is empty (neither `a :< b`, nor `b :< a` as in the case of `Nat /\ Bool`), this instance is trivial and would be equivalent to `instance Show Bot` which we could argue is a trivial instance for every type class.
 Otherwise, if `a < b` or `b < a` then only one instance may be defined in order to guarantee class coherence, so the problem may not arise.
 
 ## 4 Implement instance chains?
@@ -82,3 +82,10 @@ instance Semigroup Nat Nat {
 ~~~
 
 Also consider [functional dependencies](https://web.cecs.pdx.edu/~mpj/pubs/fundeps-esop2000.pdf)
+
+# TODOs
+
+- Formalize and reduce syntax
+- foundations: data/codata, polarity, continuations, polymorphism, subtyping, typeclass (coherence)
+- main part: type inference, dictionary passing, problematic examples for type class coherence
+- discussion: instance chains, multi param classes (for mixed variance), modularity, further work
