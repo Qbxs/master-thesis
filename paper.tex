@@ -8,6 +8,8 @@
 
 \documentclass[twoside,12pt,a4paper]{report}
 %\usepackage{reportpage}
+\usepackage{amsmath}
+\usepackage{scalerel}
 \usepackage{epsf}
 \usepackage{graphics, graphicx}
 \usepackage{latexsym}
@@ -49,8 +51,17 @@
  \ignorespaces%
 }
 
+% Inference rules
+\newcommand{\subRule}{\RightLabel{\textsc{Sub}}}
+\newcommand{\instanceDeclRule}{\RightLabel{\textsc{Decl}}}
 \newcommand{\elim}{\RightLabel{($\to$E)}}
 \newcommand{\introd}{\RightLabel{($\to$I)}}
+
+\newcommand{\ctx}{\ensuremath{\Gamma \; \vdash \;}}
+
+% Meets and Joins
+\newcommand\join{\scalerel*{\bigwedge}{i}}
+\newcommand\meet{\scalerel*{\bigvee}{i}}
 
 \usepackage{mathpartir}
 

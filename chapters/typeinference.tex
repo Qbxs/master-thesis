@@ -16,24 +16,53 @@ Type checking of instance declarations:
     };
   \end{minted}
 
+
+\section{Syntax}
+% single param type classes
+
+
+\begin{flalign*}
+  \tau := & \; \texttt{Nat} \; | \; \texttt{Int} \; | \; \dots                         & \textit{Simple types} \\
+          & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau & \textit{Lattice types} \\
+  \Phi := & \; \texttt{Read} \; | \; \texttt{Eq} \; | \; \texttt{Show} \; | \; \dots  & \textit{Type classes}
+\end{flalign*}
+
 Type checking of type class method calls:
 
   \begin{prooftree}
     \alwaysNoLine
-    \AxiomC{$\mathcal{D}$}
+    \AxiomC{$\ctx \Phi(\sigma)$}
+    \AxiomC{$\ctx \tau :< \sigma$}
     \alwaysSingleLine
-    \UnaryInfC{$x:\sigma \to \tau \to \sigma, y: \tau\vdash \lambda z.xz(yz) : \sigma \to \sigma$}
-      \introd
-    \UnaryInfC{$x:\sigma \to \tau \to \sigma\vdash \lambda yz.xz(yz) : \tau \to \sigma \to \sigma$}
-      \introd
-    \UnaryInfC{$\vdash \lambda xyz.xz(yz) : (\sigma \to \tau \to \sigma) \to (\tau \to \sigma \to \sigma)$}
-    \AxiomC{$x:\sigma,y:\tau\vdash x : \sigma$}
-      \introd
-    \UnaryInfC{$x:\sigma\vdash \lambda y.x : \tau \to \sigma$}
-      \introd
-    \UnaryInfC{$\vdash \lambda xy.x : \sigma \to \tau \to \sigma$}
-      \elim
-    \BinaryInfC{$\vdash (\lambda xyz.xz(yz)) (\lambda xy.x) : \tau \to \sigma \to \sigma$}
+    \subRule
+    \BinaryInfC{$\ctx \Phi(\tau)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\sigma)$}
+    \AxiomC{$\ctx \Phi(\tau)$}
+    \alwaysSingleLine
+    \subRule
+    \BinaryInfC{$\ctx \Phi(\tau\join\sigma)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\sigma)$}
+    \AxiomC{$\ctx \Phi(\tau)$}
+    \alwaysSingleLine
+    \subRule
+    \BinaryInfC{$\ctx \Phi(\tau\meet\sigma)$}
+  \end{prooftree}
+
+  % should this be a rule?
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{\texttt{instance }$\Phi(\tau)$}
+    \alwaysSingleLine
+    \instanceDeclRule
+    \UnaryInfC{$\Gamma, \Phi(\tau) \vdash$}
   \end{prooftree}
 
   % Main thesis for class coherence with subtyping
