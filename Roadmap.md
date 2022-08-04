@@ -8,7 +8,9 @@
 
 ## 2 Considerations for Type Class Coherence
 
-For any type T there may be at most one instance so that (Class T) can be derived.
+For any type `T` and type class `C` there may be at most one instance so that `(C T)` can be derived.
+Therefore, if `T :< S`, then `instance C T` and `instance C S` cannot be defined in the same environment.
+Resolving instances if it was would be problematic (TODO: give examples where consistency might fail).
 
 ## 3 Resolving Constraints with Subtyping
 
@@ -34,7 +36,7 @@ What about:
 instance Show (Nat /\ Bool)
 ~~~
 
-When the meet is empty (neither `a < b`, nor `b < a`), this instance is trivial and would be equivalent to `instance Show Bot` which we could argue is a trivial instance for every type class.
+Generally, when the meet is empty (neither `a :< b`, nor `b :< a` as in the case of `Nat /\ Bool`), this instance is trivial and would be equivalent to `instance Show Bot` which we could argue is a trivial instance for every type class.
 Otherwise, if `a < b` or `b < a` then only one instance may be defined in order to guarantee class coherence, so the problem may not arise.
 
 ## 4 Implement instance chains?
@@ -61,7 +63,9 @@ class Semigroup(+a : CBV) {
 };
 ~~~
 
-but instead need to write something like:
+since `a` occurs both covariantly and contravariantly.
+
+Instead we need to write something like:
 
 ~~~
 class Semigroup(+a : CBV, -b : CBN) {
@@ -73,8 +77,15 @@ with according instances like:
 
 ~~~
 instance Semigroup Nat Nat {
-  Append(n,m,k) => n+m >> k
+  Append(n,m,k) => n*m >> k
 };
 ~~~
 
 Also consider [functional dependencies](https://web.cecs.pdx.edu/~mpj/pubs/fundeps-esop2000.pdf)
+
+# TODOs
+
+- Formalize and reduce syntax
+- foundations: data/codata, polarity, continuations, polymorphism, subtyping, typeclass (coherence)
+- main part: type inference, dictionary passing, problematic examples for type class coherence
+- discussion: instance chains, multi param classes (for mixed variance), modularity, further work
