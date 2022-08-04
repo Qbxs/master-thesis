@@ -40,7 +40,7 @@ Deriving instances:
   \begin{prooftree}
     \alwaysNoLine
     \AxiomC{$\ctx \Phi^+(\sigma)$}
-    \AxiomC{$\ctx \tau :< \sigma$}
+    \AxiomC{$\tau :< \sigma$}
     \alwaysSingleLine
     \subPosRule
     \BinaryInfC{$\ctx \Phi^+(\tau)$}
@@ -49,7 +49,7 @@ Deriving instances:
   \begin{prooftree}
     \alwaysNoLine
     \AxiomC{$\ctx \Phi^-(\sigma)$}
-    \AxiomC{$\ctx \sigma :< \tau$}
+    \AxiomC{$\sigma :< \tau$}
     \alwaysSingleLine
     \subNegRule
     \BinaryInfC{$\ctx \Phi^-(\tau)$}
@@ -88,6 +88,22 @@ Deriving instances:
     \UnaryInfC{$\Gamma, \Phi^-(\tau) \vdash \Phi^-(\tau)$}
   \end{prooftree}
 
+  This seems trivial again:
+
+  \begin{prooftree}
+    \AxiomC{}
+    \botRule
+    \UnaryInfC{$\Gamma \vdash \Phi^+(\bot)$}
+  \end{prooftree}
+
+  This seems very questionable (but does not entail obviously wrong things with \textsc{Sub}$^-$):
+
+  \begin{prooftree}
+    \AxiomC{}
+    \topRule
+    \UnaryInfC{$\Gamma \vdash \Phi^-(\top)$}
+  \end{prooftree}
+
   Probably should not be a rule:
   \begin{prooftree}
     \alwaysNoLine
@@ -96,6 +112,8 @@ Deriving instances:
     \instanceDeclRule
     \UnaryInfC{$\Phi(\tau) \vdash$}
   \end{prooftree}
+
+\section{Misc}
 
   % Main thesis for class coherence with subtyping
   Given \texttt{instance C a} and $sub < a$ and $a < sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
