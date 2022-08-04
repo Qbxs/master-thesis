@@ -52,16 +52,19 @@
 }
 
 % Inference rules
-\newcommand{\subRule}{\RightLabel{\textsc{Sub}}}
+\newcommand{\subPosRule}{\RightLabel{\textsc{Sub}$^+$}}
+\newcommand{\subNegRule}{\RightLabel{\textsc{Sub}$^-$}}
 \newcommand{\instanceDeclRule}{\RightLabel{\textsc{Decl}}}
-\newcommand{\elim}{\RightLabel{($\to$E)}}
-\newcommand{\introd}{\RightLabel{($\to$I)}}
+\newcommand{\meetRule}{\RightLabel{\textsc{Meet}}}
+\newcommand{\joinRule}{\RightLabel{\textsc{Join}}}
+\newcommand{\axiomPos}{\RightLabel{\textsc{Axiom}$^+$}}
+\newcommand{\axiomNeg}{\RightLabel{\textsc{Axiom}$^-$}}
 
 \newcommand{\ctx}{\ensuremath{\Gamma \; \vdash \;}}
 
 % Meets and Joins
-\newcommand\join{\scalerel*{\bigwedge}{i}}
-\newcommand\meet{\scalerel*{\bigvee}{i}}
+\newcommand\join{\scalerel*{\bigvee}{i}}
+\newcommand\meet{\scalerel*{\bigwedge}{i}}
 
 \usepackage{mathpartir}
 

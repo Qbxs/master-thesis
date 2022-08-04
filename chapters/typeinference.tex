@@ -27,42 +27,74 @@ Type checking of instance declarations:
   \Phi := & \; \texttt{Read} \; | \; \texttt{Eq} \; | \; \texttt{Show} \; | \; \dots  & \textit{Type classes}
 \end{flalign*}
 
-Type checking of type class method calls:
+Notation:
+\begin{itemize}
+  \item $\Gamma$: Context of known instances.
+  \item $\Phi^+$: Covariant type class $\Phi$
+  \item $\Phi^-$: Contravariant type class $\Phi$
+  \item Rules annotated with * constrain the argument types to be equal, e.g. if we can infer $\texttt{Eq}(\tau\join\sigma)$, both arguments of the class method \texttt{Eq} have to be either of type $\tau$ or $\sigma$. 
+\end{itemize}
+
+Deriving instances:
 
   \begin{prooftree}
     \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\sigma)$}
+    \AxiomC{$\ctx \Phi^+(\sigma)$}
     \AxiomC{$\ctx \tau :< \sigma$}
     \alwaysSingleLine
-    \subRule
-    \BinaryInfC{$\ctx \Phi(\tau)$}
+    \subPosRule
+    \BinaryInfC{$\ctx \Phi^+(\tau)$}
   \end{prooftree}
 
   \begin{prooftree}
     \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\sigma)$}
-    \AxiomC{$\ctx \Phi(\tau)$}
+    \AxiomC{$\ctx \Phi^-(\sigma)$}
+    \AxiomC{$\ctx \sigma :< \tau$}
     \alwaysSingleLine
-    \subRule
-    \BinaryInfC{$\ctx \Phi(\tau\join\sigma)$}
+    \subNegRule
+    \BinaryInfC{$\ctx \Phi^-(\tau)$}
+  \end{prooftree}
+
+  Unclear yet, how this behaves for co-/contravariant type classes. Definetly problematic for \texttt{Eq}.
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi^-(\sigma)$}
+    \AxiomC{$\ctx \Phi^-(\tau)$}
+    \alwaysSingleLine
+    \joinRule
+    \BinaryInfC{$\ctx \Phi^-(\tau\join\sigma)$}
+  \end{prooftree}
+
+  This seems trivial, because we already have \textsc{Sub}...
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi^+(\sigma)$}
+    \AxiomC{$\ctx \Phi^+(\tau)$}
+    \alwaysSingleLine
+    \meetRule
+    \BinaryInfC{$\ctx \Phi^+(\tau\meet\sigma)$}
+  \end{prooftree}
+
+  Axioms:
+  \begin{prooftree}
+    \AxiomC{}
+    \axiomPos
+    \UnaryInfC{$\Gamma, \Phi^+(\tau) \vdash \Phi^+(\tau)$}
   \end{prooftree}
 
   \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\sigma)$}
-    \AxiomC{$\ctx \Phi(\tau)$}
-    \alwaysSingleLine
-    \subRule
-    \BinaryInfC{$\ctx \Phi(\tau\meet\sigma)$}
+    \AxiomC{}
+    \axiomNeg
+    \UnaryInfC{$\Gamma, \Phi^-(\tau) \vdash \Phi^-(\tau)$}
   \end{prooftree}
 
-  % should this be a rule?
+  Probably should not be a rule:
   \begin{prooftree}
     \alwaysNoLine
     \AxiomC{\texttt{instance }$\Phi(\tau)$}
     \alwaysSingleLine
     \instanceDeclRule
-    \UnaryInfC{$\Gamma, \Phi(\tau) \vdash$}
+    \UnaryInfC{$\Phi(\tau) \vdash$}
   \end{prooftree}
 
   % Main thesis for class coherence with subtyping
