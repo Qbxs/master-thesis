@@ -30,6 +30,10 @@ instance Show (Bool \/ Nat)
 Even though this could work for `Show`. How would we derive `instance Ord (Bool \/ Nat)`? It is impossible to define `Equals(x : Bool, y : Nat)` generally.
 If I know how to compare booleans which each other and natural numbers with each other, I cannot derive knowledge on how to compare booleans with natural numbers.
 
+We might constrain the Join rule in one of the following ways:
+- Only allow single argument methods.
+- Check whether the argument types are equal. But this does not quite seem to be in the spirit of subtyping. There may be ambiguity especially when we consider subtypes of joins.
+
 What about:
 
 ~~~
@@ -37,7 +41,7 @@ instance Show (Nat /\ Bool)
 ~~~
 
 Generally, when the meet is empty (neither `a :< b`, nor `b :< a` as in the case of `Nat /\ Bool`), this instance is trivial and would be equivalent to `instance Show Bot` which we could argue is a trivial instance for every type class.
-Otherwise, if `a < b` or `b < a` then only one instance may be defined in order to guarantee class coherence, so the problem may not arise.
+Otherwise, if `a :< b` or `b :< a` then only one instance may be defined in order to guarantee class coherence, so the problem may not arise.
 
 ## 4 Implement instance chains?
 
@@ -82,6 +86,27 @@ instance Semigroup Nat Nat {
 ~~~
 
 Also consider [functional dependencies](https://web.cecs.pdx.edu/~mpj/pubs/fundeps-esop2000.pdf)
+
+## Given type class coherence, can we join distinct types?
+
+If from `C a` and `C b` we have `C a \/ b` how do we deal with methods that take multiple arguments.
+
+E.g. if we have `Ord Bool` and `Ord Int`, `True < 5` cannot be defined even though an instance `Ord Bool \/ Int` can be resolved.
+
+We also think about using default definitions for such cases. E.g. in `Ord Bool \/ Int` we could derive that every `Bool` is smaller than any `Int`. But since joins are commutative we would have to derive the opposite relation for `Ord Int \/ Bool`, which violates coherence.
+
+We may restrict the arguments of `<` to be the same type, but is this feasible?
+
+Imagine there is some type `c` with `c < Bool \/ Int`. We can also derive an instance `C c`. How do we check now whether the `Bool` or the `Int` instance will be used for a term of type `c`?
+
+### Counterexample
+
+Given `Show {x,y}` and `Show {y,z}` can we resolve `Show {x,y,z}`
+
+## Intensional type analysis vs Dictionary passing
+
+- intensional type analysis: dispatch type at run-time, execute corresponding code depending on type representation
+- dictionary passing: methods get compiled to functions that take an additional argument representing the correct instance declaration
 
 # TODOs
 
