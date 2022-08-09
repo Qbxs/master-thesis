@@ -17,9 +17,13 @@ Type checking of instance declarations:
   \end{minted}
 
 
-\section{Syntax}
+\section{Instance Resolution}
 % single param type classes
 
+With the Curry-Howard isomorphism we can interpret propositions as types and terms as proofs accordingly.
+Extending this notion we can interpret type classes as predicates over types.
+E.g. \texttt{Eq} $\sigma$ would mean that the predicate (or property) of equality holds for type $\sigma$.
+We can provide a proof for this iff we can resolve an instance of \texttt{Eq} $\sigma$ as a witness.
 
 \begin{flalign*}
   \tau := & \; \texttt{Nat} \; | \; \texttt{Int} \; | \; \dots                         & \textit{Simple types} \\
@@ -55,6 +59,8 @@ Deriving instances:
     \BinaryInfC{$\ctx \Phi^-(\tau)$}
   \end{prooftree}
 
+  Admissable rules:
+
   Unclear yet, how this behaves for co-/contravariant type classes. Definetly problematic for \texttt{Eq}.
   \begin{prooftree}
     \alwaysNoLine
@@ -65,7 +71,8 @@ Deriving instances:
     \BinaryInfC{$\ctx \Phi^-(\tau\join\sigma)$}
   \end{prooftree}
 
-  This seems trivial, because we already have \textsc{Sub}...
+  This seems trivial, because we already have \textsc{Sub}.
+  Additionally, given type class coherence the meet would always be $\bot$. So we do not gain anything from this rule.
   \begin{prooftree}
     \alwaysNoLine
     \AxiomC{$\ctx \Phi^+(\sigma)$}
@@ -112,6 +119,47 @@ Deriving instances:
     \instanceDeclRule
     \UnaryInfC{$\Phi(\tau) \vdash$}
   \end{prooftree}
+
+\section{Dictionary Passing}
+
+One typical way of implementing type classes is using \emph{dicitonary passing style}.
+Here, the instances of a type class are carried in a dictionary that has to be passed as an additional argument to method calls.
+For example the term
+
+\begin{minted}{Haskell}
+  show 5
+\end{minted}
+
+would be compiled to
+
+\begin{minted}{Haskell}
+  show showIntDict 5
+\end{minted}
+
+where \mintinline{Haskell}|showIntDict| is a dictionary that provides the relevant defintion of \mintinline{Haskell}{show :: Int -> String} for the instance of \mintinline{Haskell}|Show Int|.
+
+There is a drawback however, in the presence of subtyping it may not always be clear which dictionary is going to be needed for instance resolution.
+Consider the term:
+
+\begin{minted}{text}
+  show (if b then 42 :: Int else "Hello" :: String)
+\end{minted}
+
+The inferred type of this expression should be \mintinline{text}{Int \/ String}.
+What we need here are essentially two dictionaries: One for \mintinline{text}{Int} and one for \mintinline{text}{String}.
+
+\section{Intensional type analysis}
+
+Instead of passing around dictionaries, we can also resolve the relevant instance at runtime dispatching on the term's type.
+In the before mentioned case, the definition of \mintinline{Haskell}{show} could look something like this:
+
+\begin{minted}{Haskell}
+  show t x = case t of
+    Bool -> boolShow x
+    Int -> intShow x
+\end{minted}
+
+In the context of subtyping we would not require type equality but for \mintinline{Haskell}{t} to be a subtype of some type for which an instance is defined.
 
 \section{Misc}
 
