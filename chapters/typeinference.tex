@@ -17,6 +17,113 @@ Type checking of instance declarations:
   \end{minted}
 
 
+\section{Type classes as predicates over types}
+
+Type classes are a way to \emph{qualifiy} types for certain properties.
+E.g. we can say that for a type $\tau$ to fall under the \texttt{Show} type class means that $\tau$ is a showable type.
+This means every term $t : \tau$ has some property $\phi$ that is characteristic for $\Phi$.
+
+Using set-theoretic reasoning, we can motivate rules to reason about type classes by how properties are propagated through various type operators and the subtyping relationship.
+$\Phi(\tau)$ holds iff for every witness of $\tau$ some characteristic predicate $\phi$ of $\Phi$ holds.
+($\Phi$ can stand for a type class, $\phi$ for a class method.)
+
+\begin{definition}
+  A \emph{predicate over types} $\Phi$ is specified by a set of properties $\phi_i$.
+  For a type $\tau$ the application $\Phi(\tau)$ holds if and only if every $phi$ (possibly) mentioning $\tau$ holds.
+\end{definition}
+
+Our syntax looks as follows:
+
+\begin{flalign*}
+  \tau := & \; \texttt{Nat} \; | \; \texttt{Int} \; | \; \dots                         & \textit{Simple types} \\
+          & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau & \textit{Lattice types} \\
+  \Phi := & \; \texttt{Read} \; | \; \texttt{Eq} \; | \; \texttt{Show} \; | \; \dots  & \textit{Type classes} \\
+  \Xi :=  & \; \Phi(\tau) \; | \;  \Xi \Rightarrow \Phi(\tau) & \textit{Constraints}
+\end{flalign*}
+
+Deriving instances from super types. If some property holds for $\sigma$ and $\tau < \sigma$,
+then since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi$ is propagated to $\tau$.
+
+Let context $\Gamma = \{ \Xi_1, \dots, \Xi_n \}$ be a set of constraints (propositions).
+
+If $\Phi$ is a property for both $\sigma$ and $\tau < \sigma$, then it should also be a property $\tau$.
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\sigma)$}
+    \AxiomC{$\tau :< \sigma$}
+    \alwaysSingleLine
+    \RightLabel{\textsc{Sub}}
+    \BinaryInfC{$\ctx \Phi(\tau)$}
+  \end{prooftree}
+
+  If $\Phi$ is a property for both $\tau$ and $\sigma$, then it should also be a property of their union or join $\tau \join \sigma$.
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\sigma)$}
+    \AxiomC{$\ctx \Phi(\tau)$}
+    \alwaysSingleLine
+    \joinRule
+    \BinaryInfC{$\ctx \Phi(\tau\join\sigma)$}
+  \end{prooftree}
+
+  We can also weaken this rule:
+  Since for any $\tau$ and $\sigma$ we have $\tau < \tau \join \sigma$ and $\sigma < \tau \join \sigma$.
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\tau)$}
+    \alwaysSingleLine
+    \joinRule
+    \UnaryInfC{$\ctx \Phi(\tau\join\sigma)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\sigma)$}
+    \alwaysSingleLine
+    \joinRule
+    \UnaryInfC{$\ctx \Phi(\tau\join\sigma)$}
+  \end{prooftree}
+
+  If we know $\Phi$ for both $\tau$ and $\sigma$, the characteristic predicate also holds for all terms that are witnesses of both $\tau$ and $\sigma$, i.e. $\tau\meet\sigma$.
+ 
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi^+(\sigma)$}
+    \AxiomC{$\ctx \Phi^+(\tau)$}
+    \alwaysSingleLine
+    \meetRule
+    \BinaryInfC{$\ctx \Phi^+(\tau\meet\sigma)$}
+  \end{prooftree}
+
+  If $\Phi$ depends on $\Psi$, then for every $\tau$ with $\Phi(\tau)$ we also obtain $\Psi(\tau)$
+
+  \begin{prooftree}
+    \AxiomC{$\ctx \Psi(\tau)$}
+    \AxiomC{$\ctx \Phi(\tau) \Rightarrow \Psi(\tau)$}
+    \RightLabel{\textsc{Impl}}
+    \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
+  \end{prooftree}
+
+  Axioms:
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Axiom}}
+    \UnaryInfC{$\Gamma, \Xi \vdash \Xi$}
+  \end{prooftree}
+
+  Every property holds for all witnesses of $\bot$, so every predicate trivially holds for $\bot$.
+
+  \begin{prooftree}
+    \AxiomC{}
+    \botRule
+    \UnaryInfC{$\Gamma \vdash \Phi(\bot)$}
+  \end{prooftree}
+
+  % TODO mention \Gamma in rules and use definition of predicates
+
 \section{Instance Resolution}
 % single param type classes
 
