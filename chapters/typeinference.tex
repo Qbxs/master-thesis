@@ -29,7 +29,7 @@ $\Phi(\tau)$ holds iff for every witness of $\tau$ some characteristic predicate
 
 \begin{definition}
   A \emph{predicate over types} $\Phi$ is specified by a set of properties $\phi_i$.
-  For a type $\tau$ the application $\Phi(\tau)$ holds if and only if every $phi$ (possibly) mentioning $\tau$ holds.
+  For a type $\tau$ the application $\Phi(\tau)$ holds if and only if $\phi$ holds for every member of $\tau$.
 \end{definition}
 
 Our syntax looks as follows:
@@ -38,7 +38,7 @@ Our syntax looks as follows:
   \tau := & \; \texttt{Nat} \; | \; \texttt{Int} \; | \; \dots                         & \textit{Simple types} \\
           & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau & \textit{Lattice types} \\
   \Phi := & \; \texttt{Read} \; | \; \texttt{Eq} \; | \; \texttt{Show} \; | \; \dots  & \textit{Type classes} \\
-  \Xi :=  & \; \Phi(\tau) \; | \;  \Xi \Rightarrow \Phi(\tau) & \textit{Constraints}
+  \Xi  := & \; \Phi(\tau) \; | \;  \Xi \Rightarrow \Phi(\tau) & \textit{Constraints}
 \end{flalign*}
 
 Deriving instances from super types. If some property holds for $\sigma$ and $\tau < \sigma$,
@@ -91,11 +91,11 @@ If $\Phi$ is a property for both $\sigma$ and $\tau < \sigma$, then it should al
  
   \begin{prooftree}
     \alwaysNoLine
-    \AxiomC{$\ctx \Phi^+(\sigma)$}
-    \AxiomC{$\ctx \Phi^+(\tau)$}
+    \AxiomC{$\ctx \Phi(\sigma)$}
+    \AxiomC{$\ctx \Phi(\tau)$}
     \alwaysSingleLine
     \meetRule
-    \BinaryInfC{$\ctx \Phi^+(\tau\meet\sigma)$}
+    \BinaryInfC{$\ctx \Phi(\tau\meet\sigma)$}
   \end{prooftree}
 
   If $\Phi$ depends on $\Psi$, then for every $\tau$ with $\Phi(\tau)$ we also obtain $\Psi(\tau)$

@@ -61,7 +61,27 @@ The evaluation still strongly depends on implementation details found in specifi
 For example, for the \texttt{Ord} type class we may choose to implement the ordering in ascending or descending order.
 It is therefore crucial, that for each type the corresponding instance - if it exists - is uniquely determined by the type.
 
-In Haskell 
+Reynolds \cite{reynolds_coherence}:
+
+\begin{quote}
+    When a programming language has a sufficiently rich type structure, there can be more than one proof of the same
+    typing judgment; potentially this can lead to semantic ambiguity since the semantics of a typed language is a function
+    of such proofs. When no such ambiguity arises, we say that the language is coherent.
+\end{quote}
+
+In the Haskell98 standard, type class coherence is guaranteed by the syntactical equivalence of resolved instances.
+For each Haskell type there may be at most one instance defined for each type class.
+
+Ambiguous programs should therefore generally be rejected.
+One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this short program which simply reads a string to a data type and then converts it back to string without specifying which data type is being used:
+
+\begin{minted}{Haskell}
+    f :: String -> String
+    f str = let x = read str in show x
+\end{minted}
+
+There may be multiple types that satisfy the type class constraints.
+The specific implementation of \mintinline{Haskell}{show :: forall a. (Show a) => a -> String} and \mintinline{Haskell}{read :: forall a.(Read a) -> String -> a} is therefore unknown.
 
 
 \begin{tikzcd}

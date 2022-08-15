@@ -25,4 +25,6 @@ Consider
 \begin{minted}{text}
     Show(if b then 42 : Nat else "Hello World" : String)
 \end{minted}
-This term appears to be well typed iff instances for \mintinline{text}{Show Nat} and \mintinline{text}{Show String} are resolvable.
+This term of type \mintinline{text}{Nat \/ String} appears to be well typed iff we can resolve the type class instances for \mintinline{text}{Show Nat} and \mintinline{text}{Show String}.
+
+In the following we will explore how type classes interact with these and other lattice types.

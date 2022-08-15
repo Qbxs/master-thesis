@@ -1,23 +1,3 @@
-@article{subtyping,
-  author     = {Liskov, Barbara H. and Wing, Jeannette M.},
-  title      = {A Behavioral Notion of Subtyping},
-  year       = {1994},
-  issue_date = {Nov. 1994},
-  publisher  = {Association for Computing Machinery},
-  address    = {New York, NY, USA},
-  volume     = {16},
-  number     = {6},
-  issn       = {0164-0925},
-  url        = {https://doi.org/10.1145/197320.197383},
-  doi        = {10.1145/197320.197383},
-  abstract   = {The use of hierarchy is an important component of object-oriented design. Hierarchy allows the use of type families, in which higher level supertypes capture the behavior that all of their subtypes have in common. For this methodology to be effective, it is necessary to have a clear understanding of how subtypes and supertypes are related. This paper takes the position that the relationship should ensure that any property proved about supertype objects also holds for its subtype objects. It presents two ways of defining the subtype relation, each of which meets this criterion, and each of which is easy for programmers to use. The subtype relation is based on the specifications of the sub- and supertypes; the paper presents a way of specifying types that makes it convenient to define the subtype relation. The paper also discusses the ramifications of this notion of subtyping on the design of type families.},
-  journal    = {ACM Trans. Program. Lang. Syst.},
-  month      = {nov},
-  pages      = {1811–1841},
-  numpages   = {31},
-  keywords   = {formal specifications, subtyping, Larch}
-}
-
 @article{curien2000duality,
   title     = {The duality of computation},
   author    = {Curien, Pierre-Louis and Herbelin, Hugo},
@@ -35,6 +15,7 @@
   year      = {2017},
   publisher = {University of Oregon}
 }
+
 
 @article{downen2018tutorial,
   title     = {A tutorial on computational classical logic and the sequent calculus},
@@ -70,6 +51,21 @@
   year   = {1972}
 }
 
+@book{Haskell98,
+  description  = {This report defines the syntax for Haskell programs and an informal abstract semantics for the meaning of such programs.},
+  editor       = {Jones, Simon Peyton},
+  howpublished = {PDF},
+  keywords     = {haskell msc},
+  month        = {September},
+  pages        = 277,
+  publisher    = {http://haskell.org/},
+  timestamp    = {2007-07-26T01:25:05.000+0200},
+  title        = {Haskell 98 Language and Libraries: The Revised Report},
+  type         = {Language Definition},
+  url          = {http://haskell.org/definition/haskell98-report.pdf},
+  year         = 2002
+}
+
 @phdthesis{Kilpatrick2019-cy,
   title     = {Non-reformist reform for Haskell Modularity},
   author    = {Kilpatrick, Scott},
@@ -85,12 +81,55 @@
   year      = {2010}
 }
 
+@book{reynolds_1998,
+  place     = {Cambridge},
+  title     = {Theories of Programming Languages},
+  doi       = {10.1017/CBO9780511626364},
+  publisher = {Cambridge University Press},
+  author    = {Reynolds, John C.},
+  year      = {1998}
+}
+
+@inproceedings{reynolds_coherence,
+  author    = {Reynolds, John C.},
+  editor    = {Ito, Takayasu
+               and Meyer, Albert R.},
+  title     = {The coherence of languages with intersection types},
+  booktitle = {Theoretical Aspects of Computer Software},
+  year      = {1991},
+  publisher = {Springer Berlin Heidelberg},
+  address   = {Berlin, Heidelberg},
+  pages     = {675--700},
+  abstract  = {When a programming language has a sufficiently rich type structure, there can be more than one proof of the same typing judgement; potentially this can lead to semantic ambiguity since the semantics of a typed language is a function of such proofs. When no such ambiguity arises, we say that the language is coherent. In this paper we prove the coherence of a class of lambda-calculus-based languages that use the intersection type discipline, including both a purely functional programming language and the Algol-like programming language Forsythe.},
+  isbn      = {978-3-540-47617-7}
+}
+
 @article{smithinference,
   author = {Smith, Geoffrey},
   year   = {1991},
   month  = {01},
   pages  = {},
   title  = {Polymorphic type inference for languages with overloading and subtyping /}
+}
+
+@article{subtyping,
+  author     = {Liskov, Barbara H. and Wing, Jeannette M.},
+  title      = {A Behavioral Notion of Subtyping},
+  year       = {1994},
+  issue_date = {Nov. 1994},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {16},
+  number     = {6},
+  issn       = {0164-0925},
+  url        = {https://doi.org/10.1145/197320.197383},
+  doi        = {10.1145/197320.197383},
+  abstract   = {The use of hierarchy is an important component of object-oriented design. Hierarchy allows the use of type families, in which higher level supertypes capture the behavior that all of their subtypes have in common. For this methodology to be effective, it is necessary to have a clear understanding of how subtypes and supertypes are related. This paper takes the position that the relationship should ensure that any property proved about supertype objects also holds for its subtype objects. It presents two ways of defining the subtype relation, each of which meets this criterion, and each of which is easy for programmers to use. The subtype relation is based on the specifications of the sub- and supertypes; the paper presents a way of specifying types that makes it convenient to define the subtype relation. The paper also discusses the ramifications of this notion of subtyping on the design of type families.},
+  journal    = {ACM Trans. Program. Lang. Syst.},
+  month      = {nov},
+  pages      = {1811–1841},
+  numpages   = {31},
+  keywords   = {formal specifications, subtyping, Larch}
 }
 
 @article{wadlerblott,
@@ -102,5 +141,3 @@
   journal = {[No source information available]},
   doi     = {10.1145/75277.75283}
 }
-
-@book{reynolds_1998, place={Cambridge}, title={Theories of Programming Languages}, DOI={10.1017/CBO9780511626364}, publisher={Cambridge University Press}, author={Reynolds, John C.}, year={1998}}
