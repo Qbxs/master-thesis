@@ -68,25 +68,6 @@ If $\Phi$ is a property for both $\sigma$ and $\tau < \sigma$, then it should al
     \BinaryInfC{$\ctx \Phi(\tau\join\sigma)$}
   \end{prooftree}
 
-  % We can also weaken this rule:
-  % Since for any $\tau$ and $\sigma$ we have $\tau < \tau \join \sigma$ and $\sigma < \tau \join \sigma$.
-
-  % \begin{prooftree}
-  %   \alwaysNoLine
-  %   \AxiomC{$\ctx \Phi(\tau)$}
-  %   \alwaysSingleLine
-  %   \joinRule
-  %   \UnaryInfC{$\ctx \Phi(\tau\join\sigma)$}
-  % \end{prooftree}
-
-  % \begin{prooftree}
-  %   \alwaysNoLine
-  %   \AxiomC{$\ctx \Phi(\sigma)$}
-  %   \alwaysSingleLine
-  %   \joinRule
-  %   \UnaryInfC{$\ctx \Phi(\tau\join\sigma)$}
-  % \end{prooftree}
-
   If we know $\Phi$ for both $\tau$ and $\sigma$, the characteristic predicate also holds for all terms that are witnesses of both $\tau$ and $\sigma$, i.e. $\tau\meet\sigma$.
  
   \begin{prooftree}
@@ -105,6 +86,24 @@ If $\Phi$ is a property for both $\sigma$ and $\tau < \sigma$, then it should al
     \AxiomC{$\ctx \Phi(\tau) \Rightarrow \Psi(\tau)$}
     \RightLabel{\textsc{Impl}}
     \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
+  \end{prooftree}
+
+  As a special case of \textsc{Sub} (since for any $\tau$ and $\sigma$ we have $\tau < \tau \join \sigma$ and $\sigma < \tau \join \sigma$) we can also introduce elimination rules for unions:
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\tau\join\sigma)$}
+    \alwaysSingleLine
+    \joinRule
+    \UnaryInfC{$\ctx \Phi(\tau)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\tau\join\sigma)$}
+    \alwaysSingleLine
+    \joinRule
+    \UnaryInfC{$\ctx \Phi(\sigma)$}
   \end{prooftree}
 
   Axioms:
