@@ -69,9 +69,6 @@ Reynolds \cite{reynolds_coherence}:
     of such proofs. When no such ambiguity arises, we say that the language is coherent.
 \end{quote}
 
-In the Haskell98 standard, type class coherence is guaranteed by the syntactical equivalence of resolved instances.
-For each Haskell type there may be at most one instance defined for each type class.
-
 Ambiguous programs should therefore generally be rejected.
 One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this short program which simply reads a string to a data type and then converts it back to string without specifying which data type is being used:
 
@@ -83,6 +80,20 @@ One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this sh
 There may be multiple types that satisfy the type class constraints.
 The specific implementation of \mintinline{Haskell}{show :: forall a. (Show a) => a -> String} and \mintinline{Haskell}{read :: forall a.(Read a) -> String -> a} is therefore unknown.
 
+In the Haskell98 standard, type class coherence is guaranteed by the syntactical equivalence of resolved instances.
+For each Haskell type there may be at most one instance defined for each type class.
+
+
+\subsection{Example}
+
+Consider superclasses in Haskell.
+E.g. the type class \mintinline{Haskell}{Eq} is a superclass of \mintinline{Haskell}{Ord}, written \mintinline{Haskell}{Eq a => Ord a}.
+This means that for each type that we want to define an ordering for already needs to have equality defined on.
+
+For example, given an instance for \mintinline{Haskell}{Ord (Maybe a)} we can then derive that an instance for \mintinline{Haskell}{Eq a} has to exist.
+As shown in the diagram, we can take different paths to do so but type class coherence guarantees that no matter which path we choose to resolve the instance, we will always find \emph{the same} instance.
+In Haskell98 type class coherence guarantees that all such diagrams commute.
+So even if there may be different ways to resolve type class constraints, all of them preserve the same semantics.
 
 \begin{tikzcd}
     &  & \mintinline{Haskell}|Ord (Maybe a)| \arrow[llddd, "{\footnotesize\mintinline{Haskell}|class Eq a => Ord a|}"'] \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|}"] &  &                            \\
