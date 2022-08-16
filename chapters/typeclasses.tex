@@ -61,7 +61,7 @@ The evaluation still strongly depends on implementation details found in specifi
 For example, for the \texttt{Ord} type class we may choose to implement the ordering in ascending or descending order.
 It is therefore crucial, that for each type the corresponding instance - if it exists - is uniquely determined by the type.
 
-Reynolds \cite{reynolds_coherence}:
+Reynolds \cite{reynolds_coherence} describes the issue of coherence as follows:
 
 \begin{quote}
     When a programming language has a sufficiently rich type structure, there can be more than one proof of the same
@@ -69,7 +69,17 @@ Reynolds \cite{reynolds_coherence}:
     of such proofs. When no such ambiguity arises, we say that the language is coherent.
 \end{quote}
 
-Ambiguous programs should therefore generally be rejected.
+For type classes, this means that no two instances should be able to be resolved for the same type.
+A rather obvious example would be to define two different instances for the same type.
+For example one instance of \mintinline{Haskell}{Ord Int}, one with ascending and one with descending order.
+The ambiguity arises as soon as we make use of these instances and it is no longer clear which one should be picked for evaluation.
+
+More surprisingly type class coherence is already violated for overlapping instances.
+As part of the standard prelude we find both \mintinline{Haskell}{instance Show a => Show [a]} and \mintinline{Haskell}{instance Show String}
+(with \mintinline{Haskell}{String} being a type synonym for \mintinline{Haskell}{[Char]}).
+The \texttt{Show} instance for Strings differs from the more general instance for lists.
+
+Ambiguous programs should generally not be typeable.
 One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this short program which simply reads a string to a data type and then converts it back to string without specifying which data type is being used:
 
 \begin{minted}{Haskell}
