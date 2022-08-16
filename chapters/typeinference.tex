@@ -243,7 +243,8 @@ would be compiled to
   show showIntDict 5
 \end{minted}
 
-where \mintinline{Haskell}|showIntDict| is a dictionary that provides the relevant defintion of \mintinline{Haskell}{show :: Int -> String} for the instance of \mintinline{Haskell}|Show Int|.
+where \mintinline{Haskell}{showIntDict} is a dictionary that provides the relevant defintion of \mintinline{Haskell}{show :: Int -> String} for the instance of \mintinline{Haskell}{Show Int}.
+This allows us to "compile away" the overhead that type classes introduce to the surface language because type inference can fill in the correct dictionary that is ought to be used.
 
 There is a drawback however, in the presence of subtyping it may not always be clear which dictionary is going to be needed for instance resolution.
 Consider the term:
@@ -253,11 +254,12 @@ Consider the term:
 \end{minted}
 
 The inferred type of this expression should be \mintinline{text}{Int \/ String}.
-What we need here are essentially two dictionaries: One for \mintinline{text}{Int} and one for \mintinline{text}{String}.
+What we need here are essentially two dictionaries: One for \mintinline{text}{Int} and one for \mintinline{text}{String} because it is undecidable at compile time which dictionary is going to be used at runtime.
 
 \section{Intensional type analysis}
 
 Instead of passing around dictionaries, we can also resolve the relevant instance at runtime dispatching on the term's type.
+This requires our language to tag term with some representation of their type at runtime.
 In the before mentioned case, the definition of \mintinline{Haskell}{show} could look something like this:
 
 \begin{minted}{Haskell}
@@ -267,10 +269,12 @@ In the before mentioned case, the definition of \mintinline{Haskell}{show} could
 \end{minted}
 
 In the context of subtyping we would not require type equality but for \mintinline{Haskell}{t} to be a subtype of some type for which an instance is defined.
+This also renders intensional type analysis more difficult:
+We can not simply match on a type (or its encoded representation \cite{weirich2000}) because we have to essentially solve the problem of subtyping between the type at hand and (at worst case) for each type for which an instance declaration is in scope.
+So, intensional type analysis may introduce a dramatic overhead in the presence of subtyping.
 
-\section{Misc}
-
-  % Main thesis for class coherence with subtyping
+\section{Type class coherence in the context of subtyping}
+% Main thesis for class coherence with subtyping
   Given \texttt{instance C a} and $sub < a$ and $a < sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
 
   Consider we have \texttt{Nat :< Int}.
@@ -290,8 +294,66 @@ In the context of subtyping we would not require type equality but for \mintinli
   ~Generally to infer the most specific type seems very hard. In this example filtering a \texttt{NonEmptyList} may or may not return an empty list and we may just have to assume that it is possibly empty.
   This may lead to hard to track behaviour when using overlapping instances.
 
+  A simple example for undecidable most specific instances can be better given with record types.
+  If we need to resolve an instance for \texttt{C {x : Int}} and we already have instances for \texttt{C {x : Int, y : Int}} and \texttt{C {x : Int, z : Int}} neither instance is more specific than the other.
+
+
   We should always check in an instance declaration whether this constraint globally holds. \\
   To guarantee modularity we also have to check this for module imports (possibly hiding instances).
+
+\section{Implementation}
+
+There is a problem when we want to implement the union type.
+
+Consider again the \texttt{Show} typeclass. It is intuitive to see how we can construct the \texttt{show} method for the union of two types, given that it is defined for both respecetively.
+
+\begin{listing}
+  show$_{a\join b}$ x := if typeOf x == a then show$_a$ x else show$_b$ x
+\end{listing}
+
+
+\subsection{Multi Parameter Type Classes}
+
+The concrete implementation may impose further restrictions on instance resolution.
+
+Our language differentiattes covariant and contravariant type classes.
+This distinction is made for the type variable declared in the class declaration.
+
+In a covariant type class, type variables may only occur on covariant positions in the class methods signatures.
+A simple example for a covariant type class is the \mintinline{Haskell}{Show} class:
+
+\begin{minted}{Haskell}
+  class Show +a where
+    show :: a -> String
+\end{minted}
+
+Dually in a contravariant type class, type variables may only occur on contravariant positions in the class methods signatures.
+A simple example for a contravariant type class is the \mintinline{Haskell}{Read} class:
+
+\begin{minted}{Haskell}
+  class Read -a where
+    read :: Read -> a
+\end{minted}
+
+This distinction imposes a problem when we want to implement type classes in which the type variable may occur both in a covariant and contravariant position.
+
+\begin{minted}{Haskell}
+  class Semigroup a where
+    mappend :: a -> a -> a
+\end{minted}
+
+One way to solve this problem is by distinguishing covariant and contravariant type variables.
+We can do so by introducing multi parameter type classes:
+
+\begin{minted}{Haskell}
+  class Semigroup +a -b where
+    mappend :: a -> a -> b
+\end{minted}
+
+Instead of defining an instance for \mintinline{Haskell}{Semigroup Nat}, we would then have to define an instance for \mintinline{Haskell}{Semigroup Nat Nat}.
+The latter seems to be less intuitive because semigroups are not a relation between types but a property for just one type (the operator has to map two elements from one set into the same set).
+Since such cases may occur in many other classes (e.g. Num, Monad) it may be helpful to define syntactic sugar for type classes with mixed variance.
+Then, the less intuitive implementation as multi parameter type classes could be hidden on the surface syntax.
 
   Discuss instance chains:
   We can relax this constraint by defining an explicit order in which instances should be picked/resolved.
