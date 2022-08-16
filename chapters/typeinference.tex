@@ -68,24 +68,24 @@ If $\Phi$ is a property for both $\sigma$ and $\tau < \sigma$, then it should al
     \BinaryInfC{$\ctx \Phi(\tau\join\sigma)$}
   \end{prooftree}
 
-  We can also weaken this rule:
-  Since for any $\tau$ and $\sigma$ we have $\tau < \tau \join \sigma$ and $\sigma < \tau \join \sigma$.
+  % We can also weaken this rule:
+  % Since for any $\tau$ and $\sigma$ we have $\tau < \tau \join \sigma$ and $\sigma < \tau \join \sigma$.
 
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\tau)$}
-    \alwaysSingleLine
-    \joinRule
-    \UnaryInfC{$\ctx \Phi(\tau\join\sigma)$}
-  \end{prooftree}
+  % \begin{prooftree}
+  %   \alwaysNoLine
+  %   \AxiomC{$\ctx \Phi(\tau)$}
+  %   \alwaysSingleLine
+  %   \joinRule
+  %   \UnaryInfC{$\ctx \Phi(\tau\join\sigma)$}
+  % \end{prooftree}
 
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\sigma)$}
-    \alwaysSingleLine
-    \joinRule
-    \UnaryInfC{$\ctx \Phi(\tau\join\sigma)$}
-  \end{prooftree}
+  % \begin{prooftree}
+  %   \alwaysNoLine
+  %   \AxiomC{$\ctx \Phi(\sigma)$}
+  %   \alwaysSingleLine
+  %   \joinRule
+  %   \UnaryInfC{$\ctx \Phi(\tau\join\sigma)$}
+  % \end{prooftree}
 
   If we know $\Phi$ for both $\tau$ and $\sigma$, the characteristic predicate also holds for all terms that are witnesses of both $\tau$ and $\sigma$, i.e. $\tau\meet\sigma$.
  
