@@ -73,6 +73,14 @@
   year      = 2019
 }
 
+@online{kiselyov,
+  author  = {Oleg Kiselyov},
+  title   = {Implementing, and Understanding Type Classes},
+  year    = {2021},
+  url     = {https://okmij.org/ftp/Computation/typeclass.html},
+  urldate = {2022-08-17}
+}
+
 @inproceedings{morris2010instance,
   title     = {Instance chains: type class programming without overlapping instances},
   author    = {Morris, J Garrett and Jones, Mark P},
@@ -127,27 +135,35 @@
   abstract   = {The use of hierarchy is an important component of object-oriented design. Hierarchy allows the use of type families, in which higher level supertypes capture the behavior that all of their subtypes have in common. For this methodology to be effective, it is necessary to have a clear understanding of how subtypes and supertypes are related. This paper takes the position that the relationship should ensure that any property proved about supertype objects also holds for its subtype objects. It presents two ways of defining the subtype relation, each of which meets this criterion, and each of which is easy for programmers to use. The subtype relation is based on the specifications of the sub- and supertypes; the paper presents a way of specifying types that makes it convenient to define the subtype relation. The paper also discusses the ramifications of this notion of subtyping on the design of type families.},
   journal    = {ACM Trans. Program. Lang. Syst.},
   month      = {nov},
-  pages      = {1811–1841},
+  pages      = {1811-1841},
   numpages   = {31},
   keywords   = {formal specifications, subtyping, Larch}
 }
 
-@article{wadlerblott,
-  author  = {Wadler, Philip and Blott, Stephen},
-  year    = {1997},
-  month   = {08},
-  pages   = {},
-  title   = {How to Make Ad-Hoc Polymorphism Less Ad Hoc},
-  journal = {[No source information available]},
-  doi     = {10.1145/75277.75283}
+@inproceedings{wadlerblott,
+  author    = {Wadler, P. and Blott, S.},
+  title     = {How to Make Ad-Hoc Polymorphism Less Ad Hoc},
+  year      = {1989},
+  isbn      = {0897912942},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/75277.75283},
+  doi       = {10.1145/75277.75283},
+  abstract  = {This paper presents type classes, a new approach to ad-hoc polymorphism. Type classes permit overloading of arithmetic operators such as multiplication, and generalise the “eqtype variables” of Standard ML. Type classes extend the Hindley/Milner polymorphic type system, and provide a new approach to issues that arise in object-oriented programming, bounded type quantification, and abstract data types. This paper provides an informal introduction to type classes, and defines them formally by means of type inference rules.},
+  booktitle = {Proceedings of the 16th ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+  pages     = {60-76},
+  numpages  = {17},
+  location  = {Austin, Texas, USA},
+  series    = {POPL '89}
 }
 
 @inproceedings{weirich2000,
-author = {Weirich, Stephanie},
-year = {2000},
-month = {11},
-pages = {},
-title = {Encoding Intensional Type Analysis},
-isbn = {978-3-540-41862-7},
-doi = {10.1007/3-540-45309-1_7}
+  author    = {Weirich, Stephanie},
+  year      = {2000},
+  month     = {11},
+  pages     = {92-106},
+  title     = {{Encoding Intensional Type Analysis}},
+  booktitle = {Proceedings of the 10th European Symposium on Programming Languages and Systems},
+  isbn      = {978-3-540-41862-7},
+  doi       = {10.1007/3-540-45309-1_7}
 }

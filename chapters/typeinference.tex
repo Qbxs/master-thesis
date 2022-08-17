@@ -245,6 +245,22 @@ would be compiled to
 where \mintinline{Haskell}{showIntDict} is a dictionary that provides the relevant defintion of \mintinline{Haskell}{show :: Int -> String} for the instance of \mintinline{Haskell}{Show Int}.
 This allows us to "compile away" the overhead that type classes introduce to the surface language because type inference can fill in the correct dictionary that is ought to be used.
 
+Generic constrained functions like
+
+\begin{minted}{Haskell}
+  emphasize :: (Show a) => a -> String
+  emphasize x = show x ++ "!"
+\end{minted}
+
+would simply pass around the dictionary and be compiled to something like:
+
+\begin{minted}{Haskell}
+  emphasize :: ShowDict a -> a -> String
+  emphasize dict x = show dict x ++ "!"
+\end{minted}
+
+\cite{kiselyov}
+
 There is a drawback however, in the presence of subtyping it may not always be clear which dictionary is going to be needed for instance resolution.
 Consider the term:
 
@@ -254,6 +270,7 @@ Consider the term:
 
 The inferred type of this expression should be \mintinline{text}{Int \/ String}.
 What we need here are essentially two dictionaries: One for \mintinline{text}{Int} and one for \mintinline{text}{String} because it is undecidable at compile time which dictionary is going to be used at runtime.
+% Would it not be possible to just construct a new dictionary consisting of both variants?
 
 \section{Intensional type analysis}
 
