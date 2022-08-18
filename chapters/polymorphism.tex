@@ -5,9 +5,23 @@ These can be summarised in three categories: parametric polymorphism, subtyping 
 
 \section{Parametric polymorphism}\label{sec:parmetric-polymorphism}
 
-We can define functions without knowing the concrete representation of the arguments and result types (e.g. \texttt{id : a -> a}) % cite something
-Abstract algorithms detached from concrete type representation.
-Allows for 'theorems for free'. \cite{wadlertheorems}
+Parametric polymorphism is used in many functional languages but has been adopted as well in common main stream languages like Java.
+Using this feature, we ce can define functions without knowing the concrete representation of the arguments and result types.
+We can therefore implement abstract algorithms detached from concrete type representation.
+For example the universal identity function is typeable with \texttt{id : forall a. a -> a}.
+
+This form of polymorphism allows us furthermore to reason about the behavior of functions:
+The \texttt{id} function mentioned above can only be implemented in one way:
+
+\begin{lstlisting}
+    id x = x
+\end{lstlisting}
+
+Its type enables us only to simply return the argument, because without knowing its type there is nothing else we could do with it.
+Similarily, for a function \texttt{g : forall a. a -> a -> a} there can be at most two implementations:
+One that returns the first and one that returns the second argument.
+
+Many such \emph{theorems for free} can be derived using parametric polymorphism, as Wadler has shown. \cite{wadlertheorems}
 
 \section{Subtyping}\label{sec:subtyping}
 
