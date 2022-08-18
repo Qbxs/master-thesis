@@ -1,16 +1,41 @@
-\chapter{Type Classes}\label{ch:typeclasses}
+\chapter{Polymorphism}\label{ch:polymorphism}
 
 In order to generalize functions over data types there have been several proposals to abstract over types in different programming languages:
-Amongst others,
-\begin{itemize}
-\item Parametric polymorphism: we can define functions without knowing the concrete representation of the arguments and result types (e.g. \texttt{id : a -> a}) % cite something
-\item ad-hoc polymorphism: in some mostly imperative languages it is possible to simply overload functions (e.g. we may define \texttt{+} both on integers and on float values, the correct implementation is then picked based on the argument type) % cite...
-\item and type classes. Combining both approaches (making ad-polymorphism less ad-hoc) we can define classes and corresponding functions and then use them to constrain valid argument types when defining a function that relies on these type class functions \cite{wadlerblott}
-\end{itemize}
+These can be summarised in three categories: parametric polymorphism, subtyping and ad-hoc polymorphism.
 
-\section{Type Classes}\label{sec:typeclasses}
+\section{Parametric polymorphism}\label{sec:parmetric-polymorphism}
+
+We can define functions without knowing the concrete representation of the arguments and result types (e.g. \texttt{id : a -> a}) % cite something
+Abstract algorithms detached from concrete type representation.
+Allows for 'theorems for free'. \cite{wadlertheorems}
+
+\section{Subtyping}\label{sec:subtyping}
+
+In many cases the specific semantics of types exhibit a hierarchy.
+In Object-oriented programming this hierarchy is given in the form of sub- and superclasses.
+We can express the relationship between super- and subclasses, or more generally super- and subtypes,
+in the form that all properties of the superclass is also exhibited in the subclass. \cite{subtyping}
+
+In the case of OO-languages this means that, if the class \texttt{SubC} is a subclass of \texttt{SuperC},
+then any method defined in \texttt{SuperC} is also going to be defined for objects of \texttt{SubC}.
+This enables us to use an object \texttt{SubC} wherever a \texttt{SuperC} is expected.
+
+We denote $T \leq S$ for $T$ is a subtype of $S$.
+Syntactically, this implies that if we have obatined the judgement $e : T$, we also have $e : S$.
+Therefore, we can use $e$ in any context that expects the usage of a term of type $S$.
+Semantically, the subtyping relation can be understood analogously to sets in terms of the subset relationship $\subseteq$,
+meaning all terms $e$ of type $T$ are also of type $S$.
+\cite{reynolds_1998}
+
+This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype.
+
+
+\section{Ad-hoc polymorphism}\label{sec:ad-hoc-polymorphism}
 % overloading vs type classes
 % paper by wadler
+
+In some - mostly imperative - languages it is possible to simply overload functions (e.g. we may define \texttt{+} both on integers and on float values, the correct implementation is then picked based on the argument type).
+However, there is usually no way to express this in the type system of these languages. % cite...
 
 If our type system doesn't allow for ad-hoc polymorphism it may seem neccessary to write verbose code for basic function with respect to every concrete type it should be used for.
 An intuitive example for this (that is also the motivation for type classes in the original proposal) are arithmetic operators.
@@ -47,8 +72,6 @@ instance  Num Int  where
 In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs.
 
 \cite{wadlerblott}
-
-\section{Multi parameter type classes}\label{sec:multiparam}
 
 \section{The problem of type class coherence}\label{sec:coherence}
 % for each type there t may be globally at most one instance C t defined
