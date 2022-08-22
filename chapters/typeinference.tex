@@ -1,21 +1,5 @@
 \chapter{Type Inference} \label{ch:inference}
 
-Type checking of instance declarations:
-
-\begin{mathpar}
-  \inferrule{\mathcal{D}}{}
-\end{mathpar}
-
-\begin{lstlisting}
-  instance Foo Bar { ... }
-\end{lstlisting}
-
-  \begin{minted}[escapeinside=??]{text}
-    instance ?$\tau$? C {
-       Method?$_1$?(?$x_1,...,x_n,k_1,...,k_n$?) => cmd
-    };
-  \end{minted}
-
 
 \section{Type classes as predicates over types}
 
@@ -24,7 +8,7 @@ E.g. we can say that for a type $\tau$ to fall under the \texttt{Show} type clas
 This means every term $t : \tau$ has some property $\phi$ that is characteristic for $\Phi$.
 
 Using set-theoretic reasoning, we can motivate rules to reason about type classes by how properties are propagated through various type operators and the subtyping relationship.
-$\Phi(\tau)$ holds iff for every witness of $\tau$ some characteristic predicate $\phi$ of $\Phi$ holds.
+$\Phi(\tau)$ holds iff for every witness of $\tau$ some characteristic property $\phi$ of $\Phi$ holds.
 ($\Phi$ can stand for a type class, $\phi$ for a class method.)
 
 \begin{definition}
@@ -41,23 +25,24 @@ Our syntax looks as follows:
   \Xi  := & \; \Phi(\tau) \; | \;  \Xi \Rightarrow \Phi(\tau) & \textit{Constraints}
 \end{flalign*}
 
-Deriving instances from super types. If some property holds for $\sigma$ and $\tau < \sigma$,
-then since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi$ is propagated to $\tau$.
-
 Let context $\Gamma = \{ \Xi_1, \dots, \Xi_n \}$ be a set of constraints (propositions).
 
-If $\Phi$ is a property for both $\sigma$ and $\tau < \sigma$, then it should also be a property $\tau$.
+The central rule motivated by Liskov substitution:
+If some property holds for $\sigma$ and $\tau < \sigma$,
+If $\Phi$ is a property for $\sigma$ and $\tau < \sigma$, then it should also be a property $\tau$.
+Since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi$ is propagated to $\tau$.
 
   \begin{prooftree}
     \alwaysNoLine
     \AxiomC{$\ctx \Phi(\sigma)$}
-    \AxiomC{$\tau :< \sigma$}
+    \AxiomC{$\tau \sub \sigma$}
     \alwaysSingleLine
     \RightLabel{\textsc{Sub}}
     \BinaryInfC{$\ctx \Phi(\tau)$}
   \end{prooftree}
 
   If $\Phi$ is a property for both $\tau$ and $\sigma$, then it should also be a property of their union or join $\tau \join \sigma$.
+  Since all witnesses of $\tau \join \sigma$ are witnesses of $\sigma$ or $\tau$, the property $\Phi$ holds for all witnesses of $\tau \join \sigma$.
 
   \begin{prooftree}
     \alwaysNoLine
@@ -69,17 +54,26 @@ If $\Phi$ is a property for both $\sigma$ and $\tau < \sigma$, then it should al
   \end{prooftree}
 
   If we know $\Phi$ for both $\tau$ and $\sigma$, the characteristic predicate also holds for all terms that are witnesses of both $\tau$ and $\sigma$, i.e. $\tau\meet\sigma$.
+  This rule is \emph{admissable} because with $\tau \sub \tau \meet \sigma$ and $\sigma \sub \tau \meet \sigma$ we can derive the result using the \textsc{Sub}-rule.
  
   \begin{prooftree}
     \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\sigma)$}
     \AxiomC{$\ctx \Phi(\tau)$}
     \alwaysSingleLine
     \meetRule
-    \BinaryInfC{$\ctx \Phi(\tau\meet\sigma)$}
+    \UnaryInfC{$\ctx \Phi(\tau\meet\sigma)$}
   \end{prooftree}
 
-  If $\Phi$ depends on $\Psi$, then for every $\tau$ with $\Phi(\tau)$ we also obtain $\Psi(\tau)$
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi(\sigma)$}
+    \alwaysSingleLine
+    \meetRule
+    \UnaryInfC{$\ctx \Phi(\tau\meet\sigma)$}
+  \end{prooftree}
+
+  If $\Phi$ depends on $\Psi$, then for every $\tau$ with $\Phi(\tau)$ we also obtain $\Psi(\tau)$.
+  For every witness of $\tau$, the characteristic property $\psi$ holds and because of $\Phi(\tau) \Rightarrow \Psi(\tau)$ we have $\psi$ implies $\phi$, $\phi$ holds for every witness of $\tau$ as well.
 
   \begin{prooftree}
     \AxiomC{$\ctx \Psi(\tau)$}
@@ -150,7 +144,7 @@ Deriving instances:
   \begin{prooftree}
     \alwaysNoLine
     \AxiomC{$\ctx \Phi^+(\sigma)$}
-    \AxiomC{$\tau :< \sigma$}
+    \AxiomC{$\tau \sub \sigma$}
     \alwaysSingleLine
     \subPosRule
     \BinaryInfC{$\ctx \Phi^+(\tau)$}
@@ -159,7 +153,7 @@ Deriving instances:
   \begin{prooftree}
     \alwaysNoLine
     \AxiomC{$\ctx \Phi^-(\sigma)$}
-    \AxiomC{$\sigma :< \tau$}
+    \AxiomC{$\sigma \sub \tau$}
     \alwaysSingleLine
     \subNegRule
     \BinaryInfC{$\ctx \Phi^-(\tau)$}
@@ -293,7 +287,7 @@ So, intensional type analysis may introduce a dramatic overhead in the presence 
 % Main thesis for class coherence with subtyping
   Given \texttt{instance C a} and $sub < a$ and $a < sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
 
-  Consider we have \texttt{Nat :< Int}.
+  Consider we have \texttt{Nat \sub Int}.
   We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
   For integers on the other hand, we might prefer to choose addition as operator and 0 as neutral element, so we can expand to monoid to a group.
 

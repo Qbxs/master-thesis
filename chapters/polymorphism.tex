@@ -44,6 +44,55 @@ meaning all terms $e$ of type $T$ are also of type $S$.
 This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype.
 
 
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Refl}}
+    \UnaryInfC{$\tau \sub \tau$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma$}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{Trans}}
+    \BinaryInfC{$\tau \sub \rho$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma \join \rho$}
+    \RightLabel{\textsc{Join}$_1$}
+    \UnaryInfC{$\tau \sub \sigma$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma \join \rho$}
+    \RightLabel{\textsc{Join}$_2$}
+    \UnaryInfC{$\tau \sub \rho$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{Meet}$_2$}
+    \UnaryInfC{$\tau \meet \rho \sub \sigma$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{Meet}$_2$}
+    \UnaryInfC{$\rho \meet \tau \sub \sigma$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Top}}
+    \UnaryInfC{$\tau \sub \top$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Bot}}
+    \UnaryInfC{$\bot \sub \tau$}
+  \end{prooftree}
+
 \section{Ad-hoc polymorphism}\label{sec:ad-hoc-polymorphism}
 % overloading vs type classes
 % paper by wadler
@@ -87,7 +136,18 @@ In the end, this enables us to use elaborate concepts such as functors and monad
 
 \cite{wadlerblott}
 
-\section{The problem of type class coherence}\label{sec:coherence}
+\section{Relation between different forms of Subtyping}\label{sec:relations}
+
+The different forms of subtyping just discussed are not unrelated.
+
+We can understand both parametric and ad-hoc polymorhism as a form of subtyping.
+E.g. the function \mintinline{Haskell}{chooseSecond :: a -> Int -> Int} is a subtype of \mintinline{Haskell}{const :: a -> b -> b}.
+
+Similarily, the hierarchy of type classes expresses the same relationship exhibited by subtyping.
+% example?
+
+
+\section{Coherence}\label{sec:coherence}
 % for each type there t may be globally at most one instance C t defined
 % discuss overlapping instances
 % can already be tricky in a modular system
@@ -155,4 +215,13 @@ So even if there may be different ways to resolve type class constraints, all of
 Even though there are multiple ways to derive an instance for \mintinline{Haskell}|Eq a| from an instance of \texttt{Ord (Maybe a)}, the derived instance has to be uniquely determined.
 Since the diagram commutes, there has to be exactly one instance for \mintinline{Haskell}|Eq a|.
 
-Uniqueness or non-ambiguity of type classes.
+\subsection{How to ensure coherence}
+
+There are several ways to ensure type class coherence.
+The easiest one can also be found in Haskell98.
+Here, overlapping or otherwise ambiguous instances are simply not allowed to be declared in the same namespace.
+% The report only states: 'A type may not be declared as an instance of a particular class more than once in the program.'
+
+Another possibility somewhat alike ML-modules are named instances.
+
+The latest proposal are instance chains which make the order in which instances are checked explicit. \cite{morris2010instance}
