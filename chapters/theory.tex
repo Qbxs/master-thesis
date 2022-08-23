@@ -85,7 +85,8 @@ Since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi
     \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
   \end{prooftree}
 
-  As a special case of \textsc{Sub} (since for any $\tau$ and $\sigma$ we have $\tau < \tau \join \sigma$ and $\sigma < \tau \join \sigma$) we can also introduce elimination rules for unions:
+  We can also introduce elimination rules for unions.
+  These are also \emph{admissable} since for any $\tau$ and $\sigma$ we have with the subtyping rules $\tau < \tau \join \sigma$ and $\sigma < \tau \join \sigma$ and can then derive this rule from \textsc{Sub}.
 
   \begin{prooftree}
     \alwaysNoLine
@@ -107,15 +108,23 @@ Since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi
   \begin{prooftree}
     \AxiomC{}
     \RightLabel{\textsc{Axiom}}
-    \UnaryInfC{$\Gamma, \Xi \vdash \Xi$}
+    \UnaryInfC{$\Gamma, \Phi(\tau) \vdash \Phi(\tau)$}
   \end{prooftree}
 
-  Every property holds for all witnesses of $\bot$, so every predicate trivially holds for $\bot$.
+  Every property holds for all witnesses of $\bot$ because there are none, so every predicate trivially holds for $\bot$.
 
   \begin{prooftree}
     \AxiomC{}
     \botRule
-    \UnaryInfC{$\Gamma \vdash \Phi(\bot)$}
+    \UnaryInfC{$\ctx \Phi(\bot)$}
+  \end{prooftree}
+
+  If we know $\Phi(\top)$, then with the \textsc{Sub}-rule we can infer $\Phi(\tau)$ for any type $\tau$.
+
+  \begin{prooftree}
+    \AxiomC{$\ctx \Phi(\top)$}
+    \RightLabel{\textsc{Top}}
+    \UnaryInfC{$\ctx \Phi(\tau)$}
   \end{prooftree}
 
   % TODO mention \Gamma in rules and use definition of predicates
