@@ -93,6 +93,16 @@ This permits many useful features in programming languages such as the reuse and
     \UnaryInfC{$\bot \sub \tau$}
   \end{prooftree}
 
+Liskov \cite{liskov} describes subtyping to adhere to the following substitution principle:
+
+\begin{quote}
+    The intuitive idea of a eubtype is one whose
+objects provide all the behavior of objects of another type (th e supertype) plus something extra. What is
+wanted here is something like the following substitution property: If for each object $\sigma_1$ of type $S$ there
+is an object $\sigma_2$ of type $T$ such that for all programs $P$ defined in terms of $T$, the behavior of $P$ is
+unchanged when $\sigma_1$ is substituted for $\sigma_2$, then $S$ is a subtype of $T$.
+\end{quote}
+
 \section{Ad-hoc polymorphism}\label{sec:ad-hoc-polymorphism}
 % overloading vs type classes
 % paper by wadler

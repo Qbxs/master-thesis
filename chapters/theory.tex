@@ -3,9 +3,12 @@
 
 \section{Type classes as predicates over types}
 
-Type classes are a way to \emph{qualifiy} types for certain properties.
+Type classes can be seen as a form of \emph{qualified types}, i.e. types that qualify for certain properties.
 E.g. we can say that for a type $\tau$ to fall under the \texttt{Show} type class means that $\tau$ is a showable type.
-This means every term $t : \tau$ has some property $\phi$ that is characteristic for $\Phi$.
+In this case, it means every term $t : \tau$ has some property $\phi$ that is characteristic for $\Phi$.
+
+In this section we want to give a way to reason about predicates over types and how they can be related in the context of subtyping.
+We therefore restrict ourselves to monotonous predicates, i.e. predicates that only refer to the witnesses of types, opposed to e.g. predicates about the number of witnesses of a type.
 
 Using set-theoretic reasoning, we can motivate rules to reason about type classes by how properties are propagated through various type operators and the subtyping relationship.
 $\Phi(\tau)$ holds iff for every witness of $\tau$ some characteristic property $\phi$ of $\Phi$ holds.
@@ -54,7 +57,7 @@ Since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi
   \end{prooftree}
 
   If we know $\Phi$ for both $\tau$ and $\sigma$, the characteristic predicate also holds for all terms that are witnesses of both $\tau$ and $\sigma$, i.e. $\tau\meet\sigma$.
-  This rule is \emph{admissable} because with $\tau \sub \tau \meet \sigma$ and $\sigma \sub \tau \meet \sigma$ we can derive the result using the \textsc{Sub}-rule.
+  This rule is \emph{admissable} because with $\tau \sub \tau \meet \sigma$ and $\sigma \sub \tau \meet \sigma$ given by the subtyping rules we can derive the result using the \textsc{Sub}-rule.
  
   \begin{prooftree}
     \alwaysNoLine
@@ -349,6 +352,13 @@ So, intensional type analysis may introduce a dramatic overhead in the presence 
 There is a problem when we want to implement the union type.
 
 Consider again the \texttt{Show} typeclass. It is intuitive to see how we can construct the \texttt{show} method for the union of two types, given that it is defined for both respecetively.
+However, looking at the \texttt{Eq} typeclass, we can not generally deduce an instance of the join of two types.
+If we solely know how to compare terms of type $\tau$ with each other and how to compare terms of type $\sigma$ with each other,
+we do not know how to compare a term of type $\tau$ with a term of type $\sigma$, even though the derived instance tells we should be able to do so.
+
+We might be able to just return \texttt{False} as a default value in such cases but even default values can be ambiguous.
+Consider now the \texttt{Ord} type class. Given \texttt{Ord a} and \texttt{Ord b} we may say that in \texttt{Ord a $\join$ b} every $a$ is ordered before $b$.
+But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
 
 \begin{listing}
   show$_{a\join b}$ x := if typeOf x == a then show$_a$ x else show$_b$ x
