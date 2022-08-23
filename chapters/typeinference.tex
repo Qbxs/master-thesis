@@ -223,6 +223,39 @@ Deriving instances:
 \section{Dictionary Passing}
 
 One typical way of implementing type classes is using \emph{dicitonary passing style}.
+We use an isomorphism between type classes and records:
+E.g. the type class \mintinline{Haskell}{Eq} defined as
+
+\begin{minted}{Haskell}
+  class Eq a where
+    eq :: a -> a -> Bool
+    neq :: a -> a -> Bool
+\end{minted}
+
+can be translated to a record type that preserves the structure of the class:
+
+\begin{minted}{Haskell}
+  data DictEq a =
+    DictEq { eq :: a -> a -> Bool,
+             neq :: a -> a -> Bool }
+\end{minted}
+
+Instances as witnesses of type classes can be translated accordingly to values of dictionaries.
+E.g.
+
+\begin{minted}{Haskell}
+  instance Eq Int where
+    eq = intEq
+    neq = not . intEq  
+\end{minted}
+
+can be translated to a value of type \mintinline{Haskell}{DictEq Int}:
+
+\begin{minted}{Haskell}
+  intEqDict = DictEq { eq = intEq,
+                       neq = not . intEq }
+\end{minted}
+
 Here, the instances of a type class are carried in a dictionary that has to be passed as an additional argument to method calls.
 For example the term
 
