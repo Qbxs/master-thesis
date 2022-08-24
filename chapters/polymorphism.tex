@@ -96,12 +96,17 @@ This permits many useful features in programming languages such as the reuse and
 Liskov \cite{liskov} describes subtyping to adhere to the following substitution principle:
 
 \begin{quote}
-    The intuitive idea of a eubtype is one whose
-objects provide all the behavior of objects of another type (th e supertype) plus something extra. What is
-wanted here is something like the following substitution property: If for each object $\sigma_1$ of type $S$ there
-is an object $\sigma_2$ of type $T$ such that for all programs $P$ defined in terms of $T$, the behavior of $P$ is
-unchanged when $\sigma_1$ is substituted for $\sigma_2$, then $S$ is a subtype of $T$.
+The intuitive idea of a subtype is one whose objects provide all the behavior of objects of another type (the supertype) plus something extra.
+What is wanted here is something like the following substitution property:
+If for each object $\sigma_1$ of type $S$ there is an object $\sigma_2$ of type $T$ such that for all programs $P$ defined in terms of $T$,
+the behavior of $P$ is unchanged when $\sigma_1$ is substituted for $\sigma_2$, then $S$ is a subtype of $T$.
 \end{quote}
+
+In essence, given subtyping types are no longer disjoint but can be mixed together to display natural inclusion properties that we may expect.
+E.g. every natural number is also an integer and therefore the type \texttt{Nat} of natural numbers is a subtype of \texttt{Int}.
+
+If we omit subtyping, we have to give explicit coercion functions (e.g. \texttt{coerce : Nat -> Int}) whenever the expected type is more general than the given type.
+Subtyping allows us to pass such more specific arguments in a more natural way and makes the coercion implicit.
 
 \section{Ad-hoc polymorphism}\label{sec:ad-hoc-polymorphism}
 % overloading vs type classes
