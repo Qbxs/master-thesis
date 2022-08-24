@@ -137,6 +137,13 @@ Extending this notion we can interpret type classes as predicates over types.
 E.g. \texttt{Eq} $\sigma$ would mean that the predicate (or property) of equality holds for type $\sigma$.
 We can provide a proof for this iff we can resolve an instance of \texttt{Eq} $\sigma$ as a witness.
 
+Here, we build upon the rules for qualified types to construct resolution rules for type classes.
+Our language differentiates between co- and contravariant type classes because they behave differently in the context of subtyping.
+Co- and contravariant type classes restrict the occurence of the bound type variable in the methods.
+
+An example for a covariant type class is the \texttt{Read} type class in which the type to be shown only occurs in a covariant position.
+In the \texttt{Read} type class the type variable only occurs in a contravariant position. 
+
 \begin{flalign*}
   \tau := & \; \texttt{Nat} \; | \; \texttt{Int} \; | \; \dots                         & \textit{Simple types} \\
           & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau & \textit{Lattice types} \\
