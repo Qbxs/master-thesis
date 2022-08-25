@@ -1,5 +1,29 @@
-\chapter{Theory of Type Classes} \label{ch:theory}
+\chapter{Qualified Types} \label{ch:qualified-types}
 
+To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. types that satisfy some predicate.
+
+\begin{definition} Predicates\\
+  Given a universe of types $\mathcal{U}$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\mathcal{U})$.
+\end{definition}
+
+There can be many different kinds of predicates over types, however not all of them are useful in the context of subtyping.
+E.g. \dots
+
+We assume a naive set-theoretic definition of subtyping analagous to the one given by Castagna and Xu \cite{castagna}:
+
+\begin{definition} Subtyping\\
+  $\tau \sub \sigma \Leftrightarrow [\tau] \subseteq [\sigma]$
+\end{definition}
+
+\begin{definition}
+  A \emph{covariant type class predicate} $\Phi$ is specified by a propertiy $\phi$.
+  For a type $\tau$ the application $\Phi(\tau)$ holds if and only if $\phi$ holds for all witnesses of $\tau$.
+\end{definition}
+
+\begin{definition}
+  A \emph{contravariant type class predicate} $\Phi$ is specified by a propertiy $\phi$.
+  For a type $\tau$ the application $\Phi(\tau)$ holds if and only if $\phi$ holds for some witnesses of $\tau$.
+\end{definition}
 
 \section{Type classes as predicates over types}
 
