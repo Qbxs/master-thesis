@@ -2,6 +2,8 @@
 
 In order to generalize functions over data types there have been several proposals to abstract over types in different programming languages:
 These can be summarised in three categories: parametric polymorphism, subtyping and ad-hoc polymorphism.
+Each of these have a reasoning principle associated with them.
+In this chapter, we want to examine the different forms of polymorphism and how mixing them affects our ability to reason about them.
 
 \section{Parametric polymorphism}\label{sec:parmetric-polymorphism}
 
@@ -43,13 +45,14 @@ meaning all terms $e$ of type $T$ are also of type $S$.
 
 This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype.
 
-
+  % refl
   \begin{prooftree}
     \AxiomC{}
     \RightLabel{\textsc{Refl}}
     \UnaryInfC{$\tau \sub \tau$}
   \end{prooftree}
 
+  % trans
   \begin{prooftree}
     \AxiomC{$\tau \sub \sigma$}
     \AxiomC{$\sigma \sub \rho$}
@@ -57,7 +60,8 @@ This permits many useful features in programming languages such as the reuse and
     \BinaryInfC{$\tau \sub \rho$}
   \end{prooftree}
 
-\begin{center}
+ % join intro
+ \begin{center}
     \AxiomC{$\tau \sub \sigma$}
     \RightLabel{\textsc{JoinI}$_1$}
     \UnaryInfC{$\tau \sub \sigma \join \rho$}
@@ -67,8 +71,9 @@ This permits many useful features in programming languages such as the reuse and
     \RightLabel{\textsc{JoinI}$_2$}
     \UnaryInfC{$\tau \sub \rho \join \sigma$}
     \DisplayProof
-\end{center}
+ \end{center}
 
+ % join elim
  \begin{center} 
     \AxiomC{$\tau \join \sigma \sub \rho$}
     \RightLabel{\textsc{JoinE}$_1$}
@@ -81,6 +86,20 @@ This permits many useful features in programming languages such as the reuse and
     \DisplayProof
  \end{center}
 
+  % meet intro
+  \begin{center}
+    \AxiomC{$\tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_1$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_2$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+ \end{center}
+
+ % meet elim
  \begin{center}
     \AxiomC{$\tau \sub \sigma \meet \rho$}
     \RightLabel{\textsc{MeetE}$_1$}
@@ -93,18 +112,7 @@ This permits many useful features in programming languages such as the reuse and
     \DisplayProof
  \end{center}
 
- \begin{center}
-    \AxiomC{$\tau \sub \rho$}
-    \RightLabel{\textsc{MeetI}$_1$}
-    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
-    \DisplayProof
-    {\hskip.2in}
-    \AxiomC{$\sigma \sub \rho$}
-    \RightLabel{\textsc{MeetI}$_2$}
-    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
-    \DisplayProof
- \end{center}
-
+ % top/bot
  \begin{center}
     \AxiomC{}
     \RightLabel{\textsc{Top}}
@@ -122,15 +130,15 @@ Liskov \cite{liskov} describes subtyping to adhere to the following substitution
 \begin{quote}
 The intuitive idea of a subtype is one whose objects provide all the behavior of objects of another type (the supertype) plus something extra.
 What is wanted here is something like the following substitution property:
-If for each object $\sigma_1$ of type $S$ there is an object $\sigma_2$ of type $T$ such that for all programs $P$ defined in terms of $T$,
-the behavior of $P$ is unchanged when $\sigma_1$ is substituted for $\sigma_2$, then $S$ is a subtype of $T$.
+If for each object [$e_1$] of type [$\tau$] there is an object [$e_2$] of type [$\sigma$] such that for all programs $P$ defined in terms of [$\sigma$],
+the behavior of $P$ is unchanged when [$e_1$] is substituted for [$e_2$], then [$\tau$] is a subtype of [$\sigma$].
 \end{quote}
 
 In essence, given subtyping types are no longer disjoint but can be mixed together to display natural inclusion properties that we may expect.
 E.g. every natural number is also an integer and therefore the type \texttt{Nat} of natural numbers is a subtype of \texttt{Int}.
 
 If we omit subtyping, we have to give explicit coercion functions (e.g. \texttt{coerce : Nat -> Int}) whenever the expected type is more general than the given type.
-Subtyping allows us to pass such more specific arguments in a more natural way and makes the coercion implicit.
+Subtyping allows us to pass such more specific arguments in a more natural way and makes coercions implicit.
 
 \section{Ad-hoc polymorphism}\label{sec:ad-hoc-polymorphism}
 % overloading vs type classes
@@ -165,9 +173,6 @@ instance  Num Int  where
 \end{minted}
 
 
-
-
-
 % later:
 % category theory: functors, monoids, monads, etc.
 
@@ -180,10 +185,13 @@ In the end, this enables us to use elaborate concepts such as functors and monad
 The different forms of subtyping just discussed are not unrelated.
 
 We can understand both parametric and ad-hoc polymorhism as a form of subtyping.
-E.g. the function \mintinline{Haskell}{chooseSecond :: a -> Int -> Int} is a subtype of \mintinline{Haskell}{const :: a -> b -> b}.
+E.g. given both parametric polymorphism and subtyping the \texttt{const} function can be typeable both by
+\texttt{const : forall a b. a -> b -> b} and \texttt{const : forall a. Top -> a -> a}.
+Now there are two ways to substitute any type for the first argument of the function.
 
-Similarily, the hierarchy of type classes expresses the same relationship exhibited by subtyping.
-% example?
+Similarily, the hierarchy of type classes can express a similar relationship exhibited by subtyping.
+E.g. the \mintinline{Haskell}{Fractional} type class is a subclass of the type class \mintinline{Haskell}{Num}.
+Similarily with subtyping we can define a type \texttt{Fractional} representing all fractional numbers and make it a subtype of \texttt{Number}.
 
 
 \section{Coherence}\label{sec:coherence}
