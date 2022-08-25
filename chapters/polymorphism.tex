@@ -34,7 +34,7 @@ In the case of OO-languages this means that, if the class \texttt{SubC} is a sub
 then any method defined in \texttt{SuperC} is also going to be defined for objects of \texttt{SubC}.
 This enables us to use an object \texttt{SubC} wherever a \texttt{SuperC} is expected.
 
-We denote $T \leq S$ for $T$ is a subtype of $S$.
+We denote $T \sub S$ for $T$ is a subtype of $S$.
 Syntactically, this implies that if we have obatined the judgement $e : T$, we also have $e : S$.
 Therefore, we can use $e$ in any context that expects the usage of a term of type $S$.
 Semantically, the subtyping relation can be understood analogously to sets in terms of the subset relationship $\subseteq$,
@@ -57,41 +57,65 @@ This permits many useful features in programming languages such as the reuse and
     \BinaryInfC{$\tau \sub \rho$}
   \end{prooftree}
 
-  \begin{prooftree}
-    \AxiomC{$\tau \sub \sigma \join \rho$}
-    \RightLabel{\textsc{Join}$_1$}
-    \UnaryInfC{$\tau \sub \sigma$}
-  \end{prooftree}
+\begin{center}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_1$}
+    \UnaryInfC{$\tau \sub \sigma \join \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_2$}
+    \UnaryInfC{$\tau \sub \rho \join \sigma$}
+    \DisplayProof
+\end{center}
 
-  \begin{prooftree}
-    \AxiomC{$\tau \sub \sigma \join \rho$}
-    \RightLabel{\textsc{Join}$_2$}
+ \begin{center} 
+    \AxiomC{$\tau \join \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinE}$_1$}
     \UnaryInfC{$\tau \sub \rho$}
-  \end{prooftree}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \join \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinE}$_2$}
+    \UnaryInfC{$\sigma \sub \rho$}
+    \DisplayProof
+ \end{center}
 
-  \begin{prooftree}
-    \AxiomC{$\tau \sub \sigma$}
-    \RightLabel{\textsc{Meet}$_2$}
-    \UnaryInfC{$\tau \meet \rho \sub \sigma$}
-  \end{prooftree}
+ \begin{center}
+    \AxiomC{$\tau \sub \sigma \meet \rho$}
+    \RightLabel{\textsc{MeetE}$_1$}
+    \UnaryInfC{$\tau \sub \sigma$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \sub \rho \meet \sigma$}
+    \RightLabel{\textsc{MeetE}$_2$}
+    \UnaryInfC{$\tau \sub \sigma$}
+    \DisplayProof
+ \end{center}
 
-  \begin{prooftree}
-    \AxiomC{$\tau \sub \sigma$}
-    \RightLabel{\textsc{Meet}$_2$}
-    \UnaryInfC{$\rho \meet \tau \sub \sigma$}
-  \end{prooftree}
+ \begin{center}
+    \AxiomC{$\tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_1$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_2$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+ \end{center}
 
-  \begin{prooftree}
+ \begin{center}
     \AxiomC{}
     \RightLabel{\textsc{Top}}
     \UnaryInfC{$\tau \sub \top$}
-  \end{prooftree}
-
-  \begin{prooftree}
+    \DisplayProof
+    {\hskip.2in}
     \AxiomC{}
     \RightLabel{\textsc{Bot}}
     \UnaryInfC{$\bot \sub \tau$}
-  \end{prooftree}
+    \DisplayProof
+ \end{center}
 
 Liskov \cite{liskov} describes subtyping to adhere to the following substitution principle:
 

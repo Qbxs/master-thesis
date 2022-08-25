@@ -31,8 +31,8 @@ Our syntax looks as follows:
 Let context $\Gamma = \{ \Xi_1, \dots, \Xi_n \}$ be a set of constraints (propositions).
 
 The central rule motivated by Liskov substitution:
-If some property holds for $\sigma$ and $\tau < \sigma$,
-If $\Phi$ is a property for $\sigma$ and $\tau < \sigma$, then it should also be a property $\tau$.
+If some property holds for $\sigma$ and $\tau \sub \sigma$,
+If $\Phi$ is a property for $\sigma$ and $\tau \sub \sigma$, then it should also be a property $\tau$.
 Since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi$ is propagated to $\tau$.
 
   \begin{prooftree}
@@ -86,7 +86,7 @@ Since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi
   \end{prooftree}
 
   We can also introduce elimination rules for unions.
-  These are also \emph{admissable} since for any $\tau$ and $\sigma$ we have with the subtyping rules $\tau < \tau \join \sigma$ and $\sigma < \tau \join \sigma$ and can then derive this rule from \textsc{Sub}.
+  These are also \emph{admissable} since for any $\tau$ and $\sigma$ we have with the subtyping rules $\tau \sub \tau \join \sigma$ and $\sigma \sub \tau \join \sigma$ and can then derive this rule from \textsc{Sub}.
 
   \begin{prooftree}
     \alwaysNoLine
@@ -337,7 +337,7 @@ So, intensional type analysis may introduce a dramatic overhead in the presence 
 
 \section{Type class coherence in the context of subtyping}
 % Main thesis for class coherence with subtyping
-  Given \texttt{instance C a} and $sub < a$ and $a < sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
+  Given \texttt{instance C a} and $sub \sub a$ and $a \sub sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
 
   Consider we have \texttt{Nat \sub Int}.
   We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
@@ -352,7 +352,7 @@ So, intensional type analysis may introduce a dramatic overhead in the presence 
   Since type inferrence with subtyping is generally not quite obvious it may seem 
 
   Could we just use the most specific instance? This might have unexpected results.
-  E.g. if we have \texttt{NonEmptyList < List}, we may not know during compilation whether \texttt{NonEmptyList} or \texttt{List} is being picked.
+  E.g. if we have \texttt{NonEmptyList \sub List}, we may not know during compilation whether \texttt{NonEmptyList} or \texttt{List} is being picked.
   ~Generally to infer the most specific type seems very hard. In this example filtering a \texttt{NonEmptyList} may or may not return an empty list and we may just have to assume that it is possibly empty.
   This may lead to hard to track behaviour when using overlapping instances.
 
