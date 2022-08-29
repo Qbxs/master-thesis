@@ -38,24 +38,64 @@ From the definition of covariant predicates it follows that $\phi$ holds for eve
 
 With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful admissable rules:
 
+\begin{center}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\top)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Top}$^+$}
+  \UnaryInfC{$\ctx \Phi^+(\tau)$}
+  \DisplayProof
+  {\hskip.2in}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Bot}$^+$}
+  \UnaryInfC{$\ctx \Phi^+(\bot)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Meet}$_1^+$}
+  \UnaryInfC{$\ctx \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+  {\hskip.2in}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\sigma)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Meet}$_2^+$}
+  \UnaryInfC{$\ctx \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+\end{center}
+
 The \textsc{Join} rule can not be derived with the subtyping rules, however there is a motivation for it:
-\dots
+With the definition of covariant predicates the premises express that for all witnesses of $\tau$ and $\sigma$ the characteristic property holds.
+Since every witness of $\tau \join \sigma$ is a witness of $\tau$ or $\sigma$, $\Phi(\tau \join \sigma)$ holds.
 
 \begin{prooftree}
   \alwaysNoLine
   \AxiomC{$\ctx \Phi^+(\sigma)$}
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \alwaysSingleLine
-  \joinRule
+  \RightLabel{\textsc{Join}$^+$}
   \BinaryInfC{$\ctx \Phi^+(\tau\join\sigma)$}
 \end{prooftree}
 
-Additionally, we introduce a rule for axioms:
+Additionally, we introduce trivial rules for axioms and implications:
 
   \begin{prooftree}
     \AxiomC{}
     \axiomPos
     \UnaryInfC{$\Gamma, \Phi^+(\tau) \vdash \Phi^+(\tau)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\ctx \Psi(\tau)$}
+    \AxiomC{$\ctx \Phi(\tau) \Rightarrow \Psi(\tau)$}
+    \RightLabel{\textsc{Impl}}
+    \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
   \end{prooftree}
 
 \begin{definition}
@@ -76,6 +116,40 @@ From the definition of contravariant predicates it follows that $\phi$ holds for
   \BinaryInfC{$\ctx \Phi^-(\tau)$}
 \end{prooftree}
 
+With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful admissable rules:
+
+\begin{center}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Top}$^-$}
+  \UnaryInfC{$\ctx \Phi^-(\top)$}
+  \DisplayProof
+  {\hskip.2in}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\bot)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Bot}$^-$}
+  \UnaryInfC{$\ctx \Phi^-(\tau)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Join}$_1^-$}
+  \UnaryInfC{$\ctx \Phi^-(\tau \join \sigma)$}
+  \DisplayProof
+  {\hskip.2in}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\sigma)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Join}$_2^-$}
+  \UnaryInfC{$\ctx \Phi^-(\tau \join \sigma)$}
+  \DisplayProof
+\end{center}
+
 The \textsc{Meet} rule can not be derived with the subtyping rules, however there is a motivation for it:
 \dots
 
@@ -87,6 +161,21 @@ The \textsc{Meet} rule can not be derived with the subtyping rules, however ther
   \meetRule
   \BinaryInfC{$\ctx \Phi^-(\tau\meet\sigma)$}
 \end{prooftree}
+
+Additionally, we introduce trivial rules for axioms and implications:
+
+  \begin{prooftree}
+    \AxiomC{}
+    \axiomNeg
+    \UnaryInfC{$\Gamma, \Phi^-(\tau) \vdash \Phi^-(\tau)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\ctx \Psi(\tau)$}
+    \AxiomC{$\ctx \Phi(\tau) \Rightarrow \Psi(\tau)$}
+    \RightLabel{\textsc{Impl}}
+    \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
+  \end{prooftree}
 
 \section{Type classes as predicates over types}
 
