@@ -232,7 +232,7 @@ One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this sh
 \end{minted}
 
 There may be multiple types that satisfy the type class constraints.
-The specific implementation of \mintinline{Haskell}{show :: forall a. (Show a) => a -> String} and \mintinline{Haskell}{read :: forall a.(Read a) -> String -> a} is therefore unknown.
+The specific implementation of \mintinline{Haskell}{show :: forall a. (Show a) => a -> String} and \mintinline{Haskell}{read :: forall a. (Read a) => String -> a} is therefore unknown.
 
 In the Haskell98 standard, type class coherence is guaranteed by the syntactical equivalence of resolved instances.
 For each Haskell type there may be at most one instance defined for each type class.

@@ -7,23 +7,86 @@ To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. ty
 \end{definition}
 
 There can be many different kinds of predicates over types, however not all of them are useful in the context of subtyping.
-E.g. \dots
 
 We assume a naive set-theoretic definition of subtyping analagous to the one given by Castagna and Xu \cite{castagna}:
 
-\begin{definition} Subtyping:
-  $\tau \sub \sigma \Leftrightarrow [\tau] \subseteq [\sigma]$ where $[\tau]$ is the set-theoretic interpretation of $\tau$.
+\begin{definition} Subtyping\\
+  $\tau \sub \sigma \Leftrightarrow [\tau] \subseteq [\sigma]$ where $[\tau]$ is the set  of all witnesses of $\tau$.
 \end{definition}
 
-\begin{definition}
-  A \emph{covariant type class predicate} $\Phi$ is specified by a propertiy $\phi$.
-  For a type $\tau$ the application $\Phi(\tau)$ holds if and only if $\phi$ holds for all witnesses of $\tau$.
-\end{definition}
+We are only interested in predicates that are preserved over the subtyping lattice.
+I.e. predicates that depend only on the witnesses of a type.
+That means only predicates that are \emph{monotonous} are considered while other predicates such as \emph{"has exactly two values"} are disregarded.
+We further differentiate between \emph{covariant} and \emph{contravariant} predicates over types.
 
 \begin{definition}
-  A \emph{contravariant type class predicate} $\Phi$ is specified by a propertiy $\phi$.
-  For a type $\tau$ the application $\Phi(\tau)$ holds if and only if $\phi$ holds for some witnesses of $\tau$.
+  A \emph{covariant type class predicate} $\Phi^+$ is specified by a property $\phi$.
+  For a type $\tau$ the application $\Phi^+(\tau)$ holds if and only if $\phi$ holds for all witnesses of $\tau$.
 \end{definition}
+
+The monotonicity of $\Phi^+$ motivates the following rule preserving the predicate for subtypes.
+From the definition of covariant predicates it follows that $\phi$ holds for every witness of $\sigma$ and because every witness of $\tau$ is also a witness of $\sigma$ the characteristic property $\phi$ holds for all witnesses of $\tau$.
+
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\sigma)$}
+  \AxiomC{$\tau \sub \sigma$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^+$}
+  \BinaryInfC{$\ctx \Phi^+(\tau)$}
+\end{prooftree}
+
+With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful admissable rules:
+
+The \textsc{Join} rule can not be derived with the subtyping rules, however there is a motivation for it:
+\dots
+
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\sigma)$}
+  \AxiomC{$\ctx \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \joinRule
+  \BinaryInfC{$\ctx \Phi^+(\tau\join\sigma)$}
+\end{prooftree}
+
+Additionally, we introduce a rule for axioms:
+
+  \begin{prooftree}
+    \AxiomC{}
+    \axiomPos
+    \UnaryInfC{$\Gamma, \Phi^+(\tau) \vdash \Phi^+(\tau)$}
+  \end{prooftree}
+
+\begin{definition}
+  A \emph{contravariant type class predicate} $\Phi^-$ is specified by a property $\phi$.
+  For a type $\tau$ the application $\Phi^-(\tau)$ holds if and only if $\phi$ holds for some witnesses of $\tau$.
+\end{definition}
+
+The monotonicity of $\Phi^-$ motivates the following rule preserving the predicate for supertypes:
+From the definition of contravariant predicates it follows that $\phi$ holds for some witness of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
+
+
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\sigma)$}
+  \AxiomC{$\sigma \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^-$}
+  \BinaryInfC{$\ctx \Phi^-(\tau)$}
+\end{prooftree}
+
+The \textsc{Meet} rule can not be derived with the subtyping rules, however there is a motivation for it:
+\dots
+
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\sigma)$}
+  \AxiomC{$\ctx \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \meetRule
+  \BinaryInfC{$\ctx \Phi^-(\tau\meet\sigma)$}
+\end{prooftree}
 
 \section{Type classes as predicates over types}
 
