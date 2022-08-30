@@ -36,11 +36,11 @@ In the case of OO-languages this means that, if the class \texttt{SubC} is a sub
 then any method defined in \texttt{SuperC} is also going to be defined for objects of \texttt{SubC}.
 This enables us to use an object \texttt{SubC} wherever a \texttt{SuperC} is expected.
 
-We denote $T \sub S$ for $T$ is a subtype of $S$.
-Syntactically, this implies that if we have obatined the judgement $e : T$, we also have $e : S$.
-Therefore, we can use $e$ in any context that expects the usage of a term of type $S$.
+We denote $\tau \sub \sigma$ for $\tau$ is a subtype of $\sigma$.
+Syntactically, this implies that if we have obatined the judgement $e : \tau$, we also have $e : \sigma$.
+Therefore, we can use $e$ in any context that expects the usage of a term of type $\sigma$.
 Semantically, the subtyping relation can be understood analogously to sets in terms of the subset relationship $\subseteq$,
-meaning all terms $e$ of type $T$ are also of type $S$.
+meaning all terms $e$ of type $\tau$ are also of type $\sigma$.
 \cite{reynolds_1998}
 
 This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype.
@@ -210,7 +210,7 @@ E.g. the \mintinline{Haskell}{Fractional} type class is a subclass of the type c
 Similarily with subtyping we can define a type \texttt{Fractional} representing all fractional numbers and make it a subtype of \texttt{Number}.
 
 
-\section{Coherence}\label{sec:coherence}
+\subsection{Coherence}\label{sec:coherence}
 % for each type there t may be globally at most one instance C t defined
 % discuss overlapping instances
 % can already be tricky in a modular system
