@@ -14,6 +14,10 @@ We assume a naive set-theoretic definition of subtyping analagous to the one giv
   $\tau \sub \sigma \Leftrightarrow [\tau] \subseteq [\sigma]$ where $[\tau]$ is the set  of all witnesses of $\tau$.
 \end{definition}
 
+This notion of subtyping trivially satsifies the Liskov substitution principle.
+Because with $\tau \sub \sigma$ for every $e : \tau$ we also have $e : \sigma$, the coercion function is the identity.
+Thus all properties are preserved for terms over the subtyping relation.
+
 We are only interested in predicates that are preserved over the subtyping lattice.
 I.e. predicates that depend only on the witnesses of a type.
 That means only predicates that are \emph{monotonous} are considered while other predicates such as \emph{"has exactly two values"} are disregarded.
