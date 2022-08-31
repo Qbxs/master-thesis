@@ -74,39 +74,40 @@ This permits many useful features in programming languages such as the reuse and
  \end{center}
 
  % join elim
-%  \begin{center}
-%     (admissable)
-%     \AxiomC{$\tau \join \sigma \sub \rho$}
-%     \RightLabel{\textsc{JoinE}$_1$}
-%     \UnaryInfC{$\tau \sub \rho$}
-%     \DisplayProof
-%     {\hskip.2in}
-%     \AxiomC{$\tau \join \sigma \sub \rho$}
-%     \RightLabel{\textsc{JoinE}$_2$}
-%     \UnaryInfC{$\sigma \sub \rho$}
-%     \DisplayProof
-%  \end{center}
+ \begin{center}
+    (admissable)
+    \AxiomC{$\tau \join \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinE}$_1$}
+    \UnaryInfC{$\tau \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \join \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinE}$_2$}
+    \UnaryInfC{$\sigma \sub \rho$}
+    \DisplayProof
+ \end{center}
 
  \begin{prooftree}
-  \AxiomC{$\tau \sub \sigma$}
-  \AxiomC{$\tau \sub \rho$}
+  \AxiomC{$\tau \sub \sigma \join \rho$}
+  \AxiomC{$\sigma \sub \upsilon$}
+  \AxiomC{$\rho \sub \upsilon$}
   \RightLabel{\textsc{JoinE}}
-  \BinaryInfC{$\tau \sub \sigma \join \rho$}
+  \TrinaryInfC{$\tau \sub \upsilon$}
  \end{prooftree}
 
   % meet intro
-%   \begin{center}
-%     (admissable)
-%     \AxiomC{$\tau \sub \rho$}
-%     \RightLabel{\textsc{MeetI}$_1$}
-%     \UnaryInfC{$\tau \meet \sigma \sub \rho$}
-%     \DisplayProof
-%     {\hskip.2in}
-%     \AxiomC{$\sigma \sub \rho$}
-%     \RightLabel{\textsc{MeetI}$_2$}
-%     \UnaryInfC{$\tau \meet \sigma \sub \rho$}
-%     \DisplayProof
-%  \end{center}
+  \begin{center}
+    (admissable)
+    \AxiomC{$\tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_1$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_2$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+ \end{center}
 
  \begin{prooftree}
   \AxiomC{$\tau \sub \rho$}
