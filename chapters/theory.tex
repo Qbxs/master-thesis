@@ -75,7 +75,8 @@ With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful admis
   \DisplayProof
 \end{center}
 
-The \textsc{Join} rule can not be derived with the subtyping rules, however there is a motivation for it:
+The \textsc{Join} rule can not be derived with the subtyping rules because $\tau \join \sigma$ is neither a subtype of $\tau$ nor of $\sigma$.
+However, there is a motivation for it:
 With the definition of covariant predicates the premises express that for all witnesses of $\tau$ and $\sigma$ the characteristic property holds.
 Since every witness of $\tau \join \sigma$ is a witness of $\tau$ or $\sigma$, $\Phi(\tau \join \sigma)$ holds.
 
@@ -157,10 +158,12 @@ With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful
 % \end{center}
 
 
-The \textsc{Meet} rule can not be derived with the subtyping rules, however there is a motivation for it:
+The \textsc{Meet} rule can not be derived with the subtyping rules because $\tau \meet \sigma$ is neither a supertype of $\tau$ nor of $\sigma$.
+However, there is a motivation for it:
 With the definition of contravariant predicates the premises express that for some witnesses of $\tau$ and $\sigma$ the characteristic property holds.
 Since some witness of $\tau \meet \sigma$ is a witness of both $\tau$ and $\sigma$, $\Phi(\tau \meet \sigma)$ holds.
-% this rule could be bogus
+% this rule is bogus:
+% if \tau and \sigma are disjoint there is no possible witness in \tau \meet \sigma...
 
 \begin{prooftree}
   \alwaysNoLine
