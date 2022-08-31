@@ -28,6 +28,7 @@ We further differentiate between \emph{covariant} and \emph{contravariant} predi
   For a type $\tau$ the application $\Phi^+(\tau)$ holds if and only if $\phi$ holds for all witnesses of $\tau$.
 \end{definition}
 
+Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific predicates.
 The monotonicity of $\Phi^+$ motivates the following rule preserving the predicate for subtypes.
 From the definition of covariant predicates it follows that $\phi$ holds for every witness of $\sigma$ and because every witness of $\tau$ is also a witness of $\sigma$ the characteristic property $\phi$ holds for all witnesses of $\tau$.
 
@@ -87,22 +88,14 @@ Since every witness of $\tau \join \sigma$ is a witness of $\tau$ or $\sigma$, $
   \BinaryInfC{$\ctx \Phi^+(\tau\join\sigma)$}
 \end{prooftree}
 
-Additionally, we introduce a trivial rule for axioms:
-
-  \begin{prooftree}
-    \AxiomC{}
-    \axiomPos
-    \UnaryInfC{$\Gamma, \Phi^+(\tau) \vdash \Phi^+(\tau)$}
-  \end{prooftree}
-
 \begin{definition}
   A \emph{contravariant type class predicate} $\Phi^-$ is specified by a property $\phi$.
   For a type $\tau$ the application $\Phi^-(\tau)$ holds if and only if $\phi$ holds for some witnesses of $\tau$.
 \end{definition}
 
+The rules for contravariant predicates are dual to those for covariant predicates.
 The monotonicity of $\Phi^-$ motivates the following rule preserving the predicate for supertypes:
 From the definition of contravariant predicates it follows that $\phi$ holds for some witness of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
-
 
 \begin{prooftree}
   \alwaysNoLine
@@ -147,24 +140,45 @@ With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful
   \DisplayProof
 \end{center}
 
+% \begin{center}
+%   \alwaysNoLine
+%   \AxiomC{$\ctx \Phi^-(\tau \meet \sigma)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Meet}$_1^-$}
+%   \UnaryInfC{$\ctx \Phi^-(\tau)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \alwaysNoLine
+%   \AxiomC{$\ctx \Phi^-(\tau \meet \sigma)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Meet}$_2^-$}
+%   \UnaryInfC{$\ctx \Phi^-(\sigma)$}
+%   \DisplayProof
+% \end{center}
+
+
 The \textsc{Meet} rule can not be derived with the subtyping rules, however there is a motivation for it:
-\dots
+With the definition of contravariant predicates the premises express that for some witnesses of $\tau$ and $\sigma$ the characteristic property holds.
+Since some witness of $\tau \meet \sigma$ is a witness of both $\tau$ and $\sigma$, $\Phi(\tau \meet \sigma)$ holds.
+% this rule could be bogus
 
 \begin{prooftree}
   \alwaysNoLine
   \AxiomC{$\ctx \Phi^-(\sigma)$}
   \AxiomC{$\ctx \Phi^-(\tau)$}
   \alwaysSingleLine
-  \meetRule
+  \RightLabel{\textsc{Meet}$^-$}
   \BinaryInfC{$\ctx \Phi^-(\tau\meet\sigma)$}
 \end{prooftree}
 
-Additionally, we introduce a trivial rule for axioms:
+We omit the $^+$ and $^-$ superscripts if the variance of predicates does not matter.
+Using this notation we can simplify axioms and the rule for constraints.
+The rule for axioms is trivial: We can resolve known facts directly from the context.
 
   \begin{prooftree}
     \AxiomC{}
-    \axiomNeg
-    \UnaryInfC{$\Gamma, \Phi^-(\tau) \vdash \Phi^-(\tau)$}
+    \RightLabel{\textsc{Axiom}}
+    \UnaryInfC{$\Gamma, \Phi(\tau) \vdash \Phi(\tau)$}
   \end{prooftree}
 
 Predicates may be constrained, i.e. they depend on other predicates.
@@ -175,7 +189,7 @@ Note that this corresponds to implications even though the arrow is flipped as i
   \begin{prooftree}
     \AxiomC{$\ctx \Psi(\tau)$}
     \AxiomC{$\ctx \Phi(\tau) \Rightarrow \Psi(\tau)$}
-    \RightLabel{\textsc{Impl}}
+    \RightLabel{\textsc{Constr}}
     \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
   \end{prooftree}
 
