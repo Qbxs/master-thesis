@@ -73,9 +73,15 @@ This permits many useful features in programming languages such as the reuse and
     \DisplayProof
  \end{center}
 
+ \begin{prooftree}
+  \AxiomC{$\tau \sub \rho$}
+  \AxiomC{$\sigma \sub \rho$}
+  \RightLabel{\textsc{JoinI}}
+  \BinaryInfC{$\tau \join \sigma \sub \rho$}
+\end{prooftree}
+
  % join elim
  \begin{center}
-    (admissable)
     \AxiomC{$\tau \join \sigma \sub \rho$}
     \RightLabel{\textsc{JoinE}$_1$}
     \UnaryInfC{$\tau \sub \rho$}
@@ -97,7 +103,6 @@ This permits many useful features in programming languages such as the reuse and
 
   % meet intro
   \begin{center}
-    (admissable)
     \AxiomC{$\tau \sub \rho$}
     \RightLabel{\textsc{MeetI}$_1$}
     \UnaryInfC{$\tau \meet \sigma \sub \rho$}
@@ -127,6 +132,20 @@ This permits many useful features in programming languages such as the reuse and
     \RightLabel{\textsc{MeetE}$_2$}
     \UnaryInfC{$\tau \sub \sigma$}
     \DisplayProof
+ \end{center}
+
+ \begin{center}
+  \AxiomC{$\tau \meet \sigma \sub \rho$}
+  \AxiomC{$\sigma \sub \upsilon$}
+  \RightLabel{\textsc{MeetE}}
+  \BinaryInfC{$\tau \sub \upsilon$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{$\tau \meet \sigma \sub \rho$}
+  \AxiomC{$\tau \sub \upsilon$}
+  \RightLabel{\textsc{MeetE}}
+  \BinaryInfC{$\sigma \sub \upsilon$}
+  \DisplayProof
  \end{center}
 
  % top/bot
