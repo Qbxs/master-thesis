@@ -87,19 +87,12 @@ Since every witness of $\tau \join \sigma$ is a witness of $\tau$ or $\sigma$, $
   \BinaryInfC{$\ctx \Phi^+(\tau\join\sigma)$}
 \end{prooftree}
 
-Additionally, we introduce trivial rules for axioms and implications:
+Additionally, we introduce a trivial rule for axioms:
 
   \begin{prooftree}
     \AxiomC{}
     \axiomPos
     \UnaryInfC{$\Gamma, \Phi^+(\tau) \vdash \Phi^+(\tau)$}
-  \end{prooftree}
-
-  \begin{prooftree}
-    \AxiomC{$\ctx \Psi(\tau)$}
-    \AxiomC{$\ctx \Phi(\tau) \Rightarrow \Psi(\tau)$}
-    \RightLabel{\textsc{Impl}}
-    \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
   \end{prooftree}
 
 \begin{definition}
@@ -166,13 +159,18 @@ The \textsc{Meet} rule can not be derived with the subtyping rules, however ther
   \BinaryInfC{$\ctx \Phi^-(\tau\meet\sigma)$}
 \end{prooftree}
 
-Additionally, we introduce trivial rules for axioms and implications:
+Additionally, we introduce a trivial rule for axioms:
 
   \begin{prooftree}
     \AxiomC{}
     \axiomNeg
     \UnaryInfC{$\Gamma, \Phi^-(\tau) \vdash \Phi^-(\tau)$}
   \end{prooftree}
+
+Predicates may be constrained, i.e. they depend on other predicates.
+$\Phi(\tau) \Rightarrow \Psi(\tau)$ means $\Psi$ is constrained by $\Psi$.
+Thus, if $\Psi(\tau)$ is satisfied, then the constraint $\Phi(\tau)$.
+Note that this corresponds to implications even though the arrow is flipped as it is oriented towards constraints.
 
   \begin{prooftree}
     \AxiomC{$\ctx \Psi(\tau)$}
