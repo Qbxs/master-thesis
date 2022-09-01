@@ -8,29 +8,20 @@ To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. ty
 
 There can be many different kinds of predicates over types, however not all of them are useful in the context of subtyping.
 
-We assume a naive set-theoretic definition of subtyping analagous to the one given by Castagna and Xu \cite{castagna}:
-
-\begin{definition} Subtyping\\
-  $\tau \sub \sigma \Leftrightarrow [\tau] \subseteq [\sigma]$ where $[\tau]$ is the set  of all witnesses of $\tau$.
-\end{definition}
-
-This notion of subtyping trivially satsifies the Liskov substitution principle.
-Because with $\tau \sub \sigma$ for every $e : \tau$ we also have $e : \sigma$, the coercion function is the identity.
-Thus all properties are preserved for terms over the subtyping relation.
 
 We are only interested in predicates that are preserved over the subtyping lattice.
 I.e. predicates that depend only on the witnesses of a type.
 That means only predicates that are \emph{monotonous} are considered while other predicates such as \emph{"has exactly two values"} are disregarded.
 We further differentiate between \emph{covariant} and \emph{contravariant} predicates over types.
 
+Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific predicates.
+
 \begin{definition}
-  A \emph{covariant type class predicate} $\Phi^+$ is specified by a property $\phi$.
-  For a type $\tau$ the application $\Phi^+(\tau)$ holds if and only if $\phi$ holds for all witnesses of $\tau$.
+  A \emph{covariant type class predicate} $\Phi^+$ is a predicate preserved by the subtyping relation, i.e. it adheres to the following rule:
 \end{definition}
 
-Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific predicates.
-The monotonicity of $\Phi^+$ motivates the following rule preserving the predicate for subtypes.
-From the definition of covariant predicates it follows that $\phi$ holds for every witness of $\sigma$ and because every witness of $\tau$ is also a witness of $\sigma$ the characteristic property $\phi$ holds for all witnesses of $\tau$.
+% The monotonicity of $\Phi^+$ motivates the following rule preserving the predicate for subtypes.
+% From the definition of covariant predicates it follows that $\phi$ holds for every witness of $\sigma$ and because every witness of $\tau$ is also a witness of $\sigma$ the characteristic property $\phi$ holds for all witnesses of $\tau$.
 
 \begin{prooftree}
   \alwaysNoLine
@@ -41,7 +32,7 @@ From the definition of covariant predicates it follows that $\phi$ holds for eve
   \BinaryInfC{$\ctx \Phi^+(\tau)$}
 \end{prooftree}
 
-With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful admissable rules:
+With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules:
 
 \begin{center}
   \alwaysNoLine
@@ -75,28 +66,9 @@ With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful admis
   \DisplayProof
 \end{center}
 
-The \textsc{Join} rule can not be derived with the subtyping rules because $\tau \join \sigma$ is neither a subtype of $\tau$ nor of $\sigma$.
-However, there is a motivation for it:
-With the definition of covariant predicates the premises express that for all witnesses of $\tau$ and $\sigma$ the characteristic property holds.
-Since every witness of $\tau \join \sigma$ is a witness of $\tau$ or $\sigma$, $\Phi(\tau \join \sigma)$ holds.
-
-\begin{prooftree}
-  \alwaysNoLine
-  \AxiomC{$\ctx \Phi^+(\sigma)$}
-  \AxiomC{$\ctx \Phi^+(\tau)$}
-  \alwaysSingleLine
-  \RightLabel{\textsc{Join}$^+$}
-  \BinaryInfC{$\ctx \Phi^+(\tau\join\sigma)$}
-\end{prooftree}
-
 \begin{definition}
-  A \emph{contravariant type class predicate} $\Phi^-$ is specified by a property $\phi$.
-  For a type $\tau$ the application $\Phi^-(\tau)$ holds if and only if $\phi$ holds for some witnesses of $\tau$.
+  A \emph{contravariant type class predicate} $\Phi^-$ is a predicate preserved by the supertyping or flipped subtyping relation, i.e. it adheres to the following rule:
 \end{definition}
-
-The rules for contravariant predicates are dual to those for covariant predicates.
-The monotonicity of $\Phi^-$ motivates the following rule preserving the predicate for supertypes:
-From the definition of contravariant predicates it follows that $\phi$ holds for some witness of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
 
 \begin{prooftree}
   \alwaysNoLine
@@ -107,7 +79,12 @@ From the definition of contravariant predicates it follows that $\phi$ holds for
   \BinaryInfC{$\ctx \Phi^-(\tau)$}
 \end{prooftree}
 
-With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful admissable rules:
+The rules for contravariant predicates are dual to those for covariant predicates.
+The monotonicity of $\Phi^-$ motivates the following rule preserving the predicate for supertypes:
+From the definition of contravariant predicates it follows that $\phi$ holds for some witness of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
+
+% derivable statt admissable
+With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful rules:
 
 \begin{center}
   \alwaysNoLine
@@ -157,23 +134,6 @@ With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful
 %   \DisplayProof
 % \end{center}
 
-
-The \textsc{Meet} rule can not be derived with the subtyping rules because $\tau \meet \sigma$ is neither a supertype of $\tau$ nor of $\sigma$.
-However, there is a motivation for it:
-With the definition of contravariant predicates the premises express that for some witnesses of $\tau$ and $\sigma$ the characteristic property holds.
-Since some witness of $\tau \meet \sigma$ is a witness of both $\tau$ and $\sigma$, $\Phi(\tau \meet \sigma)$ holds.
-% this rule is bogus:
-% if \tau and \sigma are disjoint there is no possible witness in \tau \meet \sigma...
-
-\begin{prooftree}
-  \alwaysNoLine
-  \AxiomC{$\ctx \Phi^-(\sigma)$}
-  \AxiomC{$\ctx \Phi^-(\tau)$}
-  \alwaysSingleLine
-  \RightLabel{\textsc{Meet}$^-$}
-  \BinaryInfC{$\ctx \Phi^-(\tau\meet\sigma)$}
-\end{prooftree}
-
 We omit the $^+$ and $^-$ superscripts if the variance of predicates does not matter.
 Using this notation we can simplify axioms and the rule for constraints.
 The rule for axioms is trivial: We can resolve known facts directly from the context.
@@ -195,6 +155,118 @@ Note that this corresponds to implications even though the arrow is flipped as i
     \RightLabel{\textsc{Constr}}
     \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
   \end{prooftree}
+
+\section{Witnesses}
+
+\begin{prooftree}
+  \AxiomC{$i : {\bf instance} \; \Phi(\tau)$}
+  \RightLabel{\textsc{Decl}}
+  \UnaryInfC{$w : \Phi(\tau)$}
+\end{prooftree}
+
+\begin{center}
+  \AxiomC{$w : \Phi^+(\tau \join \sigma)$}
+  \RightLabel{\textsc{Join}$_1$}
+  \UnaryInfC{$in_1(w) : \Phi^+(\tau)$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{$w : \Phi^+(\tau \join \sigma)$}
+  \RightLabel{\textsc{Join}$_2$}
+  \UnaryInfC{$in_2(w) : \Phi^+(\sigma)$}
+  \DisplayProof
+\end{center}
+
+% simply reuse the same witness
+\begin{center}
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \RightLabel{\textsc{Meet}$_1$}
+  \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{$w : \Phi^+(\sigma)$}
+  \RightLabel{\textsc{Meet}$_1$}
+  \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
+  \RightLabel{\textsc{Meet}$_1$}
+  \UnaryInfC{$proj_1(w) : \Phi^-(\tau)$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
+  \RightLabel{\textsc{Join}$_2$}
+  \UnaryInfC{$proj_2(w) : \Phi^+(\sigma)$}
+  \DisplayProof
+\end{center}
+
+% simply reuse the same witness
+\begin{center}
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \RightLabel{\textsc{Join}$_1$}
+  \UnaryInfC{$w : \Phi^-(\tau \join \sigma)$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{$w : \Phi^-(\sigma)$}
+  \RightLabel{\textsc{Join}$_1$}
+  \UnaryInfC{$w : \Phi^-(\tau \join \sigma)$}
+  \DisplayProof
+\end{center}
+
+\section{Coherence}
+
+Using witnesses we may formalize type class coherence:
+
+\begin{definition}
+  Type class resolution is coherent if and only if for any pair of witnesses $i,j : \Phi(\tau)$ that witness the same predicate application we have $i \opeq j$.
+\end{definition}
+
+TODO: Define operational equality $\opeq$
+
+\section{Inclusive Subtyping}
+
+We assume a naive set-theoretic definition of subtyping analagous to the one given by Castagna and Xu \cite{castagna}:
+
+\begin{definition} Subtyping\\
+  $\tau \sub \sigma \Leftrightarrow [\tau] \subseteq [\sigma]$ where $[\tau]$ is the set  of all witnesses of $\tau$.
+\end{definition}
+
+This notion of subtyping trivially satsifies the Liskov substitution principle.
+Because with $\tau \sub \sigma$ for every $e : \tau$ we also have $e : \sigma$, the coercion function is the identity.
+Thus all properties are preserved for terms over the subtyping relation.
+
+The \textsc{Join} rule can not be derived with the subtyping rules because $\tau \join \sigma$ is neither a subtype of $\tau$ nor of $\sigma$.
+However, there is a motivation for it:
+With the definition of covariant predicates the premises express that for all witnesses of $\tau$ and $\sigma$ the characteristic property holds.
+Since every witness of $\tau \join \sigma$ is a witness of $\tau$ or $\sigma$, $\Phi(\tau \join \sigma)$ holds.
+
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\sigma)$}
+  \AxiomC{$\ctx \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Join}$^+$}
+  \BinaryInfC{$\ctx \Phi^+(\tau\join\sigma)$}
+\end{prooftree}
+
+
+The \textsc{Meet} rule can not be derived with the subtyping rules because $\tau \meet \sigma$ is neither a supertype of $\tau$ nor of $\sigma$.
+However, there is a motivation for it:
+With the definition of contravariant predicates the premises express that for some witnesses of $\tau$ and $\sigma$ the characteristic property holds.
+Since some witness of $\tau \meet \sigma$ is a witness of both $\tau$ and $\sigma$, $\Phi(\tau \meet \sigma)$ holds.
+% this rule is bogus:
+% if \tau and \sigma are disjoint there is no possible witness in \tau \meet \sigma...
+
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\sigma)$}
+  \AxiomC{$\ctx \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Meet}$^-$}
+  \BinaryInfC{$\ctx \Phi^-(\tau\meet\sigma)$}
+\end{prooftree}
+
 
 \section{Type classes as predicates over types}
 

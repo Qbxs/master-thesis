@@ -114,3 +114,24 @@ Given `Show {x,y}` and `Show {y,z}` can we resolve `Show {x,y,z}`
 - foundations: data/codata, polarity, continuations, polymorphism, subtyping, typeclass (coherence)
 - main part: type inference, dictionary passing, problematic examples for type class coherence
 - discussion: instance chains, multi param classes (for mixed variance), modularity, further work
+
+# Structure
+
+## Qualified Types
+
+### Defs
+
+- Predicates
+- Cov Pred
+- Contrav Pred
+
+Derviable Rules
+(with example derivation)
+
+examples for predicates: Show, Read, Default, Decidable (a -> Bool)
+
+### Witnesses
+
+### Coherence
+
+### 
