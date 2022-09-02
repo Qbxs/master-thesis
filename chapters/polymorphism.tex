@@ -62,6 +62,19 @@ This permits many useful features in programming languages such as the reuse and
     \BinaryInfC{$\tau \sub \rho$}
   \end{prooftree}
 
+  % top/bot
+ \begin{center}
+  \AxiomC{}
+  \RightLabel{\textsc{Top}}
+  \UnaryInfC{$\tau \sub \top$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{}
+  \RightLabel{\textsc{Bot}}
+  \UnaryInfC{$\bot \sub \tau$}
+  \DisplayProof
+\end{center}
+
  % join intro
  \begin{center}
     \AxiomC{$\tau \sub \sigma$}
@@ -102,22 +115,7 @@ This permits many useful features in programming languages such as the reuse and
   \BinaryInfC{$\tau \sub \sigma \meet \rho$}
  \end{prooftree}
 
- 
-
- % top/bot
- \begin{center}
-    \AxiomC{}
-    \RightLabel{\textsc{Top}}
-    \UnaryInfC{$\tau \sub \top$}
-    \DisplayProof
-    {\hskip.2in}
-    \AxiomC{}
-    \RightLabel{\textsc{Bot}}
-    \UnaryInfC{$\bot \sub \tau$}
-    \DisplayProof
- \end{center}
-
- Using the \textsc{Trans} rule, we can derive further elimination rules:
+ Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules:
 
  % join elim
  \begin{center}
@@ -166,6 +164,16 @@ This permits many useful features in programming languages such as the reuse and
 \BinaryInfC{$\sigma \sub \upsilon$}
 \DisplayProof
 \end{center}
+
+Finally, we can add primitive rules.
+Let $Nat$ and $Int$ be the types of natural numbers and integers.
+We want to express that every natural number is also an integer and therefore introduce a corresponding rule:
+
+\begin{prooftree}
+  \AxiomC{}
+  \RightLabel{\textsc{Prim}}
+  \UnaryInfC{$Nat \sub Int$}
+\end{prooftree}
 
 Liskov \cite{liskov} describes subtyping to adhere to the following substitution principle:
 
