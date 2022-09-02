@@ -158,45 +158,88 @@ Note that this corresponds to implications even though the arrow is flipped as i
 
 \section{Witnesses}
 
+By annotating applications of predicates with specific witnesses we obtain a calculus
+that is not only able to prove that a type satisfies a predicate but also constructs a witness for such a proof.
+
+
 \begin{prooftree}
   \AxiomC{$i : {\bf instance} \; \Phi(\tau)$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w : \Phi(\tau)$}
 \end{prooftree}
 
+\begin{prooftree}
+  \AxiomC{$w : \Psi(\tau)$}
+  \AxiomC{$s : \Phi(\tau) \Rightarrow \Psi(\tau)$}
+  \RightLabel{\textsc{SuperC}}
+  \BinaryInfC{$s(w) : \Phi(\tau)$}
+\end{prooftree}
+
 \begin{center}
-  \AxiomC{$w : \Phi^+(\tau \join \sigma)$}
-  \RightLabel{\textsc{Join}$_1$}
-  \UnaryInfC{$in_1(w) : \Phi^+(\tau)$}
+  \alwaysNoLine
+  \AxiomC{$w : \Phi^+(\top)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Top}$^+$}
+  \UnaryInfC{$triv(w) : \Phi^+(\tau)$}
   \DisplayProof
   {\hskip.2in}
-  \AxiomC{$w : \Phi^+(\tau \join \sigma)$}
-  \RightLabel{\textsc{Join}$_2$}
-  \UnaryInfC{$in_2(w) : \Phi^+(\sigma)$}
+  \alwaysNoLine
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Bot}$^+$}
+  \UnaryInfC{$triv(w) : \Phi^+(\bot)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \alwaysNoLine
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Top}$^-$}
+  \UnaryInfC{$triv(w) : \Phi^-(\top)$}
+  \DisplayProof
+  {\hskip.2in}
+  \alwaysNoLine
+  \AxiomC{$w : \Phi^-(\bot)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Bot}$^-$}
+  \UnaryInfC{$triv(w) : \Phi^-(\tau)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \AxiomC{$in_1(w) : \Phi^+(\tau \join \sigma)$}
+  \RightLabel{\textsc{Join}$_1^+$}
+  \UnaryInfC{$w : \Phi^+(\tau)$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{$in_2(w) : \Phi^+(\tau \join \sigma)$}
+  \RightLabel{\textsc{Join}$_2^+$}
+  \UnaryInfC{$w : \Phi^+(\sigma)$}
   \DisplayProof
 \end{center}
 
 % simply reuse the same witness
 \begin{center}
-  \AxiomC{$w : \Phi^+(\tau)$}
-  \RightLabel{\textsc{Meet}$_1$}
+  \AxiomC{$proj_1(w) : \Phi^+(\tau)$}
+  \RightLabel{\textsc{Meet}$_1^+$}
   \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
   \DisplayProof
   {\hskip.2in}
-  \AxiomC{$w : \Phi^+(\sigma)$}
-  \RightLabel{\textsc{Meet}$_1$}
+  \AxiomC{$proj_2(w) : \Phi^+(\sigma)$}
+  \RightLabel{\textsc{Meet}$_2^+$}
   \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
   \DisplayProof
 \end{center}
 
 \begin{center}
   \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
-  \RightLabel{\textsc{Meet}$_1$}
+  \RightLabel{\textsc{Meet}$_1^-$}
   \UnaryInfC{$proj_1(w) : \Phi^-(\tau)$}
   \DisplayProof
   {\hskip.2in}
   \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
-  \RightLabel{\textsc{Meet}$_2$}
+  \RightLabel{\textsc{Meet}$_2^-$}
   \UnaryInfC{$proj_2(w) : \Phi^+(\sigma)$}
   \DisplayProof
 \end{center}
@@ -204,13 +247,13 @@ Note that this corresponds to implications even though the arrow is flipped as i
 % simply reuse the same witness
 \begin{center}
   \AxiomC{$w : \Phi^-(\tau)$}
-  \RightLabel{\textsc{Join}$_1$}
-  \UnaryInfC{$w : \Phi^-(\tau \join \sigma)$}
+  \RightLabel{\textsc{Join}$_1^-$}
+  \UnaryInfC{$in_1(w) : \Phi^-(\tau \join \sigma)$}
   \DisplayProof
   {\hskip.2in}
   \AxiomC{$w : \Phi^-(\sigma)$}
-  \RightLabel{\textsc{Join}$_1$}
-  \UnaryInfC{$w : \Phi^-(\tau \join \sigma)$}
+  \RightLabel{\textsc{Join}$_2^-$}
+  \UnaryInfC{$in_2(w) : \Phi^-(\tau \join \sigma)$}
   \DisplayProof
 \end{center}
 
