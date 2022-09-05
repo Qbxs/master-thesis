@@ -117,6 +117,16 @@ Given `Show {x,y}` and `Show {y,z}` can we resolve `Show {x,y,z}`
 
 # Structure
 
+## Polymorphism
+
+### Parametric Polymorphism
+
+### Ad-hoc Polymorphism
+
+### Subtyping
+
+Should function types be considered even if they are not built-in?
+
 ## Qualified Types
 
 ### Defs
