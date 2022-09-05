@@ -8,11 +8,8 @@ To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. ty
   Given a universe of types $\mathcal{U}$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\mathcal{U})$.
 \end{definition}
 
-There can be many different kinds of predicates over types, however not all of them are useful in the context of subtyping.
-
-
 We are only interested in predicates that are preserved over the subtyping lattice.
-I.e. predicates that depend only on the witnesses of a type.
+I.e. predicates that depend only on the terms of a type.
 That means only predicates that are \emph{monotonous} are considered while other predicates such as \emph{"has exactly two values"} are disregarded.
 We further differentiate between \emph{covariant} and \emph{contravariant} predicates over types.
 
@@ -23,7 +20,7 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
 \end{definition}
 
 % The monotonicity of $\Phi^+$ motivates the following rule preserving the predicate for subtypes.
-% From the definition of covariant predicates it follows that $\phi$ holds for every witness of $\sigma$ and because every witness of $\tau$ is also a witness of $\sigma$ the characteristic property $\phi$ holds for all witnesses of $\tau$.
+% From the definition of covariant predicates it follows that $\phi$ holds for every term of $\sigma$ and because every witness of $\tau$ is also a witness of $\sigma$ the characteristic property $\phi$ holds for all witnesses of $\tau$.
 
 \begin{prooftree}
   \alwaysNoLine
@@ -75,6 +72,10 @@ With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules
   \UnaryInfC{$\ctx \Phi^+(Nat)$}
 \end{prooftree}
 
+A typical example for covariant predicates is $Showable$: all types that are showable, which generally rules out function types.
+The \textsc{Sub}$^+$ rule seems intuitive for this:
+If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can be shown in the same way.
+
 \begin{definition}
   A \emph{contravariant type class predicate} $\Phi^-$ is a predicate preserved by the supertyping or flipped subtyping relation, i.e. it adheres to the following rule:
 \end{definition}
@@ -90,9 +91,8 @@ With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules
 
 The rules for contravariant predicates are dual to those for covariant predicates.
 The monotonicity of $\Phi^-$ motivates the following rule preserving the predicate for supertypes:
-From the definition of contravariant predicates it follows that $\phi$ holds for some witness of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
+From the definition of contravariant predicates it follows that $\phi$ holds for some term of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
 
-% derivable statt admissable
 With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful rules:
 
 \begin{center}
@@ -133,6 +133,11 @@ With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful
   \RightLabel{\textsc{Prim}$^+$}
   \UnaryInfC{$\ctx \Phi^-(Int)$}
 \end{prooftree}
+
+A typical example for covariant predicates is $Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
+The \textsc{Sub}$^-$ again rule seems intuitive for this:
+If $e : \tau$ is a default value for $\tau$ and $\sigma \sub \tau$, then $e : \sigma$ can be used as a default value for $\sigma$ as well.
+
 
 % \begin{center}
 %   \alwaysNoLine
@@ -208,6 +213,8 @@ We obtain the following derivations for $Showable(Nat)$ and $Defaultable(Int \me
 By annotating applications of predicates with specific witnesses we obtain a calculus
 that is not only able to prove that a type satisfies a predicate but also constructs a witness for such a proof.
 
+The only axiom for this calculus is an instance declaration.
+We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
 
 \begin{prooftree}
   \AxiomC{$i : {\bf instance} \; \Phi(\tau)$}
