@@ -186,6 +186,7 @@ Dually, a type $\tau$ satsifies the contravariant predicate $Defaultable$ if a f
 Let context $\Gamma := \{ Showable(Int \join Unit), Defaultable(Nat) \}$.
 We obtain the following derivations for $Showable(Nat)$ and $Defaultable(Int \meet \sigma)$:
 
+
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
@@ -215,6 +216,20 @@ that is not only able to prove that a type satisfies a predicate but also constr
 
 The only axiom for this calculus is an instance declaration.
 We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
+
+$triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
+$in_{1/2}$ correspond to the construction (injection) of an union type from either the first type $\tau$ or the second type $\sigma$ of the union $\tau \join \sigma$.
+$proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet \sigma$ to one of its constituent types $\tau$ or $\sigma$.
+
+\[
+\begin{tikzcd}
+  & \tau \meet \sigma \arrow [llddd] \arrow [rrddd] & \\
+  & & \\
+  & & \\
+  \tau & & \sigma
+\end{tikzcd}
+\]
+
 
 \begin{prooftree}
   \AxiomC{$i : {\bf instance} \; \Phi(\tau)$}
