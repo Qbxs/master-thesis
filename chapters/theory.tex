@@ -223,10 +223,19 @@ $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet 
 
 \[
 \begin{tikzcd}
-  & \tau \meet \sigma \arrow [llddd] \arrow [rrddd] & \\
+  & \tau \meet \sigma \arrow[lddd, "proj_1"'] \arrow[rddd, "proj_2"] & \\
   & & \\
   & & \\
   \tau & & \sigma
+\end{tikzcd}
+\]
+
+\[
+\begin{tikzcd}
+  \tau \arrow[rddd, "in_1"'] & & \sigma \arrow[lddd, "in_2"] \\
+  & & \\
+  & & \\
+  & \tau \join \sigma &
 \end{tikzcd}
 \]
 
