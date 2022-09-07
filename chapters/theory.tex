@@ -214,12 +214,10 @@ We obtain the following derivations for $Showable(Nat)$ and $Defaultable(Int \me
 By annotating applications of predicates with specific witnesses we obtain a calculus
 that is not only able to prove that a type satisfies a predicate but also constructs a witness for such a proof.
 
-The only axiom for this calculus is an instance declaration.
-We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
+This directly corresponds to type class resolution if we interpret type classes as predicates on types.
+We again differentiate co- and contravariant type classes in order to transport type classes over the subtyping relation.
 
-$triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
-$in_{1/2}$ correspond to the construction (injection) of an union type from either the first type $\tau$ or the second type $\sigma$ of the union $\tau \join \sigma$.
-$proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet \sigma$ to one of its constituent types $\tau$ or $\sigma$.
+We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
 
 \[
 \begin{tikzcd}
@@ -240,11 +238,19 @@ $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet 
 \]
 
 
+$triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
+$in_{1/2}$ correspond to the construction (injection) of an union type from either the first type $\tau$ or the second type $\sigma$ of the union $\tau \join \sigma$.
+$proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet \sigma$ to one of its constituent types $\tau$ or $\sigma$. We can interpret these morphisms as the supertype relation.
+
+If there exists some instance declaration of type class $\Psi$ for a type $\tau$, we can directly resolve $\Psi(\tau)$.
+
 \begin{prooftree}
   \AxiomC{$i : {\bf instance} \; \Phi(\tau)$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w : \Phi(\tau)$}
 \end{prooftree}
+
+Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to construct $\Phi(\tau)$ by applying it to the witness $w$ of $\Psi(\tau)$.
 
 \begin{prooftree}
   \AxiomC{$w : \Psi(\tau)$}
@@ -252,6 +258,8 @@ $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet 
   \RightLabel{\textsc{SuperC}}
   \BinaryInfC{$s(w) : \Phi(\tau)$}
 \end{prooftree}
+
+We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
 
 \begin{center}
   \alwaysNoLine
@@ -285,6 +293,8 @@ $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet 
   \DisplayProof
 \end{center}
 
+Interpreting $in_{1/2}$ and $proj_{1/2}$ as morphisms from a type to one of its supertypes the rules corresponding to the covariant \textsc{Join}$^+$ and \textsc{Meet}$^+$ rules are obvious.
+
 \begin{center}
   \AxiomC{$in_1(w) : \Phi^+(\tau \join \sigma)$}
   \RightLabel{\textsc{Join}$_1^+$}
@@ -297,7 +307,6 @@ $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet 
   \DisplayProof
 \end{center}
 
-% simply reuse the same witness
 \begin{center}
   \AxiomC{$proj_1(w) : \Phi^+(\tau)$}
   \RightLabel{\textsc{Meet}$_1^+$}
@@ -309,6 +318,8 @@ $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet 
   \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
   \DisplayProof
 \end{center}
+
+Analagously, with the interpretation of $in_{1/2}$ and $proj_{1/2}$  the rules corresponding to the contravariant \textsc{Join}$^-$ and \textsc{Meet}$^-$ rules are again obvious.
 
 \begin{center}
   \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
@@ -724,11 +735,15 @@ This also renders intensional type analysis more difficult:
 We can not simply match on a type (or its encoded representation \cite{weirich2000}) because we have to essentially solve the problem of subtyping between the type at hand and (at worst case) for each type for which an instance declaration is in scope.
 So, intensional type analysis may introduce a dramatic overhead in the presence of subtyping.
 
+This overhead seems natural when we want to implement a dynamically type checked language,
+However, type class resolution should already guarantee us static type safety, so additionally using type tags for dynamic type checking or type analysis seems superfluous.
+The only case for which intensional type analysis appears superior is a union type.
+
 \section{Type class coherence in the context of subtyping}
 % Main thesis for class coherence with subtyping
   Given \texttt{instance C a} and $sub \sub a$ and $a \sub sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
 
-  Consider we have \texttt{Nat \sub Int}.
+  Consider we have $Nat \sub Int$.
   We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
   For integers on the other hand, we might prefer to choose addition as operator and 0 as neutral element, so we can expand to monoid to a group.
 
@@ -741,12 +756,12 @@ So, intensional type analysis may introduce a dramatic overhead in the presence 
   Since type inferrence with subtyping is generally not quite obvious it may seem 
 
   Could we just use the most specific instance? This might have unexpected results.
-  E.g. if we have \texttt{NonEmptyList \sub List}, we may not know during compilation whether \texttt{NonEmptyList} or \texttt{List} is being picked.
-  ~Generally to infer the most specific type seems very hard. In this example filtering a \texttt{NonEmptyList} may or may not return an empty list and we may just have to assume that it is possibly empty.
+  E.g. if we have $NonEmptyList \sub List$, we may not know during compilation whether $NonEmptyList$ or $List$ is being picked.
+  ~Generally to infer the most specific type seems very hard. In this example filtering a $NonEmptyList$ may or may not return an empty list and we may just have to assume that it is possibly empty.
   This may lead to hard to track behaviour when using overlapping instances.
 
   A simple example for undecidable most specific instances can be better given with record types.
-  If we need to resolve an instance for \texttt{C {x : Int}} and we already have instances for \texttt{C {x : Int, y : Int}} and \texttt{C {x : Int, z : Int}} neither instance is more specific than the other.
+  If we need to resolve an instance for $C \{x : Int\}$ and we already have instances for $C \{x : Int, y : Int\}$ and $C \{x : Int, z : Int\}$ neither instance is more specific than the other.
 
 
   We should always check in an instance declaration whether this constraint globally holds. \\
@@ -757,7 +772,7 @@ So, intensional type analysis may introduce a dramatic overhead in the presence 
 
 The rules \textsc{Join}$^+$ and \textsc{Meet}$^-$ as mentioned before cannot be derived from the subtyping rules alone.
 It may seem intuitive that given $Show \; \tau$ and $Show \; \sigma$ we also have $Show \; \tau \; \join \; \sigma$.
-Dually we should also be able to resolve $Read \; \tau \; \meet \; \sigma$ from $Read \; \tau$ and $Read \; \sigma$.
+Dually we could also be able to resolve $Read \; \tau \; \meet \; \sigma$ from $Read \; \tau$ and $Read \; \sigma$.
 
 However these rules cannot be implemented generally.
 Consider type classes with methods in which the bound type variable occurs more than once (unlike in $Show$ and $Read$).
@@ -780,58 +795,11 @@ However, looking at the \texttt{Eq} typeclass, we can not generally deduce an in
 If we solely know how to compare terms of type $\tau$ with each other and how to compare terms of type $\sigma$ with each other,
 we do not know how to compare a term of type $\tau$ with a term of type $\sigma$, even though the derived instance tells we should be able to do so.
 
+\begin{gather}
+  \nonumber show_{a\join b} \; x := {\bf if} \; typeOf \; x == a \; {\bf then} \; show_a \; x \; {\bf else} \; show_b \; x
+\end{gather}
+
 We might be able to just return \texttt{False} as a default value in such cases but even default values can be ambiguous.
 Consider now the \texttt{Ord} type class. Given \texttt{Ord a} and \texttt{Ord b} we may say that in \texttt{Ord a $\join$ b} every $a$ is ordered before $b$.
 But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
 
-\begin{listing}
-  show$_{a\join b}$ x := if typeOf x == a then show$_a$ x else show$_b$ x
-\end{listing}
-
-
-\subsection{Multi Parameter Type Classes}
-
-The concrete implementation may impose further restrictions on instance resolution.
-
-Our language differentiattes covariant and contravariant type classes.
-This distinction is made for the type variable declared in the class declaration.
-
-In a covariant type class, type variables may only occur on covariant positions in the class methods signatures.
-A simple example for a covariant type class is the \mintinline{Haskell}{Show} class:
-
-\begin{minted}{Haskell}
-  class Show +a where
-    show :: a -> String
-\end{minted}
-
-Dually in a contravariant type class, type variables may only occur on contravariant positions in the class methods signatures.
-A simple example for a contravariant type class is the \mintinline{Haskell}{Read} class:
-
-\begin{minted}{Haskell}
-  class Read -a where
-    read :: Read -> a
-\end{minted}
-
-This distinction imposes a problem when we want to implement type classes in which the type variable may occur both in a covariant and contravariant position.
-
-\begin{minted}{Haskell}
-  class Semigroup a where
-    mappend :: a -> a -> a
-\end{minted}
-
-One way to solve this problem is by distinguishing covariant and contravariant type variables.
-We can do so by introducing multi parameter type classes:
-
-\begin{minted}{Haskell}
-  class Semigroup +a -b where
-    mappend :: a -> a -> b
-\end{minted}
-
-Instead of defining an instance for \mintinline{Haskell}{Semigroup Nat}, we would then have to define an instance for \mintinline{Haskell}{Semigroup Nat Nat}.
-The latter seems to be less intuitive because semigroups are not a relation between types but a property for just one type (the operator has to map two elements from one set into the same set).
-Since such cases may occur in many other classes (e.g. Num, Monad) it may be helpful to define syntactic sugar for type classes with mixed variance.
-Then, the less intuitive implementation as multi parameter type classes could be hidden on the surface syntax.
-
-  Discuss instance chains:
-  We can relax this constraint by defining an explicit order in which instances should be picked/resolved.
-  \cite{morris2010instance}
