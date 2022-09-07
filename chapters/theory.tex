@@ -355,6 +355,40 @@ Using witnesses we may formalize type class coherence:
 
 TODO: Define operational equality $\opeq$
 
+Following this there are some constraints we have to impose on type class resolution.
+Generally, if there is an instance declaration for $\Psi(\tau)$ and if $\tau \sub \sigma$ or $\sigma \sub \tau$ there cannot be another instance declaration for $\Psi(\sigma)$.
+Otherwise, we could have the following two derivations with different witnesses if there is a primitive subtyping derivation for $\tau \sub \sigma$:
+
+\begin{center}
+  \AxiomC{$i : {\bf instance} \; \Phi^+(\tau)$}
+  \RightLabel{\textsc{Decl}}
+  \UnaryInfC{$w : \Phi^+(\tau)$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{$j : {\bf instance} \; \Phi^+(\sigma)$}
+  \RightLabel{\textsc{Decl}}
+  \UnaryInfC{$w' : \Phi^+(\sigma)$}
+  \RightLabel{\textsc{Prim}}
+  \UnaryInfC{$coerce(w') : \Phi^+(\tau)$}
+  \DisplayProof
+\end{center}
+
+For contravariant predicates and $\sigma \sub \tau$ we could have:
+
+\begin{center}
+  \AxiomC{$i : {\bf instance} \; \Phi^-(\tau)$}
+  \RightLabel{\textsc{Decl}}
+  \UnaryInfC{$w : \Phi^-(\tau)$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{$j : {\bf instance} \; \Phi^-(\sigma)$}
+  \RightLabel{\textsc{Decl}}
+  \UnaryInfC{$w' : \Phi^-(\sigma)$}
+  \RightLabel{\textsc{Prim}}
+  \UnaryInfC{$coerce(w') : \Phi^-(\tau)$}
+  \DisplayProof
+\end{center}
+
 \section{Inclusive Subtyping}
 
 We assume a naive set-theoretic definition of subtyping analagous to the one given by Castagna and Xu \cite{castagna}:
