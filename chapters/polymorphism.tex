@@ -49,7 +49,7 @@ Let $\tau, \sigma, \rho$ be meta variables for types.
 The subtyping relation is defined by the following derivation rules.
 
 % elim rules are derivable
-
+\begin{figure}[h]
   % refl
   \begin{prooftree}
     \AxiomC{}
@@ -118,8 +118,13 @@ The subtyping relation is defined by the following derivation rules.
   \BinaryInfC{$\tau \sub \sigma \meet \rho$}
  \end{prooftree}
 
+ \caption{Subtyping rules}
+ \label{fig:subtyping}
+\end{figure}
+
  Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules:
 
+ \begin{figure}[h]
  % join elim
  \begin{center}
   \AxiomC{$\tau \join \sigma \sub \rho$}
@@ -168,14 +173,19 @@ The subtyping relation is defined by the following derivation rules.
 \DisplayProof
 \end{center}
 
+
+\caption{Derived subtyping rules}
+\label{fig:subtypingDerived}
+\end{figure}
+
 Finally, we can add primitive rules.
 Let $Nat$ and $Int$ be the types of natural numbers and integers.
 We want to express that every natural number is also an integer and therefore introduce a corresponding rule:
 
 \begin{prooftree}
   \AxiomC{}
-  \RightLabel{\textsc{Prim}}
-  \UnaryInfC{$Nat \sub Int$}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
 \end{prooftree}
 
 Liskov \cite{liskov} describes subtyping to adhere to the following substitution principle:

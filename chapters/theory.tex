@@ -68,11 +68,11 @@ With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules
 \begin{prooftree}
   \AxiomC{$\ctx \Phi^+(Int)$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Prim}$^+$}
+  \RightLabel{\textsc{NatPrim}$^+$}
   \UnaryInfC{$\ctx \Phi^+(Nat)$}
 \end{prooftree}
 
-A typical example for covariant predicates is $Showable$: all types that are showable, which generally rules out function types.
+A typical example for covariant predicates is $\Showable$: all types that are showable, which generally rules out function types.
 The \textsc{Sub}$^+$ rule seems intuitive for this:
 If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can be shown in the same way.
 
@@ -130,11 +130,11 @@ With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful
 \begin{prooftree}
   \AxiomC{$\ctx \Phi^-(Nat)$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Prim}$^+$}
+  \RightLabel{\textsc{NatPrim}$^+$}
   \UnaryInfC{$\ctx \Phi^-(Int)$}
 \end{prooftree}
 
-A typical example for covariant predicates is $Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
+A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
 The \textsc{Sub}$^-$ again rule seems intuitive for this:
 If $e : \tau$ is a default value for $\tau$ and $\sigma \sub \tau$, then $e : \sigma$ can be used as a default value for $\sigma$ as well.
 
@@ -179,34 +179,34 @@ Note that this corresponds to implications even though the arrow is flipped as i
 
 \subsection{Examples}
 
-Consider the predicates $Showable$ and $Defaultable$.
-A type $\tau$ satsifies the covariant predicate $Showable$ if for each term a function from $\tau \to String$ is defined.
-Dually, a type $\tau$ satsifies the contravariant predicate $Defaultable$ if a function of type $Unit \to \tau$ can be defined.
+Consider the predicates $\Showable$ and $\Defaultable$.
+A type $\tau$ satsifies the covariant predicate $\Showable$ if for each term a function from $\tau \to String$ is defined.
+Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a function of type $Unit \to \tau$ can be defined.
 
-Let context $\Gamma := \{ Showable(Int \join Unit), Defaultable(Nat) \}$.
-We obtain the following derivations for $Showable(Nat)$ and $Defaultable(Int \meet \sigma)$:
+Let context $\Gamma := \{ \Showable(Int \join Unit), \Defaultable(Nat) \}$.
+We obtain the following derivations for $\Showable(Nat)$ and $\Defaultable(Int \meet \sigma)$:
 
 
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
-  \UnaryInfC{$\ctx Showable(Int \join Unit)$}
+  \UnaryInfC{$\ctx \Showable(Int \join Unit)$}
   \RightLabel{\textsc{Join}$^+_1$}
-  \UnaryInfC{$\ctx Showable(Int)$}
+  \UnaryInfC{$\ctx \Showable(Int)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Prim}$^+$}
-  \UnaryInfC{$\ctx Showable(Nat)$}
+  \UnaryInfC{$\ctx \Showable(Nat)$}
 \end{prooftree}
 
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
-  \UnaryInfC{$\ctx Defaultable(Nat)$}
+  \UnaryInfC{$\ctx \Defaultable(Nat)$}
   \RightLabel{\textsc{Prim}$^-$}
-  \UnaryInfC{$\ctx Defaultable(Int)$}
+  \UnaryInfC{$\ctx \Defaultable(Int)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Meet}$^-_1$}
-  \UnaryInfC{$\ctx Defaultable(Int \meet \sigma)$}
+  \UnaryInfC{$\ctx \Defaultable(Int \meet \sigma)$}
 \end{prooftree}
 
 \section{Witnesses}
@@ -216,6 +216,74 @@ that is not only able to prove that a type satisfies a predicate but also constr
 
 This directly corresponds to type class resolution if we interpret type classes as predicates on types.
 We again differentiate co- and contravariant type classes in order to transport type classes over the subtyping relation.
+
+  % refl
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Refl}}
+    \UnaryInfC{$\mathit{refl} : \tau \sub \tau$}
+  \end{prooftree}
+
+  % trans
+  \begin{prooftree}
+    \AxiomC{$f : \tau \sub \sigma$}
+    \AxiomC{$g : \sigma \sub \rho$}
+    \RightLabel{\textsc{Trans}}
+    \BinaryInfC{$f \circ g : \tau \sub \rho$}
+  \end{prooftree}
+
+  % top/bot
+ \begin{center}
+  \AxiomC{}
+  \RightLabel{\textsc{Top}}
+  \UnaryInfC{$\mathit{fromTop} : \tau \sub \top$}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{}
+  \RightLabel{\textsc{Bot}}
+  \UnaryInfC{$\mathit{toBot} : \bot \sub \tau$}
+  \DisplayProof
+\end{center}
+
+ % join intro
+ \begin{center}
+    \AxiomC{$f : \tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_1$}
+    \UnaryInfC{$in_1(f) : \tau \sub \sigma \join \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$f: \tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_2$}
+    \UnaryInfC{$in_2(f) : \tau \sub \rho \join \sigma$}
+    \DisplayProof
+ \end{center}
+
+ \begin{prooftree}
+  \AxiomC{$f : \tau \sub \rho$}
+  \AxiomC{$g : \sigma \sub \rho$}
+  \RightLabel{\textsc{JoinI}}
+  \BinaryInfC{$\mathit{join}(f,g) : \tau \join \sigma \sub \rho$}
+\end{prooftree}
+
+  % meet intro
+  \begin{center}
+    \AxiomC{$f : \tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_1$}
+    \UnaryInfC{$\mathit{proj_1}(f) : \tau \meet \sigma \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$f : \sigma \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_2$}
+    \UnaryInfC{$\mathit{proj_2}(f) : \tau \meet \sigma \sub \rho$}
+    \DisplayProof
+ \end{center}
+
+ \begin{prooftree}
+  \AxiomC{$f : \tau \sub \rho$}
+  \AxiomC{$g : \tau \sub \sigma$}
+  \RightLabel{\textsc{MeetI}}
+  \BinaryInfC{$\mathit{meet}(f,g) : \tau \sub \sigma \meet \rho$}
+ \end{prooftree}
 
 We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
 
@@ -258,6 +326,27 @@ Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to c
   \RightLabel{\textsc{SuperC}}
   \BinaryInfC{$s(w) : \Phi(\tau)$}
 \end{prooftree}
+
+For \textsc{Sub}$^+$ and \textsc{Sub}$^-$ we can resolve witnesses like this:
+
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$w : \Phi^+(\sigma)$}
+  \AxiomC{$m : \tau \sub \sigma$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$cov(w,m) \Phi^+(\tau)$}
+\end{prooftree}
+
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$w : \Phi^-(\sigma)$}
+  \AxiomC{$m : \sigma \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$contrav(w,m) \Phi^-(\tau)$}
+\end{prooftree}
+
 
 We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
 
