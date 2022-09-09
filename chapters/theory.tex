@@ -313,7 +313,7 @@ $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet 
 If there exists some instance declaration of type class $\Psi$ for a type $\tau$, we can directly resolve $\Psi(\tau)$.
 
 \begin{prooftree}
-  \AxiomC{$i : {\bf instance} \; \Phi(\tau)$}
+  \AxiomC{$i : \instance{\Phi}{\tau}$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w : \Phi(\tau)$}
 \end{prooftree}
@@ -335,7 +335,7 @@ For \textsc{Sub}$^+$ and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$m : \tau \sub \sigma$}
   \alwaysSingleLine
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$cov(w,m) \Phi^+(\tau)$}
+  \BinaryInfC{$\cov(w,m) : \Phi^+(\tau)$}
 \end{prooftree}
 
 \begin{prooftree}
@@ -344,7 +344,7 @@ For \textsc{Sub}$^+$ and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$m : \sigma \sub \tau$}
   \alwaysSingleLine
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$contrav(w,m) \Phi^-(\tau)$}
+  \BinaryInfC{$\contrav(w,m) : \Phi^-(\tau)$}
 \end{prooftree}
 
 
@@ -449,39 +449,39 @@ Generally, if there is an instance declaration for $\Psi(\tau)$ and if $\tau \su
 Otherwise, we could have the following two derivations with different witnesses if there is a subtyping derivation $\mathscr{D}$ for a witness $m : \tau \sub \sigma$:
 
 \begin{prooftree}
-  \AxiomC{$i : {\bf instance} \; \Phi^+(\tau)$}
+  \AxiomC{$i : \instance{\Phi^+}{\tau}$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w : \Phi^+(\tau)$}
 \end{prooftree}
 
 \begin{prooftree}
-  \AxiomC{$j : {\bf instance} \; \Phi^+(\sigma)$}
+  \AxiomC{$j : \instance{\Phi^+}{\sigma}$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w' : \Phi^+(\sigma)$}
   \AxiomC{$\mathscr{D}$}
   \noLine
   \UnaryInfC{$m : \tau \sub \sigma$}
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$cov(w',m) : \Phi^+(\tau)$}
+  \BinaryInfC{$\cov(w',m) : \Phi^+(\tau)$}
 \end{prooftree}
 
 For contravariant predicates and given a derivation $\mathscr{D}'$ for a witness $m : \sigma \sub \tau$ we could have:
 
 \begin{prooftree}
-  \AxiomC{$i : {\bf instance} \; \Phi^-(\tau)$}
+  \AxiomC{$i : \instance{\Phi^-}{\tau}$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w : \Phi^-(\tau)$}
 \end{prooftree}
 
 \begin{prooftree}
-  \AxiomC{$j : {\bf instance} \; \Phi^-(\sigma)$}
+  \AxiomC{$j : \instance{\Phi^-}{\sigma}$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w' : \Phi^-(\sigma)$}
   \AxiomC{$\mathscr{D}'$}
   \noLine
   \UnaryInfC{$m : \sigma \sub \tau$}
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$contrav(w',m) : \Phi^-(\tau)$}
+  \BinaryInfC{$\contrav(w',m) : \Phi^-(\tau)$}
 \end{prooftree}
 
 \section{Inclusive Subtyping}
