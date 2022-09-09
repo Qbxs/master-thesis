@@ -183,30 +183,29 @@ Consider the predicates $\Showable$ and $\Defaultable$.
 A type $\tau$ satsifies the covariant predicate $\Showable$ if for each term a function from $\tau \to String$ is defined.
 Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a function of type $Unit \to \tau$ can be defined.
 
-Let context $\Gamma := \{ \Showable(Int \join Unit), \Defaultable(Nat) \}$.
-We obtain the following derivations for $\Showable(Nat)$ and $\Defaultable(Int \meet \sigma)$:
+Let context $\Gamma := \{ \Showable(\mathbb{Z}), \Defaultable(\mathbb{N}) \}$.
+We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})$ and $\Defaultable(\mathbb{Z} \join \sigma)$:
 
 
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
-  \UnaryInfC{$\ctx \Showable(Int \join Unit)$}
-  \RightLabel{\textsc{Join}$^+_1$}
-  \UnaryInfC{$\ctx \Showable(Int)$}
-  \alwaysSingleLine
+  \UnaryInfC{$\ctx \Showable(\mathbb{Z})$}
   \RightLabel{\textsc{Prim}$^+$}
-  \UnaryInfC{$\ctx \Showable(Nat)$}
+  \UnaryInfC{$\ctx \Showable(\mathbb{N})$}
+  \RightLabel{\textsc{Meet}$^+_2$}
+  \UnaryInfC{$\ctx \Showable(\mathcal{U} \meet \mathbb{N})$}
 \end{prooftree}
 
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
-  \UnaryInfC{$\ctx \Defaultable(Nat)$}
+  \UnaryInfC{$\ctx \Defaultable(\mathbb{N})$}
   \RightLabel{\textsc{Prim}$^-$}
-  \UnaryInfC{$\ctx \Defaultable(Int)$}
+  \UnaryInfC{$\ctx \Defaultable(\mathbb{Z})$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Meet}$^-_1$}
-  \UnaryInfC{$\ctx \Defaultable(Int \meet \sigma)$}
+  \RightLabel{\textsc{Join}$^-_1$}
+  \UnaryInfC{$\ctx \Defaultable(\mathbb{Z} \join \sigma)$}
 \end{prooftree}
 
 \section{Witnesses}
