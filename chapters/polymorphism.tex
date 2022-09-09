@@ -264,6 +264,8 @@ Similarily, the hierarchy of type classes can express a similar relationship exh
 E.g. the \mintinline{Haskell}{Fractional} type class is a subclass of the type class \mintinline{Haskell}{Num}.
 Similarily with subtyping we can define a type \texttt{Fractional} representing all fractional numbers and make it a subtype of \texttt{Number}.
 
+If we make instances explicit (like in ML-modules) type class overloading can be implemented solely with passing specific instance definitions.
+This is no coincidence as dictionary passing is a typical way of implementing type classes as shown in section \ref{sec:dictionaryPassing}.
 
 \subsection{Coherence}\label{sec:coherence}
 % for each type there t may be globally at most one instance C t defined
