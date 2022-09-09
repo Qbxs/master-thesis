@@ -45,8 +45,16 @@ meaning all terms $e$ of type $\tau$ are also of type $\sigma$.
 
 This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype.
 
-Let $\tau, \sigma, \rho$ be meta variables for types.
-The subtyping relation is defined by the following derivation rules.
+
+We use the following syntax of types with the simple types of natural numbers $\mathbb{N}$, of integers $\mathbb{Z}$, the type of booleans $\mathcal{B}$ and the unit type $\mathcal{U}$.
+Furthermore, for subtyping we consider the lattice types:
+\begin{flalign*}
+  \tau := & \; \mathbb{N} \; | \; \mathbb{Z} \; | \; \mathcal{B} \; | \; \mathcal{U} \dots & \textit{Simple types} \\
+          & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau           & \textit{Lattice types} \\
+          & \; \tau \to \tau                                                               & \textit{Function type}
+\end{flalign*}
+
+The subtyping lattice is defined by the following derivation rules where $\tau$, $\sigma$ and $\rho$ are meta variables for types.
 
 % elim rules are derivable
 \begin{figure}[h]
@@ -178,8 +186,8 @@ The subtyping relation is defined by the following derivation rules.
 \label{fig:subtypingDerived}
 \end{figure}
 
+
 Finally, we can add primitive rules.
-Let $Nat$ and $Int$ be the types of natural numbers and integers.
 We want to express that every natural number is also an integer and therefore introduce a corresponding rule:
 
 \begin{prooftree}
@@ -200,7 +208,7 @@ the behavior of $P$ is unchanged when [$e_1$] is substituted for [$e_2$], then [
 In essence, given subtyping types are no longer disjoint but can be mixed together to display natural inclusion properties that we may expect.
 E.g. every natural number is also an integer and therefore the type \texttt{Nat} of natural numbers is a subtype of \texttt{Int}.
 
-If we omit subtyping, we have to give explicit coercion functions (e.g. \texttt{coerce : Nat -> Int}) whenever the expected type is more general than the given type.
+If we omit subtyping, we have to give explicit coercion functions (e.g. $\mathit{coerce} : \mathbb{N} \to \mathbb{Z}$) whenever the expected type is more general than the given type.
 Subtyping allows us to pass such more specific arguments in a more natural way and makes coercions implicit.
 
 \section{Ad-hoc polymorphism}\label{sec:ad-hoc-polymorphism}
