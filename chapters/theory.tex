@@ -446,37 +446,43 @@ TODO: Define operational equality $\opeq$
 
 Following this there are some constraints we have to impose on type class resolution.
 Generally, if there is an instance declaration for $\Psi(\tau)$ and if $\tau \sub \sigma$ or $\sigma \sub \tau$ there cannot be another instance declaration for $\Psi(\sigma)$.
-Otherwise, we could have the following two derivations with different witnesses if there is a primitive subtyping derivation for $\tau \sub \sigma$:
+Otherwise, we could have the following two derivations with different witnesses if there is a subtyping derivation $\mathscr{D}$ for a witness $m : \tau \sub \sigma$:
 
-\begin{center}
+\begin{prooftree}
   \AxiomC{$i : {\bf instance} \; \Phi^+(\tau)$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w : \Phi^+(\tau)$}
-  \DisplayProof
-  {\hskip.2in}
+\end{prooftree}
+
+\begin{prooftree}
   \AxiomC{$j : {\bf instance} \; \Phi^+(\sigma)$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w' : \Phi^+(\sigma)$}
-  \RightLabel{\textsc{Prim}}
-  \UnaryInfC{$coerce(w') : \Phi^+(\tau)$}
-  \DisplayProof
-\end{center}
+  \AxiomC{$\mathscr{D}$}
+  \noLine
+  \UnaryInfC{$m : \tau \sub \sigma$}
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$cov(w',m) : \Phi^+(\tau)$}
+\end{prooftree}
 
-For contravariant predicates and $\sigma \sub \tau$ we could have:
+For contravariant predicates and given a derivation $\mathscr{D}'$ for a witness $m : \sigma \sub \tau$ we could have:
 
-\begin{center}
+\begin{prooftree}
   \AxiomC{$i : {\bf instance} \; \Phi^-(\tau)$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w : \Phi^-(\tau)$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$j : {\bf instance} \; \Phi^-(\sigma)$}
+\end{prooftree}
+
+\begin{prooftree}
+  \AxiomC{$j : {\bf instance} \; \Phi^+(\sigma)$}
   \RightLabel{\textsc{Decl}}
   \UnaryInfC{$w' : \Phi^-(\sigma)$}
-  \RightLabel{\textsc{Prim}}
-  \UnaryInfC{$coerce(w') : \Phi^-(\tau)$}
-  \DisplayProof
-\end{center}
+  \AxiomC{$\mathscr{D}'$}
+  \noLine
+  \UnaryInfC{$m : \sigma \sub \tau$}
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$contrav(w',m) : \Phi^-(\tau)$}
+\end{prooftree}
 
 \section{Inclusive Subtyping}
 
