@@ -30,7 +30,7 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
   \BinaryInfC{$\ctx \Phi^+(\tau)$}
 \end{prooftree}
 
-With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules:
+With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules:
 
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\top)$}
@@ -142,7 +142,7 @@ The rules for contravariant predicates are dual to those for covariant predicate
 The monotonicity of $\Phi^-$ motivates the following rule preserving the predicate for supertypes:
 From the definition of contravariant predicates it follows that $\phi$ holds for some term of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
 
-With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful rules:
+With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can again derive several useful rules:
 
 \begin{center}
   \AxiomC{$\ctx \Phi^-(\tau)$}

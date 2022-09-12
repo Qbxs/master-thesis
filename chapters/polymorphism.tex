@@ -1,5 +1,6 @@
 \chapter{Polymorphism}\label{ch:polymorphism}
 
+Polymorphism is a general concept in programming languages to abstract code and hide implementation details.
 In order to generalize functions over data types there have been several proposals to abstract over types in different programming languages:
 These can be summarised in three categories: parametric polymorphism, subtyping and ad-hoc polymorphism.
 Each of these have a reasoning principle associated with them.
@@ -230,7 +231,8 @@ An intuitive example for this (that is also the motivation for type classes in t
 We simply cannot define \texttt{(+) : Int -> Int -> Int} and then also \texttt{(+) : Float -> Float -> Float} in a different implementation, on which both types definetly rely on under the hood.
 But these types have nonetheless something in common. Namely that they both stand for \emph{numerical} values, that hence support the usual arithmetic operations, like addition, multiplication, division and so on.
 
-The idea of type classes is to generalise attributes of types with appropriate function.
+The idea of type classes is to generalise attributes of types with appropriate functions.
+Type classes express the concept of ad-hoc polymorphism in the type system in a sensible  way.
 The class \mintinline{Haskell}|Num| in Haskell expects that we can implement a number of numerical functions for a type $\tau$ if it is ought to be a member of the \mintinline{Haskell}|Num| type class.
 
 Shortened definition of the \mintinline{Haskell}|Num| type class in Haskell.
@@ -251,9 +253,7 @@ instance  Num Int  where
 \end{minted}
 
 
-% later:
-% category theory: functors, monoids, monads, etc.
-
+In order to be able to reason about type classes, the instances in scope need to be \emph{coherent}, i.e. they need to be uniquely determined as will be shown in section \ref{sec:coherence}.
 In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs.
 
 \cite{wadlerblott}
@@ -297,6 +297,7 @@ For type classes, this means that no two instances should be able to be resolved
 A rather obvious example would be to define two different instances for the same type.
 For example one instance of \mintinline{Haskell}{Ord Int}, one with ascending and one with descending order.
 The ambiguity arises as soon as we make use of these instances and it is no longer clear which one should be picked for evaluation.
+Data structures relying on coherent instances such as the module \mintinline{Haskell}{Data.Set} in Haskell may even exhibit fauly behavior if different implementations are being used. \cite{Kilpatrick2019-cy}
 
 More surprisingly type class coherence is already violated for overlapping instances.
 As part of the standard prelude we find both \mintinline{Haskell}{instance Show a => Show [a]} and \mintinline{Haskell}{instance Show String}
