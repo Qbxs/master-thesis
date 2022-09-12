@@ -126,6 +126,13 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
   \BinaryInfC{$\tau \sub \sigma \meet \rho$}
  \end{prooftree}
 
+ \begin{prooftree}
+  \AxiomC{$\tau' \sub \tau$}
+  \AxiomC{$\sigma \sub \sigma'$}
+  \RightLabel{\textsc{Func}}
+  \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
+ \end{prooftree}
+
  \caption{Subtyping rules}
  \label{fig:subtyping}
 \end{figure}
