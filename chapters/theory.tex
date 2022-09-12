@@ -23,7 +23,6 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
 % From the definition of covariant predicates it follows that $\phi$ holds for every term of $\sigma$ and because every witness of $\tau$ is also a witness of $\sigma$ the characteristic property $\phi$ holds for all witnesses of $\tau$.
 
 \begin{prooftree}
-  \alwaysNoLine
   \AxiomC{$\ctx \Phi^+(\sigma)$}
   \AxiomC{$\tau \sub \sigma$}
   \alwaysSingleLine
@@ -34,14 +33,32 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
 With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules:
 
 \begin{center}
-  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\top)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Top}}
+  \UnaryInfC{$\tau \sub \top$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^+$}
+  \BinaryInfC{$\ctx \Phi^+(\tau)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$\ctx \Phi^+(\top)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Top}$^+$}
   \UnaryInfC{$\ctx \Phi^+(\tau)$}
   \DisplayProof
-  {\hskip.2in}
-  \alwaysNoLine
+\end{center}
+
+\begin{center}
+  \AxiomC{$\ctx \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Bot}}
+  \UnaryInfC{$\bot \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^+$}
+  \BinaryInfC{$\ctx \Phi^+(\bot)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Bot}$^+$}
@@ -50,27 +67,59 @@ With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules
 \end{center}
 
 \begin{center}
-  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{Refl}
+  \UnaryInfC{$\tau \sub \tau$}
+  \RightLabel{\textsc{MeetI}$_1$}
+  \UnaryInfC{$\tau \meet \sigma \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^+$}
+  \BinaryInfC{$\ctx \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Meet}$_1^+$}
   \UnaryInfC{$\ctx \Phi^+(\tau \meet \sigma)$}
   \DisplayProof
-  {\hskip.2in}
-  \alwaysNoLine
-  \AxiomC{$\ctx \Phi^+(\sigma)$}
+\end{center}
+
+\begin{center}
+  \AxiomC{$\ctx \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{Refl}
+  \UnaryInfC{$\tau \sub \tau$}
+  \RightLabel{\textsc{MeetI}$_2$}
+  \UnaryInfC{$\sigma \meet \tau \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^+$}
+  \BinaryInfC{$\ctx \Phi^+(\sigma \meet \tau)$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$\ctx \Phi^+(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Meet}$_2^+$}
-  \UnaryInfC{$\ctx \Phi^+(\tau \meet \sigma)$}
+  \UnaryInfC{$\ctx \Phi^+(\sigma \meet \tau)$}
   \DisplayProof
 \end{center}
 
-\begin{prooftree}
-  \AxiomC{$\ctx \Phi^+(Int)$}
+\begin{center}
+  \AxiomC{$\ctx \Phi^+(\mathbb{Z})$}
+  \AxiomC{}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^+$}
+  \BinaryInfC{$\ctx \Phi^+(\mathbb{N})$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$\ctx \Phi^+(\mathbb{Z})$}
   \alwaysSingleLine
   \RightLabel{\textsc{NatPrim}$^+$}
-  \UnaryInfC{$\ctx \Phi^+(Nat)$}
-\end{prooftree}
+  \UnaryInfC{$\ctx \Phi^+(\mathbb{N})$}
+  \DisplayProof
+\end{center}
 
 A typical example for covariant predicates is $\Showable$: all types that are showable, which generally rules out function types.
 The \textsc{Sub}$^+$ rule seems intuitive for this:
@@ -509,6 +558,19 @@ This notion of subtyping trivially satsifies the Liskov substitution principle.
 Because with $\tau \sub \sigma$ for every $e : \tau$ we also have $e : \sigma$, the coercion function is the identity.
 Thus all properties are preserved for terms over the subtyping relation.
 
+Introducing union types can only be done with some restrictions:
+
+\begin{prooftree}
+  \AxiomC{$\ctx \Phi^+(\rho)$}
+  \AxiomC{$\tau \sub \rho$}
+  \AxiomC{$\sigma \sub \rho$}
+  \RightLabel{\textsc{JoinI}}
+  \BinaryInfC{$\tau \join \sigma \sub \rho$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^+$}
+  \BinaryInfC{$\ctx \Phi^+(\tau \join \sigma)$}
+\end{prooftree}
+
 The \textsc{Join} rule can not be derived with the subtyping rules because $\tau \join \sigma$ is neither a subtype of $\tau$ nor of $\sigma$.
 In fact, only the opposite holds.
 However, there is a motivation for it:
@@ -524,6 +586,18 @@ Since every term of type $\tau \join \sigma$ is a term of type $\tau$ or $\sigma
   \BinaryInfC{$\ctx \Phi^+(\tau\join\sigma)$}
 \end{prooftree}
 
+Dually, introducing intersection types can also only be done with some restrictions:
+
+\begin{prooftree}
+  \AxiomC{$\ctx \Phi^-(\tau)$}
+  \AxiomC{$\tau \sub \sigma$}
+  \AxiomC{$\tau \sub \rho$}
+  \RightLabel{\textsc{MeetI}}
+  \BinaryInfC{$\tau \sub \sigma \meet \rho$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^-$}
+  \BinaryInfC{$\ctx \Phi^-(\sigma \meet \rho)$}
+\end{prooftree}
 
 The \textsc{Meet} rule can not be derived with the subtyping rules because $\tau \meet \sigma$ is neither a supertype of $\tau$ nor of $\sigma$.
 With the definition of contravariant predicates the premises express that for some witnesses of $\tau$ and $\sigma$ the characteristic property holds.
