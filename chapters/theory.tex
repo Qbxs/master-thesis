@@ -69,7 +69,7 @@ With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \AxiomC{}
-  \RightLabel{Refl}
+  \RightLabel{\textsc{Bot}}
   \UnaryInfC{$\tau \sub \tau$}
   \RightLabel{\textsc{MeetI}$_1$}
   \UnaryInfC{$\tau \meet \sigma \sub \tau$}
@@ -88,7 +88,7 @@ With \textsc{Sub}$^+$ and the subtyping rules we can derive several useful rules
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \AxiomC{}
-  \RightLabel{Refl}
+  \RightLabel{\textsc{Bot}}
   \UnaryInfC{$\tau \sub \tau$}
   \RightLabel{\textsc{MeetI}$_2$}
   \UnaryInfC{$\sigma \meet \tau \sub \tau$}
@@ -145,14 +145,32 @@ From the definition of contravariant predicates it follows that $\phi$ holds for
 With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful rules:
 
 \begin{center}
-  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Top}}
+  \UnaryInfC{$\tau \sub \top$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^-$}
+  \BinaryInfC{$\ctx \Phi^-(\top)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$\ctx \Phi^-(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Top}$^-$}
   \UnaryInfC{$\ctx \Phi^-(\top)$}
   \DisplayProof
-  {\hskip.2in}
-  \alwaysNoLine
+\end{center}
+
+\begin{center}
+  \AxiomC{$\ctx \Phi^-(\bot)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Bot}}
+  \UnaryInfC{$\bot \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^-$}
+  \BinaryInfC{$\ctx \Phi^-(\tau)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$\ctx \Phi^-(\bot)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Bot}$^-$}
@@ -161,27 +179,59 @@ With \textsc{Sub}$^-$ and the subtyping rules we can again derive several useful
 \end{center}
 
 \begin{center}
-  \alwaysNoLine
+  \AxiomC{$\ctx \Phi^-(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\tau \sub \tau$}
+  \RightLabel{\textsc{JoinI}$_1$}
+  \UnaryInfC{$\tau \sub \tau \join \sigma$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^-$}
+  \BinaryInfC{$\ctx \Phi^-(\tau \join \sigma)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$\ctx \Phi^-(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Join}$_1^-$}
   \UnaryInfC{$\ctx \Phi^-(\tau \join \sigma)$}
   \DisplayProof
-  {\hskip.2in}
-  \alwaysNoLine
-  \AxiomC{$\ctx \Phi^-(\sigma)$}
+\end{center}
+
+\begin{center}
+  \AxiomC{$\ctx \Phi^-(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\tau \sub \tau$}
+  \RightLabel{\textsc{JoinI}$_2$}
+  \UnaryInfC{$\tau \sub \sigma \join \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Sub}$^-$}
+  \BinaryInfC{$\ctx \Phi^-(\sigma \join \tau)$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$\ctx \Phi^-(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Join}$_2^-$}
-  \UnaryInfC{$\ctx \Phi^-(\tau \join \sigma)$}
+  \UnaryInfC{$\ctx \Phi^-(\sigma \join \tau)$}
   \DisplayProof
 \end{center}
 
-\begin{prooftree}
-  \AxiomC{$\ctx \Phi^-(Nat)$}
+\begin{center}
+  \AxiomC{$\ctx \Phi^-(\mathbb{N})$}
+  \AxiomC{}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
   \alwaysSingleLine
-  \RightLabel{\textsc{NatPrim}$^+$}
-  \UnaryInfC{$\ctx \Phi^-(Int)$}
-\end{prooftree}
+  \RightLabel{\textsc{Sub}$^-$}
+  \BinaryInfC{$\ctx \Phi^-(\mathbb{Z})$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$\ctx \Phi^-(\mathbb{N})$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{NatPrim}$^-$}
+  \UnaryInfC{$\ctx \Phi^-(\mathbb{Z})$}
+  \DisplayProof
+\end{center}
 
 A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
 The \textsc{Sub}$^-$ again rule seems intuitive for this:
