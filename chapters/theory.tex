@@ -279,7 +279,7 @@ Note that this corresponds to implications even though the arrow is flipped as i
 \subsection{Examples}
 
 Consider the predicates $\Showable$ and $\Defaultable$.
-A type $\tau$ satsifies the covariant predicate $\Showable$ if for each term a function from $\tau \to String$ is defined.
+A type $\tau$ satsifies the covariant predicate $\Showable$ if a total function from $\tau \to String$ can be defined.
 Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a function of type $Unit \to \tau$ can be defined.
 
 Let context $\Gamma := \{ \Showable(\mathbb{Z}), \Defaultable(\mathbb{N}) \}$.
