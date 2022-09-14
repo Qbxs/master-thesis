@@ -283,7 +283,7 @@ A type $\tau$ satsifies the covariant predicate $\Showable$ if for each term a f
 Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a function of type $Unit \to \tau$ can be defined.
 
 Let context $\Gamma := \{ \Showable(\mathbb{Z}), \Defaultable(\mathbb{N}) \}$.
-We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})$ and $\Defaultable(\mathbb{Z} \join \sigma)$:
+We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})$ and $\Defaultable(\mathbb{Z} \join \mathcal{B})$:
 
 
 \begin{prooftree}
@@ -304,7 +304,7 @@ We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})
   \UnaryInfC{$\ctx \Defaultable(\mathbb{Z})$}
   \alwaysSingleLine
   \RightLabel{\textsc{Join}$^-_1$}
-  \UnaryInfC{$\ctx \Defaultable(\mathbb{Z} \join \sigma)$}
+  \UnaryInfC{$\ctx \Defaultable(\mathbb{Z} \join \mathcal{B})$}
 \end{prooftree}
 
 \section{Witnesses}
@@ -334,12 +334,12 @@ We again differentiate co- and contravariant type classes in order to transport 
  \begin{center}
   \AxiomC{}
   \RightLabel{\textsc{Top}}
-  \UnaryInfC{$\mathit{fromTop} : \tau \sub \top$}
+  \UnaryInfC{$\mathit{top} : \tau \sub \top$}
   \DisplayProof
   {\hskip.2in}
   \AxiomC{}
   \RightLabel{\textsc{Bot}}
-  \UnaryInfC{$\mathit{toBot} : \bot \sub \tau$}
+  \UnaryInfC{$\mathit{bot} : \bot \sub \tau$}
   \DisplayProof
 \end{center}
 
