@@ -26,11 +26,11 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
   \AxiomC{$\ctx \Phi^+(\sigma)$}
   \AxiomC{$\tau \sub \sigma$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\tau)$}
 \end{prooftree}
 
-With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules:
+With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules:
 
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\top)$}
@@ -38,7 +38,7 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{Top}}
   \UnaryInfC{$\tau \sub \top$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\tau)$}
   \DisplayProof
   \deriveRule
@@ -55,7 +55,7 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{Bot}}
   \UnaryInfC{$\bot \sub \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\bot)$}
   \DisplayProof
   \deriveRule
@@ -69,12 +69,12 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \AxiomC{}
-  \RightLabel{\textsc{Bot}}
+  \RightLabel{\textsc{Refl}}
   \UnaryInfC{$\tau \sub \tau$}
   \RightLabel{\textsc{MeetI}$_1$}
   \UnaryInfC{$\tau \meet \sigma \sub \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\tau \meet \sigma)$}
   \DisplayProof
   \deriveRule
@@ -88,12 +88,12 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \AxiomC{}
-  \RightLabel{\textsc{Bot}}
+  \RightLabel{\textsc{Refl}}
   \UnaryInfC{$\tau \sub \tau$}
   \RightLabel{\textsc{MeetI}$_2$}
   \UnaryInfC{$\sigma \meet \tau \sub \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\sigma \meet \tau)$}
   \DisplayProof
   \deriveRule
@@ -110,7 +110,7 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{NatPrim}}
   \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\mathbb{N})$}
   \DisplayProof
   \deriveRule
@@ -122,7 +122,7 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
 \end{center}
 
 A typical example for covariant predicates is $\Showable$: all types that are showable, which generally rules out function types.
-The \textsc{Sub}$^+$ rule seems intuitive for this:
+The \textsc{CoV} rule seems intuitive for this:
 If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can be shown in the same way.
 
 \begin{definition}
@@ -334,12 +334,12 @@ We again differentiate co- and contravariant type classes in order to transport 
  \begin{center}
   \AxiomC{}
   \RightLabel{\textsc{Top}}
-  \UnaryInfC{$\mathit{top} : \tau \sub \top$}
+  \UnaryInfC{$\topW : \tau \sub \top$}
   \DisplayProof
   {\hskip.2in}
   \AxiomC{}
   \RightLabel{\textsc{Bot}}
-  \UnaryInfC{$\mathit{bot} : \bot \sub \tau$}
+  \UnaryInfC{$\botW : \bot \sub \tau$}
   \DisplayProof
 \end{center}
 
@@ -347,12 +347,12 @@ We again differentiate co- and contravariant type classes in order to transport 
  \begin{center}
     \AxiomC{$f : \tau \sub \sigma$}
     \RightLabel{\textsc{JoinI}$_1$}
-    \UnaryInfC{$in_1(f) : \tau \sub \sigma \join \rho$}
+    \UnaryInfC{$\inW{1}(f) : \tau \sub \sigma \join \rho$}
     \DisplayProof
     {\hskip.2in}
     \AxiomC{$f: \tau \sub \sigma$}
     \RightLabel{\textsc{JoinI}$_2$}
-    \UnaryInfC{$in_2(f) : \tau \sub \rho \join \sigma$}
+    \UnaryInfC{$\inW{2}(f) : \tau \sub \rho \join \sigma$}
     \DisplayProof
  \end{center}
 
@@ -360,19 +360,19 @@ We again differentiate co- and contravariant type classes in order to transport 
   \AxiomC{$f : \tau \sub \rho$}
   \AxiomC{$g : \sigma \sub \rho$}
   \RightLabel{\textsc{JoinI}}
-  \BinaryInfC{$\mathit{join}(f,g) : \tau \join \sigma \sub \rho$}
+  \BinaryInfC{$\joinW(f,g) : \tau \join \sigma \sub \rho$}
 \end{prooftree}
 
   % meet intro
   \begin{center}
     \AxiomC{$f : \tau \sub \rho$}
     \RightLabel{\textsc{MeetI}$_1$}
-    \UnaryInfC{$\mathit{proj_1}(f) : \tau \meet \sigma \sub \rho$}
+    \UnaryInfC{$\proj{1}(f) : \tau \meet \sigma \sub \rho$}
     \DisplayProof
     {\hskip.2in}
     \AxiomC{$f : \sigma \sub \rho$}
     \RightLabel{\textsc{MeetI}$_2$}
-    \UnaryInfC{$\mathit{proj_2}(f) : \tau \meet \sigma \sub \rho$}
+    \UnaryInfC{$\proj{2}(f) : \tau \meet \sigma \sub \rho$}
     \DisplayProof
  \end{center}
 
@@ -380,7 +380,13 @@ We again differentiate co- and contravariant type classes in order to transport 
   \AxiomC{$f : \tau \sub \rho$}
   \AxiomC{$g : \tau \sub \sigma$}
   \RightLabel{\textsc{MeetI}}
-  \BinaryInfC{$\mathit{meet}(f,g) : \tau \sub \sigma \meet \rho$}
+  \BinaryInfC{$\meetW(f,g) : \tau \sub \sigma \meet \rho$}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
  \end{prooftree}
 
 We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
@@ -425,7 +431,7 @@ Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to c
   \BinaryInfC{$s(w) : \Phi(\tau)$}
 \end{prooftree}
 
-For \textsc{Sub}$^+$ and \textsc{Sub}$^-$ we can resolve witnesses like this:
+For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
 
 \begin{prooftree}
   \alwaysNoLine
@@ -445,92 +451,275 @@ For \textsc{Sub}$^+$ and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \BinaryInfC{$\contrav(w,m) : \Phi^-(\tau)$}
 \end{prooftree}
 
-
-We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
+Derived covariant witness rules:
+% macros
 
 \begin{center}
-  \alwaysNoLine
+  \AxiomC{$w : \Phi^+(\top)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Top}}
+  \UnaryInfC{$\topW : \tau \sub \top$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$cov(w,top) : \Phi^+(\tau)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$w : \Phi^+(\top)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Top}$^+$}
-  \UnaryInfC{$triv(w) : \Phi^+(\tau)$}
+  \UnaryInfC{$\cov(w,\topW)\Phi^+(\tau)$}
   \DisplayProof
-  {\hskip.2in}
-  \alwaysNoLine
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Bot}}
+  \UnaryInfC{$\bot \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$\cov(w,\botW) : \Phi^+(\bot)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$w : \Phi^+(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Bot}$^+$}
-  \UnaryInfC{$triv(w) : \Phi^+(\bot)$}
+  \UnaryInfC{$\cov(w,\botW) : \Phi^+(\bot)$}
   \DisplayProof
 \end{center}
 
 \begin{center}
-  \alwaysNoLine
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \RightLabel{\textsc{MeetI}$_1$}
+  \UnaryInfC{$\proj{1}(\refl) : \tau \meet \sigma \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$\cov(w,\proj{1}(\refl)) : \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Meet}$_1^+$}
+  \UnaryInfC{$\cov(w,\proj{1}(\refl)) : \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \RightLabel{\textsc{MeetI}$_2$}
+  \UnaryInfC{$\proj{2}(\refl) : \sigma \meet \tau \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$\cov(w,\proj{2}(\refl)) : \Phi^+(\sigma \meet \tau)$}
+  \DisplayProof
+  \vspace*{0.1in}
+  \deriveRule
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Meet}$_2^+$}
+  \UnaryInfC{$\cov(w,\proj{2}(\refl)) : \Phi^+(\sigma \meet \tau)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^+(\mathbb{Z})$}
+  \AxiomC{}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$\cov(w,\natPrim) : \Phi^+(\mathbb{N})$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$w : \Phi^+(\mathbb{Z})$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{NatPrim}$^+$}
+  \UnaryInfC{$\cov(w,\natPrim) : \Phi^+(\mathbb{N})$}
+  \DisplayProof
+\end{center}
+
+Covriant derived witness rules:
+
+\begin{center}
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Top}}
+  \UnaryInfC{$\topW :\tau \sub \top$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\topW) : \Phi^-(\top)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$w : \Phi^-(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Top}$^-$}
-  \UnaryInfC{$triv(w) : \Phi^-(\top)$}
+  \UnaryInfC{$\contrav(w,\topW) : \Phi^-(\top)$}
   \DisplayProof
-  {\hskip.2in}
-  \alwaysNoLine
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^-(\bot)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Bot}}
+  \UnaryInfC{$\botW : \bot \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\botW) : \Phi^-(\tau)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$w : \Phi^-(\bot)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Bot}$^-$}
-  \UnaryInfC{$triv(w) : \Phi^-(\tau)$}
-  \DisplayProof
-\end{center}
-
-Interpreting $in_{1/2}$ and $proj_{1/2}$ as morphisms from a type to one of its supertypes the rules corresponding to the covariant \textsc{Join}$^+$ and \textsc{Meet}$^+$ rules are obvious.
-
-\begin{center}
-  \AxiomC{$in_1(w) : \Phi^+(\tau \join \sigma)$}
-  \RightLabel{\textsc{Join}$_1^+$}
-  \UnaryInfC{$w : \Phi^+(\tau)$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$in_2(w) : \Phi^+(\tau \join \sigma)$}
-  \RightLabel{\textsc{Join}$_2^+$}
-  \UnaryInfC{$w : \Phi^+(\sigma)$}
-  \DisplayProof
-\end{center}
-
-\begin{center}
-  \AxiomC{$proj_1(w) : \Phi^+(\tau)$}
-  \RightLabel{\textsc{Meet}$_1^+$}
-  \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$proj_2(w) : \Phi^+(\sigma)$}
-  \RightLabel{\textsc{Meet}$_2^+$}
-  \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
-  \DisplayProof
-\end{center}
-
-Analagously, with the interpretation of $in_{1/2}$ and $proj_{1/2}$  the rules corresponding to the contravariant \textsc{Join}$^-$ and \textsc{Meet}$^-$ rules are again obvious.
-
-\begin{center}
-  \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
-  \RightLabel{\textsc{Meet}$_1^-$}
-  \UnaryInfC{$proj_1(w) : \Phi^-(\tau)$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
-  \RightLabel{\textsc{Meet}$_2^-$}
-  \UnaryInfC{$proj_2(w) : \Phi^+(\sigma)$}
+  \UnaryInfC{$\contrav(w,\botW) \Phi^-(\tau)$}
   \DisplayProof
 \end{center}
 
 \begin{center}
   \AxiomC{$w : \Phi^-(\tau)$}
-  \RightLabel{\textsc{Join}$_1^-$}
-  \UnaryInfC{$in_1(w) : \Phi^-(\tau \join \sigma)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \RightLabel{\textsc{JoinI}$_1$}
+  \UnaryInfC{$\inW{1}(\refl) : \tau \sub \tau \join \sigma$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\inW{1}(\refl)) : \Phi^-(\tau \join \sigma)$}
   \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$w : \Phi^-(\sigma)$}
-  \RightLabel{\textsc{Join}$_2^-$}
-  \UnaryInfC{$in_2(w) : \Phi^-(\tau \join \sigma)$}
+  \deriveRule
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Join}$_1^-$}
+  \UnaryInfC{$\contrav(w,\inW{1}(\refl)) : \Phi^-(\tau \join \sigma)$}
   \DisplayProof
 \end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \RightLabel{\textsc{JoinI}$_2$}
+  \UnaryInfC{$\inW{2}(\refl) : \tau \sub \sigma \join \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\inW{2}(\refl)) : \Phi^-(\sigma \join \tau)$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Join}$_2^-$}
+  \UnaryInfC{$\contrav(w,\inW{2}(\refl)) : \Phi^-(\sigma \join \tau)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^-(\mathbb{N})$}
+  \AxiomC{}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\natPrim) : \Phi^-(\mathbb{Z})$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$w : \Phi^-(\mathbb{N})$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{NatPrim}$^-$}
+  \UnaryInfC{$\contrav(w,\natPrim) : \Phi^-(\mathbb{Z})$}
+  \DisplayProof
+\end{center}
+
+% We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
+
+% \begin{center}
+%   \alwaysNoLine
+%   \AxiomC{$w : \Phi^+(\top)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Top}$^+$}
+%   \UnaryInfC{$triv(w) : \Phi^+(\tau)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \alwaysNoLine
+%   \AxiomC{$w : \Phi^+(\tau)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Bot}$^+$}
+%   \UnaryInfC{$triv(w) : \Phi^+(\bot)$}
+%   \DisplayProof
+% \end{center}
+
+% \begin{center}
+%   \alwaysNoLine
+%   \AxiomC{$w : \Phi^-(\tau)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Top}$^-$}
+%   \UnaryInfC{$triv(w) : \Phi^-(\top)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \alwaysNoLine
+%   \AxiomC{$w : \Phi^-(\bot)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Bot}$^-$}
+%   \UnaryInfC{$triv(w) : \Phi^-(\tau)$}
+%   \DisplayProof
+% \end{center}
+
+% Interpreting $in_{1/2}$ and $proj_{1/2}$ as morphisms from a type to one of its supertypes the rules corresponding to the covariant \textsc{Join}$^+$ and \textsc{Meet}$^+$ rules are obvious.
+
+% \begin{center}
+%   \AxiomC{$in_1(w) : \Phi^+(\tau \join \sigma)$}
+%   \RightLabel{\textsc{Join}$_1^+$}
+%   \UnaryInfC{$w : \Phi^+(\tau)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \AxiomC{$in_2(w) : \Phi^+(\tau \join \sigma)$}
+%   \RightLabel{\textsc{Join}$_2^+$}
+%   \UnaryInfC{$w : \Phi^+(\sigma)$}
+%   \DisplayProof
+% \end{center}
+
+% \begin{center}
+%   \AxiomC{$proj_1(w) : \Phi^+(\tau)$}
+%   \RightLabel{\textsc{Meet}$_1^+$}
+%   \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \AxiomC{$proj_2(w) : \Phi^+(\sigma)$}
+%   \RightLabel{\textsc{Meet}$_2^+$}
+%   \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
+%   \DisplayProof
+% \end{center}
+
+% Analagously, with the interpretation of $in_{1/2}$ and $proj_{1/2}$  the rules corresponding to the contravariant \textsc{Join}$^-$ and \textsc{Meet}$^-$ rules are again obvious.
+
+% \begin{center}
+%   \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
+%   \RightLabel{\textsc{Meet}$_1^-$}
+%   \UnaryInfC{$proj_1(w) : \Phi^-(\tau)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
+%   \RightLabel{\textsc{Meet}$_2^-$}
+%   \UnaryInfC{$proj_2(w) : \Phi^+(\sigma)$}
+%   \DisplayProof
+% \end{center}
+
+% \begin{center}
+%   \AxiomC{$w : \Phi^-(\tau)$}
+%   \RightLabel{\textsc{Join}$_1^-$}
+%   \UnaryInfC{$in_1(w) : \Phi^-(\tau \join \sigma)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \AxiomC{$w : \Phi^-(\sigma)$}
+%   \RightLabel{\textsc{Join}$_2^-$}
+%   \UnaryInfC{$in_2(w) : \Phi^-(\tau \join \sigma)$}
+%   \DisplayProof
+% \end{center}
 
 \section{Coherence}
 
@@ -617,7 +806,7 @@ Introducing union types can only be done with some restrictions:
   \RightLabel{\textsc{JoinI}}
   \BinaryInfC{$\tau \join \sigma \sub \rho$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\tau \join \sigma)$}
 \end{prooftree}
 
