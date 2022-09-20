@@ -28,11 +28,11 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
   \AxiomC{$\ctx \Phi^+(\sigma)$}
   \AxiomC{$\tau \sub \sigma$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\tau)$}
 \end{prooftree}
 
-With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules:
+With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules:
 
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\top)$}
@@ -40,7 +40,7 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{Top}}
   \UnaryInfC{$\tau \sub \top$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\tau)$}
   \DisplayProof
   \deriveRule
@@ -57,7 +57,7 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{Bot}}
   \UnaryInfC{$\bot \sub \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\bot)$}
   \DisplayProof
   \deriveRule
@@ -71,12 +71,12 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \AxiomC{}
-  \RightLabel{\textsc{Bot}}
+  \RightLabel{\textsc{Refl}}
   \UnaryInfC{$\tau \sub \tau$}
   \RightLabel{\textsc{MeetI}$_1$}
   \UnaryInfC{$\tau \meet \sigma \sub \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\tau \meet \sigma)$}
   \DisplayProof
   \deriveRule
@@ -90,12 +90,12 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\tau)$}
   \AxiomC{}
-  \RightLabel{\textsc{Bot}}
+  \RightLabel{\textsc{Refl}}
   \UnaryInfC{$\tau \sub \tau$}
   \RightLabel{\textsc{MeetI}$_2$}
   \UnaryInfC{$\sigma \meet \tau \sub \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\sigma \meet \tau)$}
   \DisplayProof
   \deriveRule
@@ -112,7 +112,7 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{NatPrim}}
   \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\mathbb{N})$}
   \DisplayProof
   \deriveRule
@@ -124,7 +124,7 @@ With \textsc{Sub}$^+$ and the subtyping rules in fig. \ref{fig:subtyping} we can
 \end{center}
 
 A typical example for covariant predicates is $\Showable$: all types that are showable, which generally rules out function types.
-The \textsc{Sub}$^+$ rule seems intuitive for this:
+The \textsc{CoV} rule seems intuitive for this:
 If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can be shown in the same way.
 
 \begin{definition}
@@ -282,11 +282,11 @@ Note that this corresponds to implications even though the arrow is flipped as i
 \subsection{Examples}
 
 Consider the predicates $\Showable$ and $\Defaultable$.
-A type $\tau$ satsifies the covariant predicate $\Showable$ if for each term a function from $\tau \to String$ is defined.
+A type $\tau$ satsifies the covariant predicate $\Showable$ if a total function from $\tau \to String$ can be defined.
 Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a function of type $Unit \to \tau$ can be defined.
 
 Let context $\Gamma := \{ \Showable(\mathbb{Z}), \Defaultable(\mathbb{N}) \}$.
-We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})$ and $\Defaultable(\mathbb{Z} \join \sigma)$:
+We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})$ and $\Defaultable(\mathbb{Z} \join \mathcal{B})$:
 
 % fix:
 \begin{prooftree}
@@ -308,7 +308,7 @@ We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})
   \UnaryInfC{$\ctx \Defaultable(\mathbb{Z})$}
   \alwaysSingleLine
   \RightLabel{\textsc{Join}$^-_1$}
-  \UnaryInfC{$\ctx \Defaultable(\mathbb{Z} \join \sigma)$}
+  \UnaryInfC{$\ctx \Defaultable(\mathbb{Z} \join \mathcal{B})$}
 \end{prooftree}
 
 \section{Witnesses}
@@ -338,12 +338,12 @@ We again differentiate co- and contravariant type classes in order to transport 
  \begin{center}
   \AxiomC{}
   \RightLabel{\textsc{Top}}
-  \UnaryInfC{$\mathit{fromTop} : \tau \sub \top$}
+  \UnaryInfC{$\topW : \tau \sub \top$}
   \DisplayProof
   {\hskip.2in}
   \AxiomC{}
   \RightLabel{\textsc{Bot}}
-  \UnaryInfC{$\mathit{toBot} : \bot \sub \tau$}
+  \UnaryInfC{$\botW : \bot \sub \tau$}
   \DisplayProof
 \end{center}
 
@@ -351,12 +351,12 @@ We again differentiate co- and contravariant type classes in order to transport 
  \begin{center}
     \AxiomC{$f : \tau \sub \sigma$}
     \RightLabel{\textsc{JoinI}$_1$}
-    \UnaryInfC{$in_1(f) : \tau \sub \sigma \join \rho$}
+    \UnaryInfC{$\inW{1}(f) : \tau \sub \sigma \join \rho$}
     \DisplayProof
     {\hskip.2in}
     \AxiomC{$f: \tau \sub \sigma$}
     \RightLabel{\textsc{JoinI}$_2$}
-    \UnaryInfC{$in_2(f) : \tau \sub \rho \join \sigma$}
+    \UnaryInfC{$\inW{2}(f) : \tau \sub \rho \join \sigma$}
     \DisplayProof
  \end{center}
 
@@ -364,27 +364,33 @@ We again differentiate co- and contravariant type classes in order to transport 
   \AxiomC{$f : \tau \sub \rho$}
   \AxiomC{$g : \sigma \sub \rho$}
   \RightLabel{\textsc{JoinI}}
-  \BinaryInfC{$\mathit{join}(f,g) : \tau \join \sigma \sub \rho$}
+  \BinaryInfC{$\joinW(f,g) : \tau \join \sigma \sub \rho$}
 \end{prooftree}
 
   % meet intro
   \begin{center}
     \AxiomC{$f : \tau \sub \rho$}
     \RightLabel{\textsc{MeetI}$_1$}
-    \UnaryInfC{$\mathit{proj_1}(f) : \tau \meet \sigma \sub \rho$}
+    \UnaryInfC{$\proj{1}(f) : \tau \meet \sigma \sub \rho$}
     \DisplayProof
     {\hskip.2in}
     \AxiomC{$f : \sigma \sub \rho$}
     \RightLabel{\textsc{MeetI}$_2$}
-    \UnaryInfC{$\mathit{proj_2}(f) : \tau \meet \sigma \sub \rho$}
+    \UnaryInfC{$\proj{2}(f) : \tau \meet \sigma \sub \rho$}
     \DisplayProof
  \end{center}
 
  \begin{prooftree}
-  \AxiomC{$f : \tau \sub \rho$}
-  \AxiomC{$g : \tau \sub \sigma$}
+  \AxiomC{$f : \tau \sub \sigma$}
+  \AxiomC{$g : \tau \sub \rho$}
   \RightLabel{\textsc{MeetI}}
-  \BinaryInfC{$\mathit{meet}(f,g) : \tau \sub \sigma \meet \rho$}
+  \BinaryInfC{$\meetW(f,g) : \tau \sub \sigma \meet \rho$}
+ \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
  \end{prooftree}
 
 We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
@@ -429,7 +435,7 @@ Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to c
   \BinaryInfC{$s(w) : \Phi(\tau)$}
 \end{prooftree}
 
-For \textsc{Sub}$^+$ and \textsc{Sub}$^-$ we can resolve witnesses like this:
+For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
 
 \begin{prooftree}
   \alwaysNoLine
@@ -449,94 +455,276 @@ For \textsc{Sub}$^+$ and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \BinaryInfC{$\contrav(w,m) : \Phi^-(\tau)$}
 \end{prooftree}
 
-
-We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
+Derived covariant witness rules:
+% macros
 
 \begin{center}
-  \alwaysNoLine
+  \AxiomC{$w : \Phi^+(\top)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Top}}
+  \UnaryInfC{$\topW : \tau \sub \top$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$cov(w,top) : \Phi^+(\tau)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$w : \Phi^+(\top)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Top}$^+$}
-  \UnaryInfC{$triv(w) : \Phi^+(\tau)$}
+  \UnaryInfC{$\cov(w,\topW)\Phi^+(\tau)$}
   \DisplayProof
-  {\hskip.2in}
-  \alwaysNoLine
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Bot}}
+  \UnaryInfC{$\bot \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$\cov(w,\botW) : \Phi^+(\bot)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$w : \Phi^+(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Bot}$^+$}
-  \UnaryInfC{$triv(w) : \Phi^+(\bot)$}
+  \UnaryInfC{$\cov(w,\botW) : \Phi^+(\bot)$}
   \DisplayProof
 \end{center}
 
 \begin{center}
-  \alwaysNoLine
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \RightLabel{\textsc{MeetI}$_1$}
+  \UnaryInfC{$\proj{1}(\refl) : \tau \meet \sigma \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$\cov(w,\proj{1}(\refl)) : \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Meet}$_1^+$}
+  \UnaryInfC{$\cov(w,\proj{1}(\refl)) : \Phi^+(\tau \meet \sigma)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \RightLabel{\textsc{MeetI}$_2$}
+  \UnaryInfC{$\proj{2}(\refl) : \sigma \meet \tau \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$\cov(w,\proj{2}(\refl)) : \Phi^+(\sigma \meet \tau)$}
+  \DisplayProof
+  \vspace*{0.1in}
+  \deriveRule
+  \AxiomC{$w : \Phi^+(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Meet}$_2^+$}
+  \UnaryInfC{$\cov(w,\proj{2}(\refl)) : \Phi^+(\sigma \meet \tau)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^+(\mathbb{Z})$}
+  \AxiomC{}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{CoV}}
+  \BinaryInfC{$\cov(w,\natPrim) : \Phi^+(\mathbb{N})$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$w : \Phi^+(\mathbb{Z})$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{NatPrim}$^+$}
+  \UnaryInfC{$\cov(w,\natPrim) : \Phi^+(\mathbb{N})$}
+  \DisplayProof
+\end{center}
+
+Covriant derived witness rules:
+
+% remove from this section
+\begin{center}
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Top}}
+  \UnaryInfC{$\topW :\tau \sub \top$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\topW) : \Phi^-(\top)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$w : \Phi^-(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Top}$^-$}
-  \UnaryInfC{$triv(w) : \Phi^-(\top)$}
+  \UnaryInfC{$\contrav(w,\topW) : \Phi^-(\top)$}
   \DisplayProof
-  {\hskip.2in}
-  \alwaysNoLine
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^-(\bot)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Bot}}
+  \UnaryInfC{$\botW : \bot \sub \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\botW) : \Phi^-(\tau)$}
+  \DisplayProof
+  \deriveRule
   \AxiomC{$w : \Phi^-(\bot)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Bot}$^-$}
-  \UnaryInfC{$triv(w) : \Phi^-(\tau)$}
-  \DisplayProof
-\end{center}
-
-Interpreting $in_{1/2}$ and $proj_{1/2}$ as morphisms from a type to one of its supertypes the rules corresponding to the covariant \textsc{Join}$^+$ and \textsc{Meet}$^+$ rules are obvious.
-
-% remove from this section
-\begin{center}
-  \AxiomC{$in_1(w) : \Phi^+(\tau \join \sigma)$}
-  \RightLabel{\textsc{Join}$_1^+$}
-  \UnaryInfC{$w : \Phi^+(\tau)$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$in_2(w) : \Phi^+(\tau \join \sigma)$}
-  \RightLabel{\textsc{Join}$_2^+$}
-  \UnaryInfC{$w : \Phi^+(\sigma)$}
-  \DisplayProof
-\end{center}
-
-\begin{center}
-  \AxiomC{$proj_1(w) : \Phi^+(\tau)$}
-  \RightLabel{\textsc{Meet}$_1^+$}
-  \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$proj_2(w) : \Phi^+(\sigma)$}
-  \RightLabel{\textsc{Meet}$_2^+$}
-  \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
-  \DisplayProof
-\end{center}
-
-Analagously, with the interpretation of $in_{1/2}$ and $proj_{1/2}$  the rules corresponding to the contravariant \textsc{Join}$^-$ and \textsc{Meet}$^-$ rules are again obvious.
-
-% remove from this section
-\begin{center}
-  \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
-  \RightLabel{\textsc{Meet}$_1^-$}
-  \UnaryInfC{$proj_1(w) : \Phi^-(\tau)$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
-  \RightLabel{\textsc{Meet}$_2^-$}
-  \UnaryInfC{$proj_2(w) : \Phi^+(\sigma)$}
+  \UnaryInfC{$\contrav(w,\botW) \Phi^-(\tau)$}
   \DisplayProof
 \end{center}
 
 \begin{center}
   \AxiomC{$w : \Phi^-(\tau)$}
-  \RightLabel{\textsc{Join}$_1^-$}
-  \UnaryInfC{$in_1(w) : \Phi^-(\tau \join \sigma)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \RightLabel{\textsc{JoinI}$_1$}
+  \UnaryInfC{$\inW{1}(\refl) : \tau \sub \tau \join \sigma$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\inW{1}(\refl)) : \Phi^-(\tau \join \sigma)$}
   \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$w : \Phi^-(\sigma)$}
-  \RightLabel{\textsc{Join}$_2^-$}
-  \UnaryInfC{$in_2(w) : \Phi^-(\tau \join \sigma)$}
+  \deriveRule
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Join}$_1^-$}
+  \UnaryInfC{$\contrav(w,\inW{1}(\refl)) : \Phi^-(\tau \join \sigma)$}
   \DisplayProof
 \end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \AxiomC{}
+  \RightLabel{\textsc{Refl}}
+  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \RightLabel{\textsc{JoinI}$_2$}
+  \UnaryInfC{$\inW{2}(\refl) : \tau \sub \sigma \join \tau$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\inW{2}(\refl)) : \Phi^-(\sigma \join \tau)$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$w : \Phi^-(\tau)$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{Join}$_2^-$}
+  \UnaryInfC{$\contrav(w,\inW{2}(\refl)) : \Phi^-(\sigma \join \tau)$}
+  \DisplayProof
+\end{center}
+
+\begin{center}
+  \AxiomC{$w : \Phi^-(\mathbb{N})$}
+  \AxiomC{}
+  \RightLabel{\textsc{NatPrim}}
+  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{ContraV}}
+  \BinaryInfC{$\contrav(w,\natPrim) : \Phi^-(\mathbb{Z})$}
+  \DisplayProof
+  \deriveRule
+  \AxiomC{$w : \Phi^-(\mathbb{N})$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{NatPrim}$^-$}
+  \UnaryInfC{$\contrav(w,\natPrim) : \Phi^-(\mathbb{Z})$}
+  \DisplayProof
+\end{center}
+
+% We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
+
+% \begin{center}
+%   \alwaysNoLine
+%   \AxiomC{$w : \Phi^+(\top)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Top}$^+$}
+%   \UnaryInfC{$triv(w) : \Phi^+(\tau)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \alwaysNoLine
+%   \AxiomC{$w : \Phi^+(\tau)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Bot}$^+$}
+%   \UnaryInfC{$triv(w) : \Phi^+(\bot)$}
+%   \DisplayProof
+% \end{center}
+
+% \begin{center}
+%   \alwaysNoLine
+%   \AxiomC{$w : \Phi^-(\tau)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Top}$^-$}
+%   \UnaryInfC{$triv(w) : \Phi^-(\top)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \alwaysNoLine
+%   \AxiomC{$w : \Phi^-(\bot)$}
+%   \alwaysSingleLine
+%   \RightLabel{\textsc{Bot}$^-$}
+%   \UnaryInfC{$triv(w) : \Phi^-(\tau)$}
+%   \DisplayProof
+% \end{center}
+
+% Interpreting $in_{1/2}$ and $proj_{1/2}$ as morphisms from a type to one of its supertypes the rules corresponding to the covariant \textsc{Join}$^+$ and \textsc{Meet}$^+$ rules are obvious.
+
+% \begin{center}
+%   \AxiomC{$in_1(w) : \Phi^+(\tau \join \sigma)$}
+%   \RightLabel{\textsc{Join}$_1^+$}
+%   \UnaryInfC{$w : \Phi^+(\tau)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \AxiomC{$in_2(w) : \Phi^+(\tau \join \sigma)$}
+%   \RightLabel{\textsc{Join}$_2^+$}
+%   \UnaryInfC{$w : \Phi^+(\sigma)$}
+%   \DisplayProof
+% \end{center}
+
+% \begin{center}
+%   \AxiomC{$proj_1(w) : \Phi^+(\tau)$}
+%   \RightLabel{\textsc{Meet}$_1^+$}
+%   \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \AxiomC{$proj_2(w) : \Phi^+(\sigma)$}
+%   \RightLabel{\textsc{Meet}$_2^+$}
+%   \UnaryInfC{$w : \Phi^+(\tau \meet \sigma)$}
+%   \DisplayProof
+% \end{center}
+
+% Analagously, with the interpretation of $in_{1/2}$ and $proj_{1/2}$  the rules corresponding to the contravariant \textsc{Join}$^-$ and \textsc{Meet}$^-$ rules are again obvious.
+
+% \begin{center}
+%   \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
+%   \RightLabel{\textsc{Meet}$_1^-$}
+%   \UnaryInfC{$proj_1(w) : \Phi^-(\tau)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
+%   \RightLabel{\textsc{Meet}$_2^-$}
+%   \UnaryInfC{$proj_2(w) : \Phi^+(\sigma)$}
+%   \DisplayProof
+% \end{center}
+
+% \begin{center}
+%   \AxiomC{$w : \Phi^-(\tau)$}
+%   \RightLabel{\textsc{Join}$_1^-$}
+%   \UnaryInfC{$in_1(w) : \Phi^-(\tau \join \sigma)$}
+%   \DisplayProof
+%   {\hskip.2in}
+%   \AxiomC{$w : \Phi^-(\sigma)$}
+%   \RightLabel{\textsc{Join}$_2^-$}
+%   \UnaryInfC{$in_2(w) : \Phi^-(\tau \join \sigma)$}
+%   \DisplayProof
+% \end{center}
 
 \section{Coherence}
 
@@ -623,7 +811,7 @@ Introducing union types can only be done with some restrictions:
   \RightLabel{\textsc{JoinI}}
   \BinaryInfC{$\tau \join \sigma \sub \rho$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^+$}
+  \RightLabel{\textsc{CoV}}
   \BinaryInfC{$\ctx \Phi^+(\tau \join \sigma)$}
 \end{prooftree}
 
@@ -672,244 +860,6 @@ However, there is no guarantee that a term of type $\tau$ or of type $\sigma$ is
   \BinaryInfC{$\ctx \Phi^-(\tau\meet\sigma)$}
 \end{prooftree}
 
-
-\section{Type classes as predicates over types}
-
-Type classes can be seen as a form of \emph{qualified types}, i.e. types that qualify for certain properties.
-E.g. we can say that for a type $\tau$ to fall under the \texttt{Show} type class means that $\tau$ is a showable type.
-In this case, it means every term $t : \tau$ has some property $\phi$ that is characteristic for $\Phi$.
-
-In this section we want to give a way to reason about predicates over types and how they can be related in the context of subtyping.
-We therefore restrict ourselves to monotonous predicates, i.e. predicates that only refer to the witnesses of types, opposed to e.g. predicates about the number of witnesses of a type.
-
-Using set-theoretic reasoning, we can motivate rules to reason about type classes by how properties are propagated through various type operators and the subtyping relationship.
-$\Phi(\tau)$ holds iff for every witness of $\tau$ some characteristic property $\phi$ of $\Phi$ holds.
-($\Phi$ can stand for a type class, $\phi$ for a class method.)
-
-\begin{definition}
-  A \emph{predicate over types} $\Phi$ is specified by a set of properties $\phi_i$.
-  For a type $\tau$ the application $\Phi(\tau)$ holds if and only if $\phi$ holds for every member of $\tau$.
-\end{definition}
-
-Our syntax looks as follows:
-
-\begin{flalign*}
-  \tau := & \; \texttt{Nat} \; | \; \texttt{Int} \; | \; \dots                         & \textit{Simple types} \\
-          & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau & \textit{Lattice types} \\
-  \Phi := & \; \texttt{Read} \; | \; \texttt{Eq} \; | \; \texttt{Show} \; | \; \dots  & \textit{Type classes} \\
-  \Xi  := & \; \Phi(\tau) \; | \;  \Xi \Rightarrow \Phi(\tau) & \textit{Constraints}
-\end{flalign*}
-
-Let context $\Gamma = \{ \Xi_1, \dots, \Xi_n \}$ be a set of constraints (propositions).
-
-The central rule motivated by Liskov substitution:
-If some property holds for $\sigma$ and $\tau \sub \sigma$,
-If $\Phi$ is a property for $\sigma$ and $\tau \sub \sigma$, then it should also be a property $\tau$.
-Since all witnesses of $\tau$ are also witnesses of $\sigma$, the property $\Phi$ is propagated to $\tau$.
-
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\sigma)$}
-    \AxiomC{$\tau \sub \sigma$}
-    \alwaysSingleLine
-    \RightLabel{\textsc{Sub}}
-    \BinaryInfC{$\ctx \Phi(\tau)$}
-  \end{prooftree}
-
-  If $\Phi$ is a property for both $\tau$ and $\sigma$, then it should also be a property of their union or join $\tau \join \sigma$.
-  Since all witnesses of $\tau \join \sigma$ are witnesses of $\sigma$ or $\tau$, the property $\Phi$ holds for all witnesses of $\tau \join \sigma$.
-
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\sigma)$}
-    \AxiomC{$\ctx \Phi(\tau)$}
-    \alwaysSingleLine
-    \joinRule
-    \BinaryInfC{$\ctx \Phi(\tau\join\sigma)$}
-  \end{prooftree}
-
-  If we know $\Phi$ for both $\tau$ and $\sigma$, the characteristic predicate also holds for all terms that are witnesses of both $\tau$ and $\sigma$, i.e. $\tau\meet\sigma$.
-  This rule is \emph{admissable} because with $\tau \sub \tau \meet \sigma$ and $\sigma \sub \tau \meet \sigma$ given by the subtyping rules we can derive the result using the \textsc{Sub}-rule.
- 
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\tau)$}
-    \alwaysSingleLine
-    \meetRule
-    \UnaryInfC{$\ctx \Phi(\tau\meet\sigma)$}
-  \end{prooftree}
-
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\sigma)$}
-    \alwaysSingleLine
-    \meetRule
-    \UnaryInfC{$\ctx \Phi(\tau\meet\sigma)$}
-  \end{prooftree}
-
-  If $\Phi$ depends on $\Psi$, then for every $\tau$ with $\Phi(\tau)$ we also obtain $\Psi(\tau)$.
-  For every witness of $\tau$, the characteristic property $\psi$ holds and because of $\Phi(\tau) \Rightarrow \Psi(\tau)$ we have $\psi$ implies $\phi$, $\phi$ holds for every witness of $\tau$ as well.
-
-  \begin{prooftree}
-    \AxiomC{$\ctx \Psi(\tau)$}
-    \AxiomC{$\ctx \Phi(\tau) \Rightarrow \Psi(\tau)$}
-    \RightLabel{\textsc{Impl}}
-    \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
-  \end{prooftree}
-
-  We can also introduce elimination rules for unions.
-  These are also \emph{admissable} since for any $\tau$ and $\sigma$ we have with the subtyping rules $\tau \sub \tau \join \sigma$ and $\sigma \sub \tau \join \sigma$ and can then derive this rule from \textsc{Sub}.
-
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\tau\join\sigma)$}
-    \alwaysSingleLine
-    \joinRule
-    \UnaryInfC{$\ctx \Phi(\tau)$}
-  \end{prooftree}
-
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi(\tau\join\sigma)$}
-    \alwaysSingleLine
-    \joinRule
-    \UnaryInfC{$\ctx \Phi(\sigma)$}
-  \end{prooftree}
-
-  Axioms:
-  \begin{prooftree}
-    \AxiomC{}
-    \RightLabel{\textsc{Axiom}}
-    \UnaryInfC{$\Gamma, \Phi(\tau) \vdash \Phi(\tau)$}
-  \end{prooftree}
-
-  Every property holds for all witnesses of $\bot$ because there are none, so every predicate trivially holds for $\bot$.
-
-  \begin{prooftree}
-    \AxiomC{}
-    \botRule
-    \UnaryInfC{$\ctx \Phi(\bot)$}
-  \end{prooftree}
-
-  If we know $\Phi(\top)$, then with the \textsc{Sub}-rule we can infer $\Phi(\tau)$ for any type $\tau$.
-
-  \begin{prooftree}
-    \AxiomC{$\ctx \Phi(\top)$}
-    \RightLabel{\textsc{Top}}
-    \UnaryInfC{$\ctx \Phi(\tau)$}
-  \end{prooftree}
-
-  % TODO mention \Gamma in rules and use definition of predicates
-
-\section{Instance Resolution}
-% single param type classes
-
-With the Curry-Howard isomorphism we can interpret propositions as types and terms as proofs accordingly.
-Extending this notion we can interpret type classes as predicates over types.
-E.g. \texttt{Eq} $\sigma$ would mean that the predicate (or property) of equality holds for type $\sigma$.
-We can provide a proof for this iff we can resolve an instance of \texttt{Eq} $\sigma$ as a witness.
-
-Here, we build upon the rules for qualified types to construct resolution rules for type classes.
-Our language differentiates between co- and contravariant type classes because they behave differently in the context of subtyping.
-Co- and contravariant type classes restrict the occurence of the bound type variable in the methods.
-
-An example for a covariant type class is the \texttt{Read} type class in which the type to be shown only occurs in a covariant position.
-In the \texttt{Read} type class the type variable only occurs in a contravariant position. 
-
-\begin{flalign*}
-  \tau := & \; \texttt{Nat} \; | \; \texttt{Int} \; | \; \dots                         & \textit{Simple types} \\
-          & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau & \textit{Lattice types} \\
-  \Phi := & \; \texttt{Read} \; | \; \texttt{Eq} \; | \; \texttt{Show} \; | \; \dots  & \textit{Type classes}
-\end{flalign*}
-
-Notation:
-\begin{itemize}
-  \item $\Gamma$: Context of known instances.
-  \item $\Phi^+$: Covariant type class $\Phi$
-  \item $\Phi^-$: Contravariant type class $\Phi$
-  \item Rules annotated with * constrain the argument types to be equal, e.g. if we can infer $\texttt{Eq}(\tau\join\sigma)$, both arguments of the class method \texttt{Eq} have to be either of type $\tau$ or $\sigma$. 
-\end{itemize}
-
-Deriving instances:
-
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi^+(\sigma)$}
-    \AxiomC{$\tau \sub \sigma$}
-    \alwaysSingleLine
-    \subPosRule
-    \BinaryInfC{$\ctx \Phi^+(\tau)$}
-  \end{prooftree}
-
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi^-(\sigma)$}
-    \AxiomC{$\sigma \sub \tau$}
-    \alwaysSingleLine
-    \subNegRule
-    \BinaryInfC{$\ctx \Phi^-(\tau)$}
-  \end{prooftree}
-
-  Admissable rules:
-
-  Unclear yet, how this behaves for co-/contravariant type classes. Definetly problematic for \texttt{Eq}.
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi^-(\sigma)$}
-    \AxiomC{$\ctx \Phi^-(\tau)$}
-    \alwaysSingleLine
-    \joinRule
-    \BinaryInfC{$\ctx \Phi^-(\tau\join\sigma)$}
-  \end{prooftree}
-
-  This seems trivial, because we already have \textsc{Sub}.
-  Additionally, given type class coherence the meet would always be $\bot$. So we do not gain anything from this rule.
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{$\ctx \Phi^+(\sigma)$}
-    \AxiomC{$\ctx \Phi^+(\tau)$}
-    \alwaysSingleLine
-    \meetRule
-    \BinaryInfC{$\ctx \Phi^+(\tau\meet\sigma)$}
-  \end{prooftree}
-
-  Axioms:
-  \begin{prooftree}
-    \AxiomC{}
-    \axiomPos
-    \UnaryInfC{$\Gamma, \Phi^+(\tau) \vdash \Phi^+(\tau)$}
-  \end{prooftree}
-
-  \begin{prooftree}
-    \AxiomC{}
-    \axiomNeg
-    \UnaryInfC{$\Gamma, \Phi^-(\tau) \vdash \Phi^-(\tau)$}
-  \end{prooftree}
-
-  This seems trivial again:
-
-  \begin{prooftree}
-    \AxiomC{}
-    \botRule
-    \UnaryInfC{$\Gamma \vdash \Phi^+(\bot)$}
-  \end{prooftree}
-
-  This seems very questionable (but does not entail obviously wrong things with \textsc{Sub}$^-$):
-
-  \begin{prooftree}
-    \AxiomC{}
-    \topRule
-    \UnaryInfC{$\Gamma \vdash \Phi^-(\top)$}
-  \end{prooftree}
-
-  Probably should not be a rule:
-  \begin{prooftree}
-    \alwaysNoLine
-    \AxiomC{\texttt{instance }$\Phi(\tau)$}
-    \alwaysSingleLine
-    \instanceDeclRule
-    \UnaryInfC{$\Phi(\tau) \vdash$}
-  \end{prooftree}
 
 \section{Dictionary Passing}
 \label{sec:dictionaryPassing}

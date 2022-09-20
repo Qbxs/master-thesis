@@ -323,8 +323,11 @@ For each Haskell type there may be at most one instance defined for each type cl
 
 \subsection{Superclasses}
 
-Consider superclasses in Haskell.
-E.g. the type class \mintinline{Haskell}{Eq} is a superclass of \mintinline{Haskell}{Ord}, written \mintinline{Haskell}{Eq a => Ord a}.
+Superclasses impose additional constraints on type classes.
+If $sup$ is a superclass of $sub$, then if we want to implement an instance of $sub \;\tau$, then there needs to exist an instance for $sup \;\tau$ as well.
+Usually this is done because the subclass relies on an implementation of the superclass or because the superclass proves a property about the type.
+
+E.g. the type class \mintinline{Haskell}{Eq} in Haskell is a superclass of \mintinline{Haskell}{Ord}, written \mintinline{Haskell}{Eq a => Ord a}.
 This means that for each type that we want to define an ordering for already needs to have equality defined on.
 
 For example, given an instance for \mintinline{Haskell}{Ord (Maybe a)} we can then derive that an instance for \mintinline{Haskell}{Eq a} has to exist.
