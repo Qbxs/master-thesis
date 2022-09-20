@@ -22,6 +22,8 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
 % The monotonicity of $\Phi^+$ motivates the following rule preserving the predicate for subtypes.
 % From the definition of covariant predicates it follows that $\phi$ holds for every term of $\sigma$ and because every witness of $\tau$ is also a witness of $\sigma$ the characteristic property $\phi$ holds for all witnesses of $\tau$.
 
+% ^< statt ^+
+
 \begin{prooftree}
   \AxiomC{$\ctx \Phi^+(\sigma)$}
   \AxiomC{$\tau \sub \sigma$}
@@ -235,6 +237,7 @@ With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can
 
 A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
 The \textsc{Sub}$^-$ again rule seems intuitive for this:
+% fix:
 If $e : \tau$ is a default value for $\tau$ and $\sigma \sub \tau$, then $e : \sigma$ can be used as a default value for $\sigma$ as well.
 
 
@@ -285,7 +288,7 @@ Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a 
 Let context $\Gamma := \{ \Showable(\mathbb{Z}), \Defaultable(\mathbb{N}) \}$.
 We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})$ and $\Defaultable(\mathbb{Z} \join \sigma)$:
 
-
+% fix:
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
@@ -296,6 +299,7 @@ We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})
   \UnaryInfC{$\ctx \Showable(\mathcal{U} \meet \mathbb{N})$}
 \end{prooftree}
 
+% fix meet->join
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
@@ -482,6 +486,7 @@ We can obtain witnesses from and to the initial and terminal types $\bot$ and $\
 
 Interpreting $in_{1/2}$ and $proj_{1/2}$ as morphisms from a type to one of its supertypes the rules corresponding to the covariant \textsc{Join}$^+$ and \textsc{Meet}$^+$ rules are obvious.
 
+% remove from this section
 \begin{center}
   \AxiomC{$in_1(w) : \Phi^+(\tau \join \sigma)$}
   \RightLabel{\textsc{Join}$_1^+$}
@@ -508,6 +513,7 @@ Interpreting $in_{1/2}$ and $proj_{1/2}$ as morphisms from a type to one of its 
 
 Analagously, with the interpretation of $in_{1/2}$ and $proj_{1/2}$  the rules corresponding to the contravariant \textsc{Join}$^-$ and \textsc{Meet}$^-$ rules are again obvious.
 
+% remove from this section
 \begin{center}
   \AxiomC{$w : \Phi^-(\tau \meet \sigma)$}
   \RightLabel{\textsc{Meet}$_1^-$}
