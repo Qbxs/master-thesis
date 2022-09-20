@@ -1026,3 +1026,34 @@ We might be able to just return \texttt{False} as a default value in such cases 
 Consider now the \texttt{Ord} type class. Given \texttt{Ord a} and \texttt{Ord b} we may say that in \texttt{Ord a $\join$ b} every $a$ is ordered before $b$.
 But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
 
+
+% TODO: after merge, move this to next chapter
+
+\section{Typing Rules}
+
+\begin{figure}
+\begin{center}
+\AxiomC{}
+\RightLabel{\textsc{T-Var}}
+\UnaryInfC{$\Gamma, x : \tau \vdash x : \tau$}
+\DisplayProof
+{\hskip.2in}
+\AxiomC{$\Gamma \vdash e_1 : \sigma \to \tau$}
+\AxiomC{$\Gamma \vdash e_2 : \sigma$}
+\RightLabel{\textsc{T-App}}
+\BinaryInfC{$\Gamma \vdash e_1 \; e_2 : \tau$}
+\DisplayProof
+
+\AxiomC{$\Gamma x : \sigma \vdash e : \tau$}
+\RightLabel{\textsc{T-Abs}}
+\UnaryInfC{$\Gamma \vdash \lambda x.e : \sigma \to \tau$}
+\DisplayProof
+{\hskip.2in}
+\AxiomC{$\Gamma \vdash e : \sigma$}
+\AxiomC{$\sigma \sub \tau$}
+\RightLabel{\textsc{T-Sub}}
+\BinaryInfC{$\Gamma \vdash e : \tau$}
+\DisplayProof
+\end{center}
+\title{Typing Rules}
+\end{figure}
