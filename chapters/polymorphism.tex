@@ -265,8 +265,8 @@ In the end, this enables us to use elaborate concepts such as functors and monad
 The different forms of subtyping just discussed are not unrelated.
 
 We can understand both parametric and ad-hoc polymorhism as a form of subtyping.
-E.g. given both parametric polymorphism and subtyping the \texttt{const} function can be typeable both by
-\texttt{const : forall a b. a -> b -> b} and \texttt{const : forall a. Top -> a -> a}.
+E.g. given both parametric polymorphism and subtyping the $\mathbf{const}$ function can be typeable both by
+$\mathbf{const} : \forall \alpha \beta. \alpha \to \beta \to \beta$ and $\mathbf{const} : \forall \alpha. \top \to \alpha \to \alpha$.
 Now there are two ways to substitute any type for the first argument of the function.
 
 Similarily, the hierarchy of type classes can express a similar relationship exhibited by subtyping.
