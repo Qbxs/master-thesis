@@ -1,4 +1,5 @@
-\chapter{Qualified Types} \label{ch:qualified-types}
+\chapter{Qualified Types}
+\label{ch:qualified-types}
 
 \section{Theory of Predicates}
 
@@ -34,6 +35,7 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
 
 With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules:
 
+\begin{figure}[h]
 \begin{center}
   \AxiomC{$\ctx \Phi^+(\top)$}
   \AxiomC{}
@@ -123,6 +125,10 @@ With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can der
   \DisplayProof
 \end{center}
 
+\label{fig:derived-covariant-rules}
+\caption{Derived rules for covariant predicates}
+\end{figure}
+
 A typical example for covariant predicates is $\Showable$: all types that are showable, which generally rules out function types.
 The \textsc{CoV} rule seems intuitive for this:
 If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can be shown in the same way.
@@ -146,6 +152,7 @@ From the definition of contravariant predicates it follows that $\phi$ holds for
 
 With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can again derive several useful rules:
 
+\begin{figure}[h]
 \begin{center}
   \AxiomC{$\ctx \Phi^-(\tau)$}
   \AxiomC{}
@@ -234,6 +241,9 @@ With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \UnaryInfC{$\ctx \Phi^-(\mathbb{Z})$}
   \DisplayProof
 \end{center}
+\label{fig:contravariant-derived-rules}
+\caption{Derived rules for contravariant predicates}
+\end{figure}
 
 A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
 The \textsc{Sub}$^-$ again rule seems intuitive for this:
@@ -288,7 +298,7 @@ Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a 
 Let context $\Gamma := \{ \Showable(\mathbb{Z}), \Defaultable(\mathbb{N}) \}$.
 We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})$ and $\Defaultable(\mathbb{Z} \join \mathcal{B})$:
 
-% fix:
+\begin{figure}[h]
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
@@ -298,8 +308,11 @@ We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})
   \RightLabel{\textsc{Meet}$^+_2$}
   \UnaryInfC{$\ctx \Showable(\mathcal{U} \meet \mathbb{N})$}
 \end{prooftree}
+\label{fig:example-showable}
+\caption{Derivation for $\ctx \Showable(\mathcal{U} \meet \mathbb{N})$}
+\end{figure}
 
-% fix meet->join
+\begin{figure}[h]
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
@@ -310,7 +323,9 @@ We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})
   \RightLabel{\textsc{Join}$^-_1$}
   \UnaryInfC{$\ctx \Defaultable(\mathbb{Z} \join \mathcal{B})$}
 \end{prooftree}
-
+\label{fig:example-defaultable}
+\caption{Derivation for $\ctx \Defaultable(\mathbb{Z} \join \mathcal{B})$}
+\end{figure}
 \section{Witnesses}
 
 By annotating applications of predicates with specific witnesses we obtain a calculus
@@ -319,6 +334,7 @@ that is not only able to prove that a type satisfies a predicate but also constr
 This directly corresponds to type class resolution if we interpret type classes as predicates on types.
 We again differentiate co- and contravariant type classes in order to transport type classes over the subtyping relation.
 
+\begin{figure}[h]
   % refl
   \begin{prooftree}
     \AxiomC{}
@@ -392,9 +408,13 @@ We again differentiate co- and contravariant type classes in order to transport 
   \RightLabel{\textsc{NatPrim}}
   \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
  \end{prooftree}
+\label{fig:subtyping-witnesses}
+\caption{Rules for subtyping witnesses}
+\end{figure}
 
 We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
 
+\begin{figure}[h]
 \[
 \begin{tikzcd}
   & \tau \meet \sigma \arrow[lddd, "proj_1"'] \arrow[rddd, "proj_2"] & \\
@@ -412,7 +432,9 @@ We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given w
   & \tau \join \sigma &
 \end{tikzcd}
 \]
-
+\label{fig:cd-proj/in}
+\caption{Witnesses for union \& intersection types}
+\end{figure}
 
 $triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
 $in_{1/2}$ correspond to the construction (injection) of an union type from either the first type $\tau$ or the second type $\sigma$ of the union $\tau \join \sigma$.
@@ -455,9 +477,8 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \BinaryInfC{$\contrav(w,m) : \Phi^-(\tau)$}
 \end{prooftree}
 
-Derived covariant witness rules:
 % macros
-
+\begin{figure}[h]
 \begin{center}
   \AxiomC{$w : \Phi^+(\top)$}
   \AxiomC{}
@@ -548,9 +569,12 @@ Derived covariant witness rules:
   \DisplayProof
 \end{center}
 
-Covriant derived witness rules:
+\label{fig:derived-covariant-witnesses}
+\caption{Derivations for covariant witnesses}
+\end{figure}
 
-% remove from this section
+
+\begin{figure}[h]
 \begin{center}
   \AxiomC{$w : \Phi^-(\tau)$}
   \AxiomC{}
@@ -639,6 +663,10 @@ Covriant derived witness rules:
   \UnaryInfC{$\contrav(w,\natPrim) : \Phi^-(\mathbb{Z})$}
   \DisplayProof
 \end{center}
+
+\label{fig:contravariant-witnesses}
+\caption{Derived rules for contravariant witnesses}
+\end{figure}
 
 % We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
 
@@ -1028,10 +1056,9 @@ But given the commutativity of $\join$, this would violate type class coherence 
 
 
 % TODO: after merge, move this to next chapter
-
 \section{Typing Rules}
 
-\begin{figure}
+\begin{figure}[h]
 \begin{center}
 \AxiomC{}
 \RightLabel{\textsc{T-Var}}
@@ -1055,5 +1082,6 @@ But given the commutativity of $\join$, this would violate type class coherence 
 \BinaryInfC{$\Gamma \vdash e : \tau$}
 \DisplayProof
 \end{center}
-\title{Typing Rules}
+\caption{Typing Rules}
+\label{fig:typing-rules}
 \end{figure}
