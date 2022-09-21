@@ -1,0 +1,38 @@
+\chapter{Type Inference}\label{ch:type-inference}
+% explain type inference with algebraic subtyping/bounds/bisubstitutions
+
+\section{Bisubstitution}
+
+For type inference of type class methods we have to consider the appropiate bounds for the unification variable in question.
+I.e. for covariant type classes we need to be able to resolve an instance for the upper bounds,
+and for covariant type classes we need to resolve an instance for the lower bounds.
+
+\section{Typing Rules}
+
+\begin{figure}[h]
+\begin{center}
+\AxiomC{}
+\RightLabel{\textsc{T-Var}}
+\UnaryInfC{$\Gamma, x : \tau \vdash x : \tau$}
+\DisplayProof
+{\hskip.2in}
+\AxiomC{$\Gamma \vdash e_1 : \sigma \to \tau$}
+\AxiomC{$\Gamma \vdash e_2 : \sigma$}
+\RightLabel{\textsc{T-App}}
+\BinaryInfC{$\Gamma \vdash e_1 \; e_2 : \tau$}
+\DisplayProof
+
+\AxiomC{$\Gamma x : \sigma \vdash e : \tau$}
+\RightLabel{\textsc{T-Abs}}
+\UnaryInfC{$\Gamma \vdash \lambda x.e : \sigma \to \tau$}
+\DisplayProof
+{\hskip.2in}
+\AxiomC{$\Gamma \vdash e : \sigma$}
+\AxiomC{$\sigma \sub \tau$}
+\RightLabel{\textsc{T-Sub}}
+\BinaryInfC{$\Gamma \vdash e : \tau$}
+\DisplayProof
+\end{center}
+\caption{Typing Rules}
+\label{fig:typing-rules}
+\end{figure}
