@@ -49,11 +49,16 @@ This permits many useful features in programming languages such as the reuse and
 
 We use the following syntax of types with the simple types of natural numbers $\mathbb{N}$, of integers $\mathbb{Z}$, the type of booleans $\mathcal{B}$ and the unit type $\mathcal{U}$.
 Furthermore, for subtyping we consider the lattice types:
+
+\begin{figure}[h]
 \begin{flalign*}
   \tau := & \; \mathbb{N} \; | \; \mathbb{Z} \; | \; \mathcal{B} \; | \; \mathcal{U} \dots & \textit{Simple types} \\
           & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau           & \textit{Lattice types} \\
           & \; \tau \to \tau                                                               & \textit{Function type}
 \end{flalign*}
+\label{fig:type-syntax}
+\caption{The syntax of types}
+\end{figure}
 
 The subtyping lattice is defined by the following derivation rules where $\tau$, $\sigma$ and $\rho$ are meta variables for types.
 
