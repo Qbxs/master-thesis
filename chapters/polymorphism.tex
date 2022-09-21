@@ -276,6 +276,13 @@ Similarily with subtyping we can define a type \texttt{Fractional} representing 
 If we make instances explicit (like in ML-modules) type class overloading can be implemented solely with passing specific instance definitions.
 This is no coincidence as dictionary passing is a typical way of implementing type classes as shown in section \ref{sec:dictionaryPassing}.
 
+A way to model type classes solely with subtyping can be to define the overloaded type class methods directly.
+So instead of a type class method $f : \forall \alpha. C \alpha \Rightarrow \tau[\alpha]$ and instance $C \alpha_1, \dots, C \alpha_n$,
+we could directly define $f$ using union types for covariant type classes as $f : forall \alpha_1,\dots,\alpha_n. \tau[\alpha_1 \join \dots \join \alpha_n]$.
+Dually we could do the same using intersection types for contravariant type classes.
+The obvious drawback would be that such functions are non-modular, i.e. they can only be defined at one point in the program.
+Unlike instances the definition cannot be expanded in submodules.
+
 \subsection{Coherence}\label{sec:coherence}
 % for each type there t may be globally at most one instance C t defined
 % discuss overlapping instances
