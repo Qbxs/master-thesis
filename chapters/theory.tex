@@ -339,7 +339,7 @@ We again differentiate co- and contravariant type classes in order to transport 
   \begin{prooftree}
     \AxiomC{}
     \RightLabel{\textsc{Refl}}
-    \UnaryInfC{$\refl : \tau \sub \tau$}
+    \UnaryInfC{$\refl_\tau : \tau \sub \tau$}
   \end{prooftree}
 
   % trans
@@ -347,19 +347,19 @@ We again differentiate co- and contravariant type classes in order to transport 
     \AxiomC{$f : \tau \sub \sigma$}
     \AxiomC{$g : \sigma \sub \rho$}
     \RightLabel{\textsc{Trans}}
-    \BinaryInfC{$f \circ g : \tau \sub \rho$}
+    \BinaryInfC{$f \comp g : \tau \sub \rho$}
   \end{prooftree}
 
   % top/bot
  \begin{center}
   \AxiomC{}
   \RightLabel{\textsc{Top}}
-  \UnaryInfC{$\topW : \tau \sub \top$}
+  \UnaryInfC{$\topW_\tau : \tau \sub \top$}
   \DisplayProof
   {\hskip.2in}
   \AxiomC{}
   \RightLabel{\textsc{Bot}}
-  \UnaryInfC{$\botW : \bot \sub \tau$}
+  \UnaryInfC{$\botW_\tau : \bot \sub \tau$}
   \DisplayProof
 \end{center}
 
@@ -483,16 +483,16 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$w : \Phi^+(\top)$}
   \AxiomC{}
   \RightLabel{\textsc{Top}}
-  \UnaryInfC{$\topW : \tau \sub \top$}
+  \UnaryInfC{$\topW_\tau : \tau \sub \top$}
   \alwaysSingleLine
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$cov(w,top) : \Phi^+(\tau)$}
+  \BinaryInfC{$cov(w,\topW_\tau) : \Phi^+(\tau)$}
   \DisplayProof
   \deriveRule
   \AxiomC{$w : \Phi^+(\top)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Top}$^+$}
-  \UnaryInfC{$\cov(w,\topW)\Phi^+(\tau)$}
+  \UnaryInfC{$\cov(w,\topW_\tau)\Phi^+(\tau)$}
   \DisplayProof
 \end{center}
 
@@ -500,16 +500,16 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$w : \Phi^+(\tau)$}
   \AxiomC{}
   \RightLabel{\textsc{Bot}}
-  \UnaryInfC{$\bot \sub \tau$}
+  \UnaryInfC{$\botW_\tau : \bot \sub \tau$}
   \alwaysSingleLine
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$\cov(w,\botW) : \Phi^+(\bot)$}
+  \BinaryInfC{$\cov(w,\botW_\tau) : \Phi^+(\bot)$}
   \DisplayProof
   \deriveRule
   \AxiomC{$w : \Phi^+(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Bot}$^+$}
-  \UnaryInfC{$\cov(w,\botW) : \Phi^+(\bot)$}
+  \UnaryInfC{$\cov(w,\botW_\tau) : \Phi^+(\bot)$}
   \DisplayProof
 \end{center}
 
@@ -517,18 +517,18 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$w : \Phi^+(\tau)$}
   \AxiomC{}
   \RightLabel{\textsc{Refl}}
-  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \UnaryInfC{$\refl_\tau : \tau \sub \tau$}
   \RightLabel{\textsc{MeetI}$_1$}
-  \UnaryInfC{$\proj{1}(\refl) : \tau \meet \sigma \sub \tau$}
+  \UnaryInfC{$\proj{1}(\refl_\tau) : \tau \meet \sigma \sub \tau$}
   \alwaysSingleLine
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$\cov(w,\proj{1}(\refl)) : \Phi^+(\tau \meet \sigma)$}
+  \BinaryInfC{$\cov(w,\proj{1}(\refl_\tau) : \Phi^+(\tau \meet \sigma)$}
   \DisplayProof
   \deriveRule
   \AxiomC{$w : \Phi^+(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Meet}$_1^+$}
-  \UnaryInfC{$\cov(w,\proj{1}(\refl)) : \Phi^+(\tau \meet \sigma)$}
+  \UnaryInfC{$\cov(w,\proj{1}(\refl_\tau)) : \Phi^+(\tau \meet \sigma)$}
   \DisplayProof
 \end{center}
 
@@ -536,19 +536,19 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$w : \Phi^+(\tau)$}
   \AxiomC{}
   \RightLabel{\textsc{Refl}}
-  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \UnaryInfC{$\refl_\tau : \tau \sub \tau$}
   \RightLabel{\textsc{MeetI}$_2$}
-  \UnaryInfC{$\proj{2}(\refl) : \sigma \meet \tau \sub \tau$}
+  \UnaryInfC{$\proj{2}(\refl_\tau) : \sigma \meet \tau \sub \tau$}
   \alwaysSingleLine
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$\cov(w,\proj{2}(\refl)) : \Phi^+(\sigma \meet \tau)$}
+  \BinaryInfC{$\cov(w,\proj{2}(\refl_\tau)) : \Phi^+(\sigma \meet \tau)$}
   \DisplayProof
   \vspace*{0.1in}
   \deriveRule
   \AxiomC{$w : \Phi^+(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Meet}$_2^+$}
-  \UnaryInfC{$\cov(w,\proj{2}(\refl)) : \Phi^+(\sigma \meet \tau)$}
+  \UnaryInfC{$\cov(w,\proj{2}(\refl_\tau)) : \Phi^+(\sigma \meet \tau)$}
   \DisplayProof
 \end{center}
 
@@ -579,16 +579,16 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$w : \Phi^-(\tau)$}
   \AxiomC{}
   \RightLabel{\textsc{Top}}
-  \UnaryInfC{$\topW :\tau \sub \top$}
+  \UnaryInfC{$\topW_\tau :\tau \sub \top$}
   \alwaysSingleLine
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$\contrav(w,\topW) : \Phi^-(\top)$}
+  \BinaryInfC{$\contrav(w,\topW_\tau) : \Phi^-(\top)$}
   \DisplayProof
   \deriveRule
   \AxiomC{$w : \Phi^-(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Top}$^-$}
-  \UnaryInfC{$\contrav(w,\topW) : \Phi^-(\top)$}
+  \UnaryInfC{$\contrav(w,\topW_\tau) : \Phi^-(\top)$}
   \DisplayProof
 \end{center}
 
@@ -596,16 +596,16 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$w : \Phi^-(\bot)$}
   \AxiomC{}
   \RightLabel{\textsc{Bot}}
-  \UnaryInfC{$\botW : \bot \sub \tau$}
+  \UnaryInfC{$\botW_\tau : \bot \sub \tau$}
   \alwaysSingleLine
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$\contrav(w,\botW) : \Phi^-(\tau)$}
+  \BinaryInfC{$\contrav(w,\botW_\tau) : \Phi^-(\tau)$}
   \DisplayProof
   \deriveRule
   \AxiomC{$w : \Phi^-(\bot)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Bot}$^-$}
-  \UnaryInfC{$\contrav(w,\botW) \Phi^-(\tau)$}
+  \UnaryInfC{$\contrav(w,\botW_\tau) \Phi^-(\tau)$}
   \DisplayProof
 \end{center}
 
@@ -615,16 +615,16 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \RightLabel{\textsc{Refl}}
   \UnaryInfC{$\refl : \tau \sub \tau$}
   \RightLabel{\textsc{JoinI}$_1$}
-  \UnaryInfC{$\inW{1}(\refl) : \tau \sub \tau \join \sigma$}
+  \UnaryInfC{$\inW{1}(\refl_\tau) : \tau \sub \tau \join \sigma$}
   \alwaysSingleLine
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$\contrav(w,\inW{1}(\refl)) : \Phi^-(\tau \join \sigma)$}
+  \BinaryInfC{$\contrav(w,\inW{1}(\refl_\tau)) : \Phi^-(\tau \join \sigma)$}
   \DisplayProof
   \deriveRule
   \AxiomC{$w : \Phi^-(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Join}$_1^-$}
-  \UnaryInfC{$\contrav(w,\inW{1}(\refl)) : \Phi^-(\tau \join \sigma)$}
+  \UnaryInfC{$\contrav(w,\inW{1}(\refl_\tau)) : \Phi^-(\tau \join \sigma)$}
   \DisplayProof
 \end{center}
 
@@ -632,18 +632,18 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
   \AxiomC{$w : \Phi^-(\tau)$}
   \AxiomC{}
   \RightLabel{\textsc{Refl}}
-  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \UnaryInfC{$\refl_\tau : \tau \sub \tau$}
   \RightLabel{\textsc{JoinI}$_2$}
-  \UnaryInfC{$\inW{2}(\refl) : \tau \sub \sigma \join \tau$}
+  \UnaryInfC{$\inW{2}(\refl_\tau) : \tau \sub \sigma \join \tau$}
   \alwaysSingleLine
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$\contrav(w,\inW{2}(\refl)) : \Phi^-(\sigma \join \tau)$}
+  \BinaryInfC{$\contrav(w,\inW{2}(\refl_\tau)) : \Phi^-(\sigma \join \tau)$}
   \DisplayProof
   \deriveRule
   \AxiomC{$w : \Phi^-(\tau)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Join}$_2^-$}
-  \UnaryInfC{$\contrav(w,\inW{2}(\refl)) : \Phi^-(\sigma \join \tau)$}
+  \UnaryInfC{$\contrav(w,\inW{2}(\refl_\tau)) : \Phi^-(\sigma \join \tau)$}
   \DisplayProof
 \end{center}
 
@@ -769,53 +769,53 @@ Generally, if there is an instance declaration for $\Psi(\tau)$ and if $\tau \su
 Otherwise, we could have the following two derivations with different witnesses if there is a subtyping derivation $\mathscr{D}$ for a witness $m : \tau \sub \sigma$:
 
 \begin{prooftree}
-  \AxiomC{$i : \instance{\Phi^+}{\tau}$}
+  \AxiomC{$w : \instance{\Phi^+}{\tau}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$w : \Phi^+(\tau)$}
+  \UnaryInfC{$i(w) : \Phi^+(\tau)$}
 \end{prooftree}
 
 \begin{prooftree}
-  \AxiomC{$j : \instance{\Phi^+}{\sigma}$}
+  \AxiomC{$w' : \instance{\Phi^+}{\sigma}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$w' : \Phi^+(\sigma)$}
+  \UnaryInfC{$i(w') : \Phi^+(\sigma)$}
   \AxiomC{$\mathscr{D}$}
   \noLine
   \UnaryInfC{$m : \tau \sub \sigma$}
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$\cov(w',m) : \Phi^+(\tau)$}
+  \BinaryInfC{$\cov(i(w'),m) : \Phi^+(\tau)$}
 \end{prooftree}
 
 For contravariant predicates and given a derivation $\mathscr{D}'$ for a witness $m : \sigma \sub \tau$ we could have:
 
 \begin{prooftree}
-  \AxiomC{$i : \instance{\Phi^-}{\tau}$}
+  \AxiomC{$w : \instance{\Phi^-}{\tau}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$w : \Phi^-(\tau)$}
+  \UnaryInfC{$i(w) : \Phi^-(\tau)$}
 \end{prooftree}
 
 \begin{prooftree}
-  \AxiomC{$j : \instance{\Phi^-}{\sigma}$}
+  \AxiomC{$w' : \instance{\Phi^-}{\sigma}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$w' : \Phi^-(\sigma)$}
+  \UnaryInfC{$i(w') : \Phi^-(\sigma)$}
   \AxiomC{$\mathscr{D}'$}
   \noLine
   \UnaryInfC{$m : \sigma \sub \tau$}
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$\contrav(w',m) : \Phi^-(\tau)$}
+  \BinaryInfC{$\contrav(i(w'),m) : \Phi^-(\tau)$}
 \end{prooftree}
 
 Note that in order for coherence to be satisfied, derivations do not have to be unique.
 Instead of the first derivation we may also use the following additionally using the \textsc{Refl} rule:
 
 \begin{prooftree}
-  \AxiomC{$i : \instance{\Phi^+}{\tau}$}
+  \AxiomC{$w : \instance{\Phi^+}{\tau}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$w : \Phi^+(\tau)$}
+  \UnaryInfC{$i(w) : \Phi^+(\tau)$}
   \AxiomC{}
   \RightLabel{\textsc{Refl}}
-  \UnaryInfC{$\refl : \tau \sub \tau$}
+  \UnaryInfC{$\refl_\tau : \tau \sub \tau$}
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$\cov(w,\refl) : \Phi^+(\tau)$}
+  \BinaryInfC{$\cov(i(w),\refl_\tau) : \Phi^+(\tau)$}
 \end{prooftree}
 
 \section{Inclusive Subtyping}
