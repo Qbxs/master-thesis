@@ -38,7 +38,6 @@
 \lstdefinestyle{duoStyle}{%
     morekeywords={if, then, else instance, class, >>, CBV, CBN, +, -, =>, case, of, cocase, mu, def, prd, cns, cmd, :=},
     keywordstyle=\ttfamily\bfseries\color{blue!80!black},
-    %numbers=none, % do not uncomment! issues when used inside arrays!
     mathescape=true
     %moredelim=**[is][\bfseries]{|}{|}
 }
@@ -83,8 +82,8 @@
 \newcommand\sub{\ensuremath{\leqslant}}
 
 % Text
-\newcommand\Showable{\ensuremath{\mathit{Showable}}}
-\newcommand\Defaultable{\ensuremath{\mathit{Defaultable}}}
+\newcommand\Showable{\ensuremath{\Psi_\mathit{Show}}}
+\newcommand\Defaultable{\ensuremath{\Psi_\mathit{Default}}}
 \newcommand\instance[2]{{\bf instance} \; #1(#2)}
 
 % Witnesses
