@@ -443,9 +443,9 @@ $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet 
 If there exists some instance declaration of type class $\Psi$ for a type $\tau$, we can directly resolve $\Psi(\tau)$.
 
 \begin{prooftree}
-  \AxiomC{$i : \instance{\Phi}{\tau}$}
+  \AxiomC{$w : \instance{\Phi}{\tau}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$w : \Phi(\tau)$}
+  \UnaryInfC{$i_\tau(w) : \Phi(\tau)$}
 \end{prooftree}
 
 Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to construct $\Phi(\tau)$ by applying it to the witness $w$ of $\Psi(\tau)$.
@@ -756,6 +756,44 @@ For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
 
 \section{Coherence}
 
+\subsection{Motivation}
+
+Consider the following instance declarations (fig. \ref{fig:showable-nat}):
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{0.4\textwidth}
+  \begin{flalign*}
+  & \instance{\Showable}{\mathbb{N}} : \\
+  & \; \; \mathit{show} : \mathbb{N} \to \mathit{String} \\
+  & \; \; \mathit{show} \; x := \caseof{x} \\
+  & \; \; \; \; Z \Rightarrow \mathit{"Z"} \\
+  & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+  \end{flalign*}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.4\textwidth}
+  \begin{flalign*}
+  & \instance{\Showable}{\mathbb{N}} : \\
+  & \; \; \mathit{show} : \mathbb{N} \to \mathit{String} \\
+  & \; \; \mathit{show} \; x := \caseof{x} \\
+  & \; \; \; \; Z \Rightarrow \mathit{"0"} \\
+  & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+  \end{flalign*}
+  \end{subfigure}
+\label{fig:showable-nat}
+\caption{Incoherent instance declarations for $\Showable(\mathbb{N})$}
+\end{figure}
+
+If there is more than one instance declaration in the same environment for the same type class and type,
+the program may be indeterministic.
+If we call the method $\mathit{show}$ for an argument of type $\mathbb{N}$,
+it is therefore undecidable which instance is being picked.
+
+Moreover, in the presence of subtyping, instances for types related by the subtyping relation may not be declared for the same type class.
+
+\subsection{Definition}
+
 Using witnesses we may formalize type class coherence:
 
 \begin{definition}
@@ -771,7 +809,7 @@ Otherwise, we could have the following two derivations with different witnesses 
 \begin{prooftree}
   \AxiomC{$w : \instance{\Phi^+}{\tau}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$i(w) : \Phi^+(\tau)$}
+  \UnaryInfC{$i_/tau(w) : \Phi^+(\tau)$}
 \end{prooftree}
 
 \begin{prooftree}
@@ -790,7 +828,7 @@ For contravariant predicates and given a derivation $\mathscr{D}'$ for a witness
 \begin{prooftree}
   \AxiomC{$w : \instance{\Phi^-}{\tau}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$i(w) : \Phi^-(\tau)$}
+  \UnaryInfC{$i_/tau(w) : \Phi^-(\tau)$}
 \end{prooftree}
 
 \begin{prooftree}
@@ -810,12 +848,12 @@ Instead of the first derivation we may also use the following additionally using
 \begin{prooftree}
   \AxiomC{$w : \instance{\Phi^+}{\tau}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$i(w) : \Phi^+(\tau)$}
+  \UnaryInfC{$i_/tau(w) : \Phi^+(\tau)$}
   \AxiomC{}
   \RightLabel{\textsc{Refl}}
   \UnaryInfC{$\refl_\tau : \tau \sub \tau$}
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$\cov(i(w),\refl_\tau) : \Phi^+(\tau)$}
+  \BinaryInfC{$\cov(i_/tau(w),\refl_\tau) : \Phi^+(\tau)$}
 \end{prooftree}
 
 \section{Inclusive Subtyping}
