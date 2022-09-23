@@ -142,7 +142,7 @@ If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can b
   \AxiomC{$\ctx \Phi^-(\sigma)$}
   \AxiomC{$\sigma \sub \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^-$}
+  \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\ctx \Phi^-(\tau)$}
 \end{prooftree}
 
@@ -150,7 +150,7 @@ The rules for contravariant predicates are dual to those for covariant predicate
 The monotonicity of $\Phi^-$ motivates the following rule preserving the predicate for supertypes:
 From the definition of contravariant predicates it follows that $\phi$ holds for some term of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
 
-With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can again derive several useful rules:
+With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can again derive several useful rules:
 
 \begin{figure}[h]
 \begin{center}
@@ -159,7 +159,7 @@ With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{Top}}
   \UnaryInfC{$\tau \sub \top$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^-$}
+  \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\ctx \Phi^-(\top)$}
   \DisplayProof
   \deriveRule
@@ -176,7 +176,7 @@ With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{Bot}}
   \UnaryInfC{$\bot \sub \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^-$}
+  \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\ctx \Phi^-(\tau)$}
   \DisplayProof
   \deriveRule
@@ -195,7 +195,7 @@ With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{JoinI}$_1$}
   \UnaryInfC{$\tau \sub \tau \join \sigma$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^-$}
+  \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\ctx \Phi^-(\tau \join \sigma)$}
   \DisplayProof
   \deriveRule
@@ -214,7 +214,7 @@ With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{JoinI}$_2$}
   \UnaryInfC{$\tau \sub \sigma \join \tau$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^-$}
+  \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\ctx \Phi^-(\sigma \join \tau)$}
   \DisplayProof
   \deriveRule
@@ -231,7 +231,7 @@ With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can
   \RightLabel{\textsc{NatPrim}}
   \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^-$}
+  \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\ctx \Phi^-(\mathbb{Z})$}
   \DisplayProof
   \deriveRule
@@ -246,7 +246,7 @@ With \textsc{Sub}$^-$ and the subtyping rules in fig. \ref{fig:subtyping} we can
 \end{figure}
 
 A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
-The \textsc{Sub}$^-$ again rule seems intuitive for this:
+The \textsc{ContraV} again rule seems intuitive for this:
 % fix:
 If $e : \tau$ is a default value for $\tau$ and $\sigma \sub \tau$, then $e : \sigma$ can be used as a default value for $\sigma$ as well.
 
@@ -457,7 +457,7 @@ Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to c
   \BinaryInfC{$s(w) : \Phi(\tau)$}
 \end{prooftree}
 
-For \textsc{CoV} and \textsc{Sub}$^-$ we can resolve witnesses like this:
+For \textsc{CoV} and \textsc{ContraV} we can resolve witnesses like this:
 
 \begin{prooftree}
   \alwaysNoLine
@@ -905,7 +905,7 @@ Dually, introducing intersection types can also only be done with some restricti
   \RightLabel{\textsc{MeetI}}
   \BinaryInfC{$\tau \sub \sigma \meet \rho$}
   \alwaysSingleLine
-  \RightLabel{\textsc{Sub}$^-$}
+  \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\ctx \Phi^-(\sigma \meet \rho)$}
 \end{prooftree}
 
