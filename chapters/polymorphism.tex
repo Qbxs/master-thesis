@@ -52,10 +52,10 @@ Furthermore, for subtyping we consider the lattice types:
 
 \begin{figure}[h]
 \begin{flalign*}
-  \tau,\sigma := & \; \forall \alpha_1 \dots \alpha_n. \tau                                       & \textit{Type schemes} \\
-                 & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \dots & \textit{Simple types} \\
-                 & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma           & \textit{Lattice types} \\
-                 & \; \tau \to \sigma                                                               & \textit{Function type}
+  \tau,\sigma := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes} \\
+                 & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String         & \textit{Simple types} \\
+                 & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types} \\
+                 & \; \tau \to \sigma                                                       & \textit{Function type}
 \end{flalign*}
 \label{fig:type-syntax}
 \caption{The syntax of types}
