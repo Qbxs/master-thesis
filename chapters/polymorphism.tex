@@ -47,13 +47,13 @@ meaning all terms $e$ of type $\tau$ are also of type $\sigma$.
 This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype.
 
 
-We use the following syntax of types with the simple types of natural numbers $\mathbb{N}$, of integers $\mathbb{Z}$, the type of booleans $\mathcal{B}$ and the unit type $\mathcal{U}$.
+We use the following syntax of types with the simple types of natural numbers $\Nat$, of integers $\Int$, the type of booleans $\Bool$ and the unit type $\Unit$.
 Furthermore, for subtyping we consider the lattice types:
 
 \begin{figure}[h]
 \begin{flalign*}
   \tau := & \; \forall \alpha_1 \dots \alpha_n. \tau                                       & \textit{Type schemes} \\
-          & \; \mathbb{N} \; | \; \mathbb{Z} \; | \; \mathcal{B} \; | \; \mathcal{U} \dots & \textit{Simple types} \\
+          & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \dots & \textit{Simple types} \\
           & \; \top \; | \; \bot \; | \; \tau \meet \tau \; | \; \tau \join \tau           & \textit{Lattice types} \\
           & \; \tau \to \tau                                                               & \textit{Function type}
 \end{flalign*}
@@ -207,7 +207,7 @@ We want to express that every natural number is also an integer and therefore in
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{NatPrim}}
-  \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
+  \UnaryInfC{$\Nat \sub \Int$}
 \end{prooftree}
 
 % add function types
@@ -222,9 +222,9 @@ the behavior of $P$ is unchanged when [$e_1$] is substituted for [$e_2$], then [
 \end{quote}
 
 In essence, given subtyping types are no longer disjoint but can be mixed together to display natural inclusion properties that we may expect.
-E.g. every natural number is also an integer and therefore the type $\mathbb{N}$ of natural numbers is a subtype of $\mathbb{Z}$.
+E.g. every natural number is also an integer and therefore the type $\Nat$ of natural numbers is a subtype of $\Int$.
 
-If we omit subtyping, we have to give explicit coercion functions (e.g. $\mathbf{coerce} : \mathbb{N} \to \mathbb{Z}$) whenever the expected type is more general than the given type.
+If we omit subtyping, we have to give explicit coercion functions (e.g. $\mathbf{coerce} : \Nat \to \Int$) whenever the expected type is more general than the given type.
 Subtyping allows us to pass such more specific arguments in a more natural way and makes coercions implicit.
 
 \section{Ad-hoc polymorphism}\label{sec:ad-hoc-polymorphism}
@@ -236,7 +236,7 @@ However, there is usually no way to express this in the type system of these lan
 
 If our type system doesn't allow for ad-hoc polymorphism it may seem neccessary to write verbose code for basic function with respect to every concrete type it should be used for.
 An intuitive example for this (that is also the motivation for type classes in the original proposal) are arithmetic operators.
-We simply cannot define $(+) : \mathbb{Z} \to \mathbb{Z} \to \mathbb{Z}$ and then also $(+) : \mathit{Float} \to \mathit{Float} \to \mathit{Float}$ in a different implementation, on which both types definetly rely on under the hood.
+We simply cannot define $(+) : \Int \to \Int \to \Int$ and then also $(+) : \mathit{Float} \to \mathit{Float} \to \mathit{Float}$ in a different implementation, on which both types definetly rely on under the hood.
 But these types have nonetheless something in common. Namely that they both stand for \emph{numerical} values, that hence support the usual arithmetic operations, like addition, multiplication, division and so on.
 
 The idea of type classes is to generalise attributes of types with appropriate functions.

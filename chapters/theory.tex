@@ -6,7 +6,7 @@
 To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. types that satisfy some predicate.
 
 \begin{definition} Predicates\\
-  Given a universe of types $\mathcal{U}$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\mathcal{U})$.
+  Given a universe of types $\Unit$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\Unit)$.
 \end{definition}
 
 We are only interested in predicates that are preserved over the subtyping lattice.
@@ -109,19 +109,19 @@ With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can der
 \end{center}
 
 \begin{center}
-  \AxiomC{$\ctx \Phi^+(\mathbb{Z})$}
+  \AxiomC{$\ctx \Phi^+(\Int)$}
   \AxiomC{}
   \RightLabel{\textsc{NatPrim}}
-  \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
+  \UnaryInfC{$\Nat \sub \Int$}
   \alwaysSingleLine
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$\ctx \Phi^+(\mathbb{N})$}
+  \BinaryInfC{$\ctx \Phi^+(\Nat)$}
   \DisplayProof
   \deriveRule
-  \AxiomC{$\ctx \Phi^+(\mathbb{Z})$}
+  \AxiomC{$\ctx \Phi^+(\Int)$}
   \alwaysSingleLine
   \RightLabel{\textsc{NatPrim}$^+$}
-  \UnaryInfC{$\ctx \Phi^+(\mathbb{N})$}
+  \UnaryInfC{$\ctx \Phi^+(\Nat)$}
   \DisplayProof
 \end{center}
 
@@ -226,19 +226,19 @@ With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can
 \end{center}
 
 \begin{center}
-  \AxiomC{$\ctx \Phi^-(\mathbb{N})$}
+  \AxiomC{$\ctx \Phi^-(\Nat)$}
   \AxiomC{}
   \RightLabel{\textsc{NatPrim}}
-  \UnaryInfC{$\mathbb{N} \sub \mathbb{Z}$}
+  \UnaryInfC{$\Nat \sub \Int$}
   \alwaysSingleLine
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$\ctx \Phi^-(\mathbb{Z})$}
+  \BinaryInfC{$\ctx \Phi^-(\Int)$}
   \DisplayProof
   \deriveRule
-  \AxiomC{$\ctx \Phi^-(\mathbb{N})$}
+  \AxiomC{$\ctx \Phi^-(\Nat)$}
   \alwaysSingleLine
   \RightLabel{\textsc{NatPrim}$^-$}
-  \UnaryInfC{$\ctx \Phi^-(\mathbb{Z})$}
+  \UnaryInfC{$\ctx \Phi^-(\Int)$}
   \DisplayProof
 \end{center}
 \label{fig:contravariant-derived-rules}
@@ -295,36 +295,36 @@ Consider the predicates $\Showable$ and $\Defaultable$.
 A type $\tau$ satsifies the covariant predicate $\Showable$ if a total function from $\tau \to String$ can be defined.
 Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a function of type $Unit \to \tau$ can be defined.
 
-Let context $\Gamma := \{ \Showable(\mathbb{Z}), \Defaultable(\mathbb{N}) \}$.
-We obtain the following derivations for $\Showable(\mathcal{U} \meet \mathbb{N})$ and $\Defaultable(\mathbb{Z} \join \mathcal{B})$:
+Let context $\Gamma := \{ \Showable(\Int), \Defaultable(\Nat) \}$.
+We obtain the following derivations for $\Showable(\Unit \meet \Nat)$ and $\Defaultable(\Int \join \Bool)$:
 
 \begin{figure}[h]
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
-  \UnaryInfC{$\ctx \Showable(\mathbb{Z})$}
+  \UnaryInfC{$\ctx \Showable(\Int)$}
   \RightLabel{\textsc{Prim}$^+$}
-  \UnaryInfC{$\ctx \Showable(\mathbb{N})$}
+  \UnaryInfC{$\ctx \Showable(\Nat)$}
   \RightLabel{\textsc{Meet}$^+_2$}
-  \UnaryInfC{$\ctx \Showable(\mathcal{U} \meet \mathbb{N})$}
+  \UnaryInfC{$\ctx \Showable(\Unit \meet \Nat)$}
 \end{prooftree}
 \label{fig:example-showable}
-\caption{Derivation for $\ctx \Showable(\mathcal{U} \meet \mathbb{N})$}
+\caption{Derivation for $\ctx \Showable(\Unit \meet \Nat)$}
 \end{figure}
 
 \begin{figure}[h]
 \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{Axiom}}
-  \UnaryInfC{$\ctx \Defaultable(\mathbb{N})$}
+  \UnaryInfC{$\ctx \Defaultable(\Nat)$}
   \RightLabel{\textsc{Prim}$^-$}
-  \UnaryInfC{$\ctx \Defaultable(\mathbb{Z})$}
+  \UnaryInfC{$\ctx \Defaultable(\Int)$}
   \alwaysSingleLine
   \RightLabel{\textsc{Join}$^-_1$}
-  \UnaryInfC{$\ctx \Defaultable(\mathbb{Z} \join \mathcal{B})$}
+  \UnaryInfC{$\ctx \Defaultable(\Int \join \Bool)$}
 \end{prooftree}
 \label{fig:example-defaultable}
-\caption{Derivation for $\ctx \Defaultable(\mathbb{Z} \join \mathcal{B})$}
+\caption{Derivation for $\ctx \Defaultable(\Int \join \Bool)$}
 \end{figure}
 \section{Witnesses}
 
@@ -406,7 +406,7 @@ We again differentiate co- and contravariant type classes in order to transport 
  \begin{prooftree}
   \AxiomC{}
   \RightLabel{\textsc{NatPrim}}
-  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
+  \UnaryInfC{$\natPrim : \Nat \sub \Int$}
  \end{prooftree}
 \label{fig:subtyping-witnesses}
 \caption{Rules for subtyping witnesses}
@@ -553,19 +553,19 @@ For \textsc{CoV} and \textsc{ContraV} we can resolve witnesses like this:
 \end{center}
 
 \begin{center}
-  \AxiomC{$w : \Phi^+(\mathbb{Z})$}
+  \AxiomC{$w : \Phi^+(\Int)$}
   \AxiomC{}
   \RightLabel{\textsc{NatPrim}}
-  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
+  \UnaryInfC{$\natPrim : \Nat \sub \Int$}
   \alwaysSingleLine
   \RightLabel{\textsc{CoV}}
-  \BinaryInfC{$\cov(w,\natPrim) : \Phi^+(\mathbb{N})$}
+  \BinaryInfC{$\cov(w,\natPrim) : \Phi^+(\Nat)$}
   \DisplayProof
   \deriveRule
-  \AxiomC{$w : \Phi^+(\mathbb{Z})$}
+  \AxiomC{$w : \Phi^+(\Int)$}
   \alwaysSingleLine
   \RightLabel{\textsc{NatPrim}$^+$}
-  \UnaryInfC{$\cov(w,\natPrim) : \Phi^+(\mathbb{N})$}
+  \UnaryInfC{$\cov(w,\natPrim) : \Phi^+(\Nat)$}
   \DisplayProof
 \end{center}
 
@@ -648,19 +648,19 @@ For \textsc{CoV} and \textsc{ContraV} we can resolve witnesses like this:
 \end{center}
 
 \begin{center}
-  \AxiomC{$w : \Phi^-(\mathbb{N})$}
+  \AxiomC{$w : \Phi^-(\Nat)$}
   \AxiomC{}
   \RightLabel{\textsc{NatPrim}}
-  \UnaryInfC{$\natPrim : \mathbb{N} \sub \mathbb{Z}$}
+  \UnaryInfC{$\natPrim : \Nat \sub \Int$}
   \alwaysSingleLine
   \RightLabel{\textsc{ContraV}}
-  \BinaryInfC{$\contrav(w,\natPrim) : \Phi^-(\mathbb{Z})$}
+  \BinaryInfC{$\contrav(w,\natPrim) : \Phi^-(\Int)$}
   \DisplayProof
   \deriveRule
-  \AxiomC{$w : \Phi^-(\mathbb{N})$}
+  \AxiomC{$w : \Phi^-(\Nat)$}
   \alwaysSingleLine
   \RightLabel{\textsc{NatPrim}$^-$}
-  \UnaryInfC{$\contrav(w,\natPrim) : \Phi^-(\mathbb{Z})$}
+  \UnaryInfC{$\contrav(w,\natPrim) : \Phi^-(\Int)$}
   \DisplayProof
 \end{center}
 
@@ -764,8 +764,8 @@ Consider the following instance declarations (fig. \ref{fig:showable-nat}):
   \centering
   \begin{subfigure}{0.4\textwidth}
   \begin{flalign*}
-  & \instance{\Showable}{\mathbb{N}} : \\
-  & \; \; \mathit{show} : \mathbb{N} \to \mathit{String} \\
+  & \instance{\Showable}{\Nat} : \\
+  & \; \; \mathit{show} : \Nat \to \mathit{String} \\
   & \; \; \mathit{show} \; x := \caseof{x} \\
   & \; \; \; \; Z \Rightarrow \mathit{"Z"} \\
   & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
@@ -774,20 +774,20 @@ Consider the following instance declarations (fig. \ref{fig:showable-nat}):
   \hfill
   \begin{subfigure}{0.4\textwidth}
   \begin{flalign*}
-  & \instance{\Showable}{\mathbb{N}} : \\
-  & \; \; \mathit{show} : \mathbb{N} \to \mathit{String} \\
+  & \instance{\Showable}{\Nat} : \\
+  & \; \; \mathit{show} : \Nat \to \mathit{String} \\
   & \; \; \mathit{show} \; x := \caseof{x} \\
   & \; \; \; \; Z \Rightarrow \mathit{"0"} \\
   & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
   \end{flalign*}
   \end{subfigure}
 \label{fig:showable-nat}
-\caption{Incoherent instance declarations for $\Showable(\mathbb{N})$}
+\caption{Incoherent instance declarations for $\Showable(\Nat)$}
 \end{figure}
 
 If there is more than one instance declaration in the same environment for the same type class and type,
 the program may be indeterministic.
-If we call the method $\mathit{show}$ for an argument of type $\mathbb{N}$,
+If we call the method $\mathit{show}$ for an argument of type $\Nat$,
 it is therefore undecidable which instance is being picked.
 
 Moreover, in the presence of subtyping, instances for types related by the subtyping relation may not be declared for the same type class.
@@ -1032,7 +1032,7 @@ The only case for which intensional type analysis appears superior is a union ty
 % Main thesis for class coherence with subtyping
   Given \texttt{instance C a} and $sub \sub a$ and $a \sub sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
 
-  Consider we have $\mathbb{N} \sub \mathbb{Z}$.
+  Consider we have $\Nat \sub \Int$.
   We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
   For integers on the other hand, we might prefer to choose addition as operator and 0 as neutral element, so we can expand to monoid to a group.
 
