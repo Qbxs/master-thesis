@@ -790,6 +790,11 @@ the program may be indeterministic.
 If we call the method $\mathit{show}$ for an argument of type $\Nat$,
 it is therefore undecidable which instance is being picked.
 
+Incoherence causes unpredictable behavior of programs.
+Not only does this potentially produce unexpected results, it also prevents us from reasoning about programs.
+E.g. if the $\mathit{insert}$ operation for search tree relies on the type class $\mathit{Ord}$ for which we have incoherent instances,
+the search tree properties may break. \cite{Kilpatrick2019-cy}
+
 Moreover, in the presence of subtyping, instances for types related by the subtyping relation may not be declared for the same type class.
 
 \subsection{Definition}
