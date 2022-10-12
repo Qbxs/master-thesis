@@ -55,7 +55,8 @@ Furthermore, for subtyping we consider the lattice types:
   \tau,\sigma := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes} \\
                  & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String         & \textit{Simple types} \\
                  & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types} \\
-                 & \; \tau \to \sigma                                                       & \textit{Function type}
+                 & \; \tau \to \sigma                                                       & \textit{Function types} \\
+                 & \; \mu.\tau                                                              & \textit{Recursive types}
 \end{flalign*}
 \label{fig:type-syntax}
 \caption{The syntax of types}
