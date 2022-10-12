@@ -140,6 +140,19 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
   \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
  \end{prooftree}
 
+   % recursive types
+   \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{Rec}$_1$}
+    \UnaryInfC{$\mu\rho.\tau \sub \tau [\mu\rho.\tau\ / \rho]$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{Rec}$_2$}
+    \UnaryInfC{$\tau[\mu\rho.\tau / \rho] \sub \mu\rho.\tau$}
+    \DisplayProof
+ \end{center}
+
  \caption{Subtyping rules}
  \label{fig:subtyping}
 \end{figure}
