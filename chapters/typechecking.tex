@@ -37,6 +37,9 @@ and for covariant type classes we need to resolve an instance for the lower boun
 \label{fig:typing-rules}
 \end{figure}
 
+The resolution rules for type class witnesses in section \ref{sec:witnesses} provide us with means to implement type checking for type class methods.
+For every call to a type class method resolution either fails or provides a dictionary, i.e. a witness, for the type class constraint.
+
 Type inference for type class method calls (fig. \ref{fig:showable-example}):
 $w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution.
 $k$ is the continuation that is passed to the type class method.
