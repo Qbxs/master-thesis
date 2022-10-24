@@ -409,6 +409,26 @@ We again differentiate co- and contravariant type classes in order to transport 
   \RightLabel{\textsc{NatPrim}}
   \UnaryInfC{$\natPrim : \Nat \sub \Int$}
  \end{prooftree}
+
+ \begin{prooftree}
+  \AxiomC{$f : \tau' \sub \tau$}
+  \AxiomC{$g : \sigma \sub \sigma'$}
+  \RightLabel{\textsc{Func}}
+  \BinaryInfC{$\funcW(f,g) : \tau \to \sigma \sub \tau' \to \sigma'$}
+ \end{prooftree}
+
+   % recursive types
+   \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{Rec}$_1$}
+    \UnaryInfC{$\unfoldL : \mu\rho.\tau \sub \tau [\mu\rho.\tau\ / \rho]$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{Rec}$_2$}
+    \UnaryInfC{$\unfoldR : \tau[\mu\rho.\tau / \rho] \sub \mu\rho.\tau$}
+    \DisplayProof
+   \end{center}
 \label{fig:subtyping-witnesses}
 \caption{Rules for subtyping witnesses}
 \end{figure}
