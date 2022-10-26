@@ -1,4 +1,5 @@
-\chapter{Type Inference}\label{ch:type-inference}
+\chapter{Type Inference}
+\label{ch:type-inference}
 % explain type inference with algebraic subtyping/bounds/bisubstitutions
 
 \section{Bisubstitution}
@@ -40,17 +41,23 @@ and for covariant type classes we need to resolve an instance for the lower boun
 The resolution rules for type class witnesses in section \ref{sec:witnesses} provide us with means to implement type checking for type class methods.
 For every call to a type class method resolution either fails or provides a dictionary, i.e. a witness, for the type class constraint.
 
+What makes this kind of typing derivation special is that it not only decomposes judgements upwards,
+but fills in the gap displayed by the type class constraint downwards by resolving a fitting dictionary.
+
 Type inference for type class method calls (fig. \ref{fig:showable-example}):
 $w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution.
 $k$ is the continuation that is passed to the type class method.
 
+Generally we generate constraints between the types introduced in the class declaration of the method and the unification variables generated for its arguments.
+
 \begin{figure}[h]
     \centering
+    \AxiomC{$\tau$ fresh}
     \AxiomC{$\ctx w : \Showable(\tau)$}
     \AxiomC{$\ctx x : \tau$}
     \AxiomC{$\ctx k : \String \to \sigma$}
     \RightLabel{\textsc{T-Class}}
-    \TrinaryInfC{$\ctx \showTerm w \; x \; k : \sigma$}
+    \QuaternaryInfC{$\ctx \showTerm w \; x \; k : \sigma$}
     \DisplayProof
 \caption{Derivation for $\showTerm w \; x \; k : \sigma$}
 \label{fig:showable-example}
