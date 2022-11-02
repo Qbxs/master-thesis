@@ -3,6 +3,7 @@
 % explain type inference with algebraic subtyping/bounds/bisubstitutions
 
 \section{Bisubstitution}
+% can be deleted
 
 For type inference of type class methods we have to consider the appropiate bounds for the unification variable in question.
 I.e. for covariant type classes we need to be able to resolve an instance for the upper bounds,
@@ -62,3 +63,26 @@ Generally we generate constraints between the types introduced in the class decl
 \caption{Derivation for $\showTerm w \; x \; k : \sigma$}
 \label{fig:showable-example}
 \end{figure}
+
+Outlined below is the algorithm used to infer a principle(?) type for any given term without the presence of type classes.
+We will then examine, which alterations need to be done in order to achieve the same with the addition of type class constraints.
+
+\subsection{Constraint Generation}
+
+
+\begin{figure}[h]
+\begin{center}
+    $\constraintGen{\alpha}_\tau^\bot := \alpha$ \\
+    $\constraintGen{\alpha}_\tau^\top := \alpha$ \\
+    $\constraintGen{\nu \to \nu'}_\tau^\bot := \constraintGen{\nu}_\tau^\top \to \constraintGen{\nu'}_\tau^\bot$ \\
+    $\constraintGen{\nu \to \nu'}_\tau^\top := \constraintGen{\nu}_\tau^\bot \to \constraintGen{\nu'}_\tau^\top$ \\
+    $\constraintGen{\mu\alpha.\nu}_\tau^\bot := \mu\alpha.\constraintGen{\nu}_\tau^\bot$ \\
+    $\constraintGen{\mu\alpha.\nu}_\tau^\top := \mu\alpha.\constraintGen{\nu}_\tau^\top$ \\
+\end{center}
+\caption{Constraint Generation}
+\label{fig:constraint-generation}
+\end{figure}
+
+\subsection{Constraint Solving}
+
+\subsection{Type Simplification}
