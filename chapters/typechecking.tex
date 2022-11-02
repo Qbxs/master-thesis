@@ -79,10 +79,48 @@ We will then examine, which alterations need to be done in order to achieve the 
     $\constraintGen{\mu\alpha.\nu}_\tau^\bot := \mu\alpha.\constraintGen{\nu}_\tau^\bot$ \\
     $\constraintGen{\mu\alpha.\nu}_\tau^\top := \mu\alpha.\constraintGen{\nu}_\tau^\top$ \\
 \end{center}
-\caption{Constraint Generation}
-\label{fig:constraint-generation}
+\caption{Constraint Generation?}
+\label{fig:constraint-generation'}
+\end{figure}
+
+\begin{figure}[h]
+    \begin{center}
+        placeholder: rules for generating constraint sets
+    \end{center}
+    \caption{Constraint Generation}
+    \label{fig:constraint-generation}
 \end{figure}
 
 \subsection{Constraint Solving}
+
+\begin{figure}[h]
+    \begin{center}
+        placeholder: rules for solvinf constraints
+        \begin{itemize}
+            \item cache hits
+            \item adding to lower/upper bounds
+            \item decomposing
+            \item fail
+        \end{itemize}
+    \end{center}
+    \caption{Constraint Solving}
+    \label{fig:constraint-solving}
+\end{figure}
+
+\begin{figure}[h]
+    % We might add witnesses here?
+    \begin{flalign*}
+        \decompose{\tau}{\top} & := & \emptyset \\
+        \decompose{\bot}{\tau} & := & \emptyset \\
+        \decompose{\tau_1 \join \tau_2}{\sigma} & := & \{ \tau_1 \sub \sigma, \tau_2 \sub \sigma \} \\
+        \decompose{\sigma}{\tau_1 \meet \tau_2} & := & \{ \sigma \sub \tau_1, \sigma \sub \tau_2 \} \\
+        \decompose{\tau}{\mu\alpha.\sigma} & := & \{ \tau \sub \sigma[\mu\alpha.\sigma / \alpha] \} \\
+        \decompose{\mu\alpha.\sigma}{\tau} & := & \{ \sigma[\mu\alpha.\sigma / \alpha] \sub \tau \} \\
+        \decompose{\alpha}{\alpha} & := & \emptyset \\
+        \decompose{\sigma_1 \to \tau_1}{\sigma_2 \to \tau_2} & := & \{ \sigma_2 \sub \sigma_1, \tau_1 \sub \tau_2 \} \\
+    \end{flalign*}
+    \caption{Constraint Solving}
+    \label{fig:constraint-solving}
+\end{figure}
 
 \subsection{Type Simplification}
