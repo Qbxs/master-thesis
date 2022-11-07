@@ -86,6 +86,25 @@ We will then examine, which alterations need to be done in order to achieve the 
 \begin{figure}[h]
     \begin{center}
         placeholder: rules for generating constraint sets
+
+        \AxiomC{$\Gamma(x) = \tau$}
+        \RightLabel{\textsc{Var}}
+        \UnaryInfC{$\Gamma \vdash x : \tau \toConstr \emptyset$}
+        \DisplayProof
+
+        \AxiomC{$\Gamma \vdash e : \tau \toConstr \Xi$}
+        \AxiomC{$\mathit{Fresh}(\beta)$}
+        \RightLabel{\textsc{Lam}}
+        \BinaryInfC{$\Gamma \vdash \lambda x. e : \beta \to \tau \toConstr \Xi$}
+        \DisplayProof
+
+        \AxiomC{$\Gamma \vdash e_1 : \sigma_1 \toConstr \Xi_1$}
+        \AxiomC{$\Gamma \vdash e_2 : \sigma_2 \toConstr \Xi_2$}
+        \AxiomC{$\mathit{Fresh}(\beta)$}
+        \RightLabel{\textsc{App}}
+        \TrinaryInfC{$\Gamma \vdash e_1e_2 : \beta \toConstr \{ \sigma_1 \sub \sigma_2 \to \beta \} \cup \Xi_1 \cup \Xi_2$}
+        \DisplayProof
+
     \end{center}
     \caption{Constraint Generation}
     \label{fig:constraint-generation}
