@@ -1,13 +1,6 @@
-\chapter{Type Inference}
-\label{ch:type-inference}
+\chapter{Type System}
+\label{ch:type-system}
 % explain type inference with algebraic subtyping/bounds/bisubstitutions
-
-\section{Bisubstitution}
-% can be deleted
-
-For type inference of type class methods we have to consider the appropiate bounds for the unification variable in question.
-I.e. for covariant type classes we need to be able to resolve an instance for the upper bounds,
-and for covariant type classes we need to resolve an instance for the lower bounds.
 
 \section{Typing Rules}
 
@@ -67,6 +60,15 @@ Generally we generate constraints between the types introduced in the class decl
 Outlined below is the algorithm used to infer a principle(?) type for any given term without the presence of type classes.
 We will then examine, which alterations need to be done in order to achieve the same with the addition of type class constraints.
 
+\section{Type Inference}
+\label{sec:type-inference}
+
+The core of type inference is done using an unifaction algorithm.
+For this, in the first step, we generate subtyping and type class constraint based on the term.
+When solving the constraint set, the algorithm either fails (i.e. the term does not type check) or for all unification variables we obtain lower and upper bounds, as well as type class constraints.
+The resulting bisubstitution is used to compute a principal type which can later be simplified using a translation to its type automata representation which is being minimized.
+As a result, we obtain a simple principal type for any term that typechecks.
+
 \subsection{Constraint Generation}
 
 
@@ -79,13 +81,12 @@ We will then examine, which alterations need to be done in order to achieve the 
     $\constraintGen{\mu\alpha.\nu}_\tau^\bot := \mu\alpha.\constraintGen{\nu}_\tau^\bot$ \\
     $\constraintGen{\mu\alpha.\nu}_\tau^\top := \mu\alpha.\constraintGen{\nu}_\tau^\top$ \\
 \end{center}
-\caption{Constraint Generation?}
-\label{fig:constraint-generation'}
+\caption{Upper/lower bound translation}
+\label{fig:bound-translation}
 \end{figure}
 
 \begin{figure}[h]
     \begin{center}
-        placeholder: rules for generating constraint sets
 
         \AxiomC{$\Gamma(x) = \tau$}
         \RightLabel{\textsc{Var}}
@@ -105,11 +106,18 @@ We will then examine, which alterations need to be done in order to achieve the 
         \TrinaryInfC{$\Gamma \vdash e_1e_2 : \beta \toConstr \{ \sigma_1 \sub \sigma_2 \to \beta \} \cup \Xi_1 \cup \Xi_2$}
         \DisplayProof
 
-        \AxiomC{$\Gamma \vdash x_1 : \sigma_1 \toConstr \Xi_1$}
-        \AxiomC{$\Gamma \vdash x_n : \sigma_n \toConstr \Xi_2$}
+        \AxiomC{$\Gamma \vdash x : \sigma \toConstr \Xi$}
+        \AxiomC{$P(\mathbf{m}) := \forall \alpha. \Phi(\alpha) \Rightarrow \alpha \to \rho$}
         \AxiomC{$\mathit{Fresh}(\beta)$}
-        \RightLabel{\textsc{Method}}
-        \TrinaryInfC{$\Gamma \vdash \mathbf{m} \; x_1 \dots x_n : \tau \toConstr \{ \Phi_m(\beta) \} \cup \Xi_1 \cup \Xi_2$}
+        \RightLabel{\textsc{Method}$^+$}
+        \TrinaryInfC{$\Gamma \vdash \mathbf{m} \; x : \tau \toConstr \{ \Phi_m(\beta), \sigma \sub \beta, \tau \sub \rho \} \cup \Xi$}
+        \DisplayProof
+
+        \AxiomC{$\Gamma \vdash x : \sigma \toConstr \Xi$}
+        \AxiomC{$P(\mathbf{m}) := \forall \alpha. \Phi(\alpha) \Rightarrow \rho \to \alpha$}
+        \AxiomC{$\mathit{Fresh}(\beta)$}
+        \RightLabel{\textsc{Method}$^-$}
+        \TrinaryInfC{$\Gamma \vdash \mathbf{m} \; x : \tau \toConstr \{ \Phi_m(\beta), \beta \sub \tau, \sigma \sub \rho \} \cup \Xi$}
         \DisplayProof
 
     \end{center}
