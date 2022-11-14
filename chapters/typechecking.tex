@@ -43,6 +43,9 @@ $w$ is the implicit witness for the type class constraint $\Showable(\tau)$ whic
 $k$ is the continuation that is passed to the type class method.
 
 Generally we generate constraints between the types introduced in the class declaration of the method and the unification variables generated for its arguments.
+In this case $\mathbf{show}$ is implemented in continuation passing style, so apart from the argument to be shown $x$, there is continutation $k$ which consumes the $\mathit{String}$ output.
+The argument $w$ is implicit and stands for the inferred witness of the type class.
+At compilation it will be filled with a resolved instance, so that the evaluation of the metod is well defined.
 
 \begin{figure}[h]
     \centering
@@ -50,12 +53,29 @@ Generally we generate constraints between the types introduced in the class decl
     \AxiomC{$\ctx w : \Showable(\tau)$}
     \AxiomC{$\ctx x : \tau$}
     \AxiomC{$\ctx k : \String \to \sigma$}
-    \RightLabel{\textsc{T-Class}}
+    \RightLabel{\textsc{T-Class}$^+$}
     \QuaternaryInfC{$\ctx \showTerm w \; x \; k : \sigma$}
     \DisplayProof
 \caption{Derivation for $\showTerm w \; x \; k : \sigma$}
 \label{fig:showable-example}
 \end{figure}
+
+For contravariant type classes such as $\Readable$ the inference looks slightly different:
+In this case, the type class constraint is applied to the argument type of the continuation.
+
+\begin{figure}[h]
+    \centering
+    \AxiomC{$\tau$ fresh}
+    \AxiomC{$\ctx w : \Readable(\tau)$}
+    \AxiomC{$\ctx x : \String$}
+    \AxiomC{$\ctx k : \tau \to \sigma$}
+    \RightLabel{\textsc{T-Class}$^-$}
+    \QuaternaryInfC{$\ctx \readTerm w \; x \; k : \sigma$}
+    \DisplayProof
+\caption{Derivation for $\readTerm w \; x \; k : \sigma$}
+\label{fig:readable-example}
+\end{figure}
+
 
 Outlined below is the algorithm used to infer a principle(?) type for any given term without the presence of type classes.
 We will then examine, which alterations need to be done in order to achieve the same with the addition of type class constraints.
@@ -156,5 +176,7 @@ As a result, we obtain a simple principal type for any term that typechecks.
     \caption{Constraint Decomposition}
     \label{fig:constraint-decomposition}
 \end{figure}
+
+\subsection{Type Coalescing}
 
 \subsection{Type Simplification}
