@@ -1050,9 +1050,9 @@ This also renders intensional type analysis more difficult:
 We can not simply match on a type (or its encoded representation \cite{weirich2000}) because we have to essentially solve the problem of subtyping between the type at hand and (at worst case) for each type for which an instance declaration is in scope.
 So, intensional type analysis may introduce a dramatic overhead in the presence of subtyping.
 
-This overhead seems natural when we want to implement a dynamically type checked language,
+This overhead seems natural when we want to implement a dynamically type checked language.
 However, type class resolution should already guarantee us static type safety, so additionally using type tags for dynamic type checking or type analysis seems superfluous.
-The only case for which intensional type analysis appears superior is a union type.
+The only case for which intensional type analysis appears superior is for the case of union and intersection types.
 
 \section{Type class coherence in the context of subtyping}
 % Main thesis for class coherence with subtyping
@@ -1082,7 +1082,7 @@ The only case for which intensional type analysis appears superior is a union ty
   We should always check in an instance declaration whether this constraint globally holds. \\
   To guarantee modularity we also have to check this for module imports (possibly hiding instances).
 
-\section{Joining Type Classes}
+\section{Unions and Intersection of Type Classes}
 % also treated in the next section
 
 The rules \textsc{Join}$^+$ and \textsc{Meet}$^-$ as mentioned before cannot be derived from the subtyping rules alone.
@@ -1100,6 +1100,8 @@ As an example where this rule cannot be implemented, let us look at the $Eq$ typ
 
 Given instances $Eq \; Nat$ and $Eq \; Bool$, we may expect to have $Eq \; Nat \; \join \; Bool$ but e.g. the term $eq \; 5 \; True$ cannot be trivially implemented based on known implementations for $eq$.
 Therefore, these non-derivable rules cannot be used for type class resolution.
+
+% explain problems for intersection in contravariant type classes
 
 \section{Implementation}
 
