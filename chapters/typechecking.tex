@@ -179,4 +179,19 @@ As a result, we obtain a simple principal type for any term that typechecks.
 
 \subsection{Type Coalescing}
 
+The upper and lower bounds of unification variables are being coalesced to preserve transitivity of the subtyping relation and reduce the number of constraints of the inferred type.
+E.g. if $\alpha$ has the upper bound $\beta$ and $\beta$ has the upper bound $\Nat$, we can coalesce the bounds and deduce that $\alpha$ also has $\Nat$ as an upper bound.
+
 \subsection{Type Simplification}
+
+After type coalescing we are not yet done in inferring a principle type, as in many cases there are additional simplification steps possible.
+E.g. \dots
+
+As Dolan has shown \cite{dolan2017subtyping} types can be translated into type automata, a disinguished form of finite state automata.
+This enables us to use all known algorithm that operate on finite state automata on types, especially determinisation and minimisation.
+
+\subsubsection{Constrained Nodes}
+
+As an expansion for type automata we introduced constrained nodes.
+Any node can now be annotated by a set of type classes representing type class constraints.
+With this addition we have to consider how to merge nodes, as simplification should not impose any additional constraints.
