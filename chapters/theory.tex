@@ -1080,7 +1080,8 @@ The only case for which intensional type analysis appears superior is for the ca
 
 
   We should always check in an instance declaration whether this constraint globally holds. \\
-  To guarantee modularity we also have to check this for module imports (possibly hiding instances).
+  To guarantee modularity we also have to check this for module imports, but since even the import of functions using different instances for the same type can lead to incoherences, we have to rule out any declaration of orphan instances.
+  \cite{Kilpatrick2019-cy}.
 
 \section{Unions and Intersection of Type Classes}
 % also treated in the next section
@@ -1094,12 +1095,44 @@ Consider type classes with methods in which the bound type variable occurs more 
 As an example where this rule cannot be implemented, let us look at the $Eq$ type class:
 
 \begin{gather}
-\nonumber {\bf class} \; Eq \; a \; where\\
-\nonumber  eq : a \to a \to Bool
+\nonumber {\bf class} \; Eq(a) \; where\\
+\nonumber  eq : a \to a \to \Bool
 \end{gather}
 
-Given instances $Eq \; Nat$ and $Eq \; Bool$, we may expect to have $Eq \; Nat \; \join \; Bool$ but e.g. the term $eq \; 5 \; True$ cannot be trivially implemented based on known implementations for $eq$.
+Given instances $Eq(\Nat)$ and $Eq(\Bool)$, we may expect to have $Eq(Nat \join Bool)$ but e.g. the term $eq \; 5 \; True$ cannot be trivially implemented based on known implementations for $eq$.
 Therefore, these non-derivable rules cannot be used for type class resolution.
+
+% not a good counterexample: here we should just choose the "smaller" instance
+% even though this is undecidable in other cases, see above
+
+% More surprisingly perhaps, even finding an implementation for $\Readable(\tau \meet \sigma)$ can lead to problems.
+% Consider the following instances for $\Readable(\Nat)$ and $\Readable(\Int)$:
+
+
+% \begin{figure}[h]
+%   \centering
+%   \begin{subfigure}{0.4\textwidth}
+%   \begin{flalign*}
+%   & \instance{\Readable}{\Nat} : \\
+%   & \; \; \mathit{read} : \mathit{String} \to \Nat \\
+%   & \; \; \mathit{read} \; str := \; 0
+%   \end{flalign*}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}{0.4\textwidth}
+%   \begin{flalign*}
+%   & \instance{\Readable}{\Int} : \\
+%   & \; \; \mathit{read} : \mathit{String} \to \Int \\
+%   & \; \; \mathit{read} \; str := \; 1
+%   \end{flalign*}
+%   \end{subfigure}
+% \label{fig:read-instances}
+% \caption{Instances for $\Readable(\Nat)$ and $\Readable(\Int)$}
+% \end{figure}
+
+% The intersection type $\Nat \meet \Int$ is equivalent to $\Nat$.
+% However, based on these instance declarations it is ambiguous whether the derived instance for $\Readable(\Nat \meet \Int)$ will be the same as the declared instance for $\Readable{\Nat}$.
+
 
 % explain problems for intersection in contravariant type classes
 
