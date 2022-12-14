@@ -48,15 +48,18 @@ This permits many useful features in programming languages such as the reuse and
 
 
 We use the following syntax of types with the simple types of natural numbers $\Nat$, of integers $\Int$, the type of booleans $\Bool$ and the unit type $\Unit$.
-Furthermore, for subtyping we consider the lattice types:
+Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which are inhabited by exactly one value respectively, e.g. $1 : \Singleton{1}$.
+Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$:
 
 \begin{figure}[h]
 \begin{flalign*}
   \tau,\sigma := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes} \\
                  & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String         & \textit{Simple types} \\
+                 & \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots  & \textit{Singleton types} \\
                  & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types} \\
                  & \; \tau \to \sigma                                                       & \textit{Function types} \\
-                 & \; \mu.\tau                                                              & \textit{Recursive types}
+                 & \; \mu\alpha.\tau                                                        & \textit{Recursive types} \\
+                 & \; \alpha                                                                & \textit{Recursive type variables}
 \end{flalign*}
 \label{fig:type-syntax}
 \caption{The syntax of types}
@@ -215,14 +218,25 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
 \end{figure}
 
 
-Finally, we can add primitive rules.
-We want to express that every natural number is also an integer and therefore introduce a corresponding rule:
+Finally, we can add primitive rules (Fig. \ref{fig:prim-sub-rules}).
+We want to express that every natural number is also an integer and therefore introduce a corresponding rule, as well as a rule for the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}$ to be subtypes of $\Nat$:
 
-\begin{prooftree}
+\begin{figure}
+\begin{center}
   \AxiomC{}
   \RightLabel{\textsc{NatPrim}}
   \UnaryInfC{$\Nat \sub \Int$}
-\end{prooftree}
+  \DisplayProof
+  {\hskip.2in}
+  \AxiomC{}
+  \RightLabel{\textsc{SingletonPrim}}
+  \UnaryInfC{$\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots \sub \Nat$}
+  \DisplayProof
+\end{center}
+
+\caption{Primitve subtyping rules}
+\label{fig:prim-sub-rules}
+\end{figure}
 
 % add function types
 

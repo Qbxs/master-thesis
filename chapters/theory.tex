@@ -309,11 +309,13 @@ Note that this corresponds to implications even though the arrow is flipped as i
 \subsection{Examples}
 
 Consider the predicates $\Showable$ and $\Defaultable$.
-A type $\tau$ satsifies the covariant predicate $\Showable$ if a total function from $\tau \to String$ can be defined.
+A type $\tau$ satsifies the covariant predicate $\Showable$ if a total function of $\tau \to String$ can be defined.
 Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a function of type $Unit \to \tau$ can be defined.
 
 Let context $\Gamma := \{ \Showable(\Int), \Defaultable(\Nat) \}$.
-We obtain the following derivations for $\Showable(\Unit \meet \Nat)$ and $\Defaultable(\Int \join \Bool)$:
+We obtain the following derivations for $\Showable(\Singleton{1} \meet \Nat)$ and $\Defaultable(\Int \join \Bool)$:
+We can interpret these derivations as a proof for \emph{Given a way to show an integer, we can also show anything that is both a natural number and of the singleton type $\Singleton{1}$} and
+\emph{Given a default value for $\Nat$, we also obtain a default value for the union of $\Int$ and $\Bool$}
 
 \begin{figure}[h]
 \begin{prooftree}
@@ -323,7 +325,7 @@ We obtain the following derivations for $\Showable(\Unit \meet \Nat)$ and $\Defa
   \RightLabel{\textsc{Prim}$^+$}
   \UnaryInfC{$\ctx \Showable(\Nat)$}
   \RightLabel{\textsc{Meet}$^+_2$}
-  \UnaryInfC{$\ctx \Showable(\Unit \meet \Nat)$}
+  \UnaryInfC{$\ctx \Showable(\Singleton{1} \meet \Nat)$}
 \end{prooftree}
 \label{fig:example-showable}
 \caption{Derivation for $\ctx \Showable(\Unit \meet \Nat)$}
