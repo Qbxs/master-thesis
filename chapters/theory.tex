@@ -277,6 +277,23 @@ The rule for axioms is trivial: We can resolve known facts directly from the con
     \UnaryInfC{$\Gamma, \Phi(\tau) \vdash \Phi(\tau)$}
   \end{prooftree}
 
+\begin{definition}
+  An \emph{invariant type class predicate} $\Phi^-$ is a predicate preserved by the subtyping \emph{and} flipped subtyping relation, i.e. it adheres to the following rule:
+\end{definition}
+  
+\begin{prooftree}
+  \alwaysNoLine
+  \AxiomC{$\ctx \Phi(\sigma)$}
+  \AxiomC{$\sigma \sub \tau$}
+  \AxiomC{$\tau \sub \sigma$}
+  \alwaysSingleLine
+  \RightLabel{\textsc{InV}}
+  \TrinaryInfC{$\ctx \Phi(\tau)$}
+\end{prooftree}
+
+Invariant type class predicates can essentially only be derived from type equalitites, i.e. where a type is both a sub- and supertype of another.
+Hence, there are no interesting derivable rules for them.
+
 Predicates may be constrained, i.e. they depend on other predicates.
 $\Phi(\tau) \Rightarrow \Psi(\tau)$ means $\Psi$ is constrained by $\Phi$.
 Thus, if $\Psi(\tau)$ is satisfied, then the constraint $\Phi(\tau)$ is satisfied as well.
