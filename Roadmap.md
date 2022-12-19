@@ -144,4 +144,8 @@ examples for predicates: Show, Read, Default, Decidable (a -> Bool)
 
 ### Coherence
 
-### 
+For all types t and s, if Phi(t) and Phi(s) are defined, then t/\s = Bot.
+Counterexamples:
+ - Phi({x,y}) and Phi({y,z}) lead to incoherent instances for Phi({y})
+ - Phi(Int) and Phi(Nat) lead to incoherent instances for every subtype of Nat
+The same condition holds for co- and contravariant predicates
