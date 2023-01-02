@@ -1078,8 +1078,14 @@ The only case for which intensional type analysis appears superior is for the ca
 
 \section{Type class coherence in the context of subtyping}
 % Main thesis for class coherence with subtyping
-  Given \texttt{instance C a} and $sub \sub a$ and $a \sub sup$, we can neither have \texttt{instance C sub}, nor \texttt{instance C sup}.
+  To ensure type class coherence, we have to take conclusions of the subtyping relation into account.
+  That means we have to consider the derivable instances of type class based of sub- or supertypes.
+  This imposes some restrictions not present in type systems based on type equalities.
 
+  E.g. given $\instance \Phi a$ and $sub \sub a$ and $a \sub sup$, we can neither have $\instance \Phi{sub}$ , nor $\instance \Phi{sup}$,
+  as $\Phi(sup)$ would imply $\Phi(a)$ and $\Phi(a)$ would imply $\Phi(sup)$.
+
+  In the following, I want to give a motivation on why this would be problematic.
   Consider we have $\Nat \sub \Int$.
   We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
   For integers on the other hand, we might prefer to choose addition as operator and 0 as neutral element, so we can expand to monoid to a group.
@@ -1099,6 +1105,12 @@ The only case for which intensional type analysis appears superior is for the ca
 
   A simple example for undecidable most specific instances can be better given with record types.
   If we need to resolve an instance for $C \{x : Int\}$ and we already have instances for $C \{x : Int, y : Int\}$ and $C \{x : Int, z : Int\}$ neither instance is more specific than the other.
+
+  
+  A means to ensure type class coherence could be the following:
+  Since for any pair of types $\tau$ and $\sigma$ that have a common subtype $\rho$ with $\rho \sub \tau$ and $\rho \sub \sigma$ having different witnesses for $\Phi(\tau)$ and $\Phi(\sigma)$ would lead to different witnesses for $\Phi(\rho)$,
+  we have to ensure that $\tau \meet \sigma$ is equivalent to the empty type $\bot$.
+  We can do so by constructing the intersection of the type automata for $\tau$ and $\sigma$ and checking whether this automaton accepts the empty language.
 
 
   We should always check in an instance declaration whether this constraint globally holds. \\
@@ -1121,7 +1133,12 @@ As an example where this rule cannot be implemented, let us look at the $Eq$ typ
 \nonumber  eq : a \to a \to \Bool
 \end{gather}
 
-Given instances $Eq(\Nat)$ and $Eq(\Bool)$, we may expect to have $Eq(Nat \join Bool)$ but e.g. the term $eq \; 5 \; True$ cannot be trivially implemented based on known implementations for $eq$.
+Given instances $Eq(\Nat)$ and $Eq(\Bool)$, we may expect to have $Eq(\Nat \join \Bool)$ but e.g. the term $eq \; 5 \; True$ cannot be trivially implemented based on known implementations for $eq$.
+Based on the assumptions we already know how to compare terms of type $\Nat$ with each other and terms of type $\Bool$ with each other,
+however we have no information available on how to compare a term of type $\Bool$ with a term of type $\Nat$.
+In this example, it would be easy to provide $false$ as a default value but constructing default values is going to be complicated for more sophisticated type classes.
+In fact the $Ord$ type class already would be problematic using default values.
+
 Therefore, these non-derivable rules cannot be used for type class resolution.
 
 % not a good counterexample: here we should just choose the "smaller" instance
