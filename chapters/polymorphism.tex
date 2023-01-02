@@ -336,11 +336,15 @@ Reynolds \cite{reynolds_coherence} describes the issue of coherence as follows:
     of such proofs. When no such ambiguity arises, we say that the language is coherent.
 \end{quote}
 
+When talking about predicates on types we have to enforce that if $\Phi(\tau)$ holds for some predicate $\Phi$ on some type $\tau$,
+then all evidence for this judgement has to be equivalent.
+
 For type classes, this means that no two instances should be able to be resolved for the same type.
 A rather obvious example would be to define two different instances for the same type.
 For example one instance of \mintinline{Haskell}{Ord Int}, one with ascending and one with descending order.
+
 The ambiguity arises as soon as we make use of these instances and it is no longer clear which one should be picked for evaluation.
-Data structures relying on coherent instances such as the module \mintinline{Haskell}{Data.Set} in Haskell may even exhibit fauly behavior if different implementations are being used. \cite{Kilpatrick2019-cy}
+Data structures relying on coherent instances such as the module \mintinline{Haskell}{Data.Set} in Haskell may even exhibit faulty behavior if different implementations are being used. \cite{Kilpatrick2019-cy}
 
 More surprisingly type class coherence is already violated for overlapping instances.
 As part of the standard prelude we find both \mintinline{Haskell}{instance Show a => Show [a]} and \mintinline{Haskell}{instance Show String}

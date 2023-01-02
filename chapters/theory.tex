@@ -913,6 +913,9 @@ This notion of subtyping trivially satsifies the Liskov substitution principle.
 Because with $\tau \sub \sigma$ for every $e : \tau$ we also have $e : \sigma$, the coercion function is the identity.
 Thus all properties are preserved for terms over the subtyping relation.
 
+Given inclusive subtyping, it we may be motivated to introduces some other rules.
+E.g. given $\Showable{\Bool}$ and $\Showable{\Nat}$, it may seem tempting to derive $\Showable{\Bool \join \Nat}$,
+so that the term $\lambda b. \showTerm(\ifthenelseTerm b \; b \; 42)$ is typeable.
 Introducing union types can only be done with some restrictions:
 
 \begin{prooftree}
