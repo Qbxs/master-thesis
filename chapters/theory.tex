@@ -1112,7 +1112,14 @@ The only case for which intensional type analysis appears superior is for the ca
   we have to ensure that $\tau \meet \sigma$ is equivalent to the empty type $\bot$.
   We can do so by constructing the intersection of the type automata for $\tau$ and $\sigma$ and checking whether this automaton accepts the empty language.
 
+  \subsection{Emptiness Check}
 
+  Dolan \cite{downen2017phd} has shown how we can translate types to type automata in order to simplify lattice types.
+  These type automata are a form of finite automata, so all the standard algorithms for finite automata (such as determinisation, minimisation) can be performed on them.
+  By translating types for which we want to check for an overlap, we can construct an intersection automaton using the standard algorithm for intersections of finite automata.
+  All that is left to do from there, is to check whether the resulting automaton accepts the empty language,  i.e. no final state is reachable from the start state.
+
+  \subsection{Rest}
   We should always check in an instance declaration whether this constraint globally holds. \\
   To guarantee modularity we also have to check this for module imports, but since even the import of functions using different instances for the same type can lead to incoherences, we have to rule out any declaration of orphan instances.
   \cite{Kilpatrick2019-cy}.
