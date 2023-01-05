@@ -401,8 +401,8 @@ Here, overlapping or otherwise ambiguous instances are simply not allowed to be 
 % The report only states: 'A type may not be declared as an instance of a particular class more than once in the program.'
 
 Another possibility somewhat alike ML-modules are named instances.
-They have the advantage that we can explicitly use instances and therefore it is allowed to have multiple instances in scope.
-The drawback however, is that we lose true overloading because that way we always \emph{have to} name instances explicitly.
+They have the advantage that we can explicitly use instances and therefore it is allowed to have overlapping instances in scope.
+The drawback however, is that we lose true overloading because that way we always \emph{have to} name instances explicitly to avoid name clashes.
 
-The latest proposal are instance chains which make the order in which instances are checked explicit. \cite{morris2010instance}
+The latest proposal are instance chains which make the order in which instances are checked explicit, thus avoiding the ambuigity. \cite{morris2010instance}
 These are supported in Haskell to some degree with the \mintinline{Haskell}{Overlaps} pragma.

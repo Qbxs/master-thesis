@@ -497,7 +497,7 @@ Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to c
   \BinaryInfC{$s(w) : \Phi(\tau)$}
 \end{prooftree}
 
-For \textsc{CoV} and \textsc{ContraV} we can resolve witnesses like this:
+For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses like this:
 
 \begin{prooftree}
   \alwaysNoLine
@@ -515,6 +515,14 @@ For \textsc{CoV} and \textsc{ContraV} we can resolve witnesses like this:
   \alwaysSingleLine
   \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\contrav(w,m) : \Phi^-(\tau)$}
+\end{prooftree}
+
+\begin{prooftree}
+  \AxiomC{$w : \Phi^-(\sigma)$}
+  \AxiomC{$m : \sigma \sub \tau$}
+  \AxiomC{$n : \tau \sub \sigma$}
+  \RightLabel{\textsc{InV}}
+  \TrinaryInfC{$\inv(w,m,n) : \Phi^-(\tau)$}
 \end{prooftree}
 
 % macros
