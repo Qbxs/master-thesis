@@ -24,7 +24,16 @@ Its type enables us only to simply return the argument, because without knowing 
 Similarily, for a function $\mathbf{g} : \forall \alpha. \alpha \to \alpha \to \alpha$ there can be at most two implementations:
 One that returns the first and one that returns the second argument.
 
+More interesting, perhaps, is the usage of parametric data structures such as lists.
+Given a function of type $\forall \alpha \beta. (\alpha \to \beta) \to \mathit{List } \alpha \to \mathit{List } \beta$, we expect this function to be the $\mathit{map}$ function which simply applies a supplied function to each element of a list and returns the transformed list.
+Based on the type we can be sure that the supplied function $f$ is applied exactly once to each element of the list, as this is the only way to transform an element of type $\alpha$ to type $\beta$.
+The only other possibilies are dropping and/or rearranging elements of the list but these are not typically expected here and in our type system it is impossible to refine the type of a function so much that it can only be implemented as $\mathit{map}$.
+
 Many such \emph{theorems for free} can be derived using parametric polymorphism, as Wadler has shown. \cite{wadlertheorems}
+This is especially useful for combining functions.
+E.g. we can do optimizations based solely on the type of functions.
+Given $\mathbf{head}  : \forall \alpha. \mathit{List } \alpha \to \alpha$ and $\mathbf{map} : \forall \alpha \beta. (\alpha \to \beta) \to \mathit{List } \alpha \to \mathit{List } \beta$
+we can deduce that $\mathbf{head} \circ \mathbf{map} f$ and $f \circ \mathbf{head}$ behave in the same way, whereas the latter is more efficient due to it operating in constant rather than linear time complexity.
 
 \section{Subtyping}\label{sec:subtyping}
 
