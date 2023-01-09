@@ -4,6 +4,9 @@
 
 \chapter{Introduction}\label{ch:intro}
 
+Abstraction is a powerful method to generalize code for different use cases.
+It can help in hiding implementation details, facilitates the reusage of code and makes it easier to reason about programs.
+
 % this section likely needs a big overhaul
 In many functional programming languages such as Haskell, type classes are a powerful tool to generalize functions over different data types.
 This allows us e.g. to use the \mintinline{Haskell}|+| operator both on \mintinline{Haskell}|Int| and \mintinline{Haskell}|Float| types.
@@ -12,9 +15,9 @@ For example, since the type of natural numbers \mintinline{text}|Nat| is a subty
 
 Although these approaches do not serve exactly the same purpose it is uncommon to find both concepts in the same language.
 In this work, I am going to show how it is possible to implement type classes in a language that supports subtyping.
-There are unique challenges when bringing both together because instances for certain types are going to be ambiguous.
+There are unique challenges when bringing both together because instances for certain types are going to be ambiguous and impose additional challenges for the problem of type class coherence.
 
-The Haskell type \mintinline{Haskell}|Either a b| roughly corresponds to the lattice type \mintinline{text}|a \/ b|.
+The Haskell type \mintinline{Haskell}|Either a b| very roughly corresponds to the lattice type \mintinline{text}|a \/ b|  in the sense that both types unify two simpler types.
 Given a type class \mintinline{Haskell}|C :: * -> *| and instances \mintinline{Haskell}|C a| and \mintinline{Haskell}|C b| the instance \mintinline{Haskell}|C (Either a b)| has to be defined by hand which can be easily done by pattern-matching and using the given instances.
 However, instances for lattice types are neither explicit nor straightforward:
 Since \mintinline{text}|a \/ b| does not have a uniquely-determined(?) constructor we might just implicitly derive \mintinline{text}|C (a \/ b)| from the given instances.
