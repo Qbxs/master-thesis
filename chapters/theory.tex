@@ -806,32 +806,33 @@ For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses lik
 
 \subsection{Motivation}
 
-Consider the following instance declarations (fig. \ref{fig:showable-nat}):
 
 \begin{figure}[h]
   \centering
   \begin{subfigure}{0.4\textwidth}
-  \begin{flalign*}
-  & \instance{\Showable}{\Nat} : \\
-  & \; \; \mathit{show} : \Nat \to \mathit{String} \\
-  & \; \; \mathit{show} \; x := \caseof{x} \\
-  & \; \; \; \; Z \Rightarrow \mathit{"Z"} \\
-  & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
-  \end{flalign*}
+    \begin{flalign*}
+      & \instance{\Showable}{\Nat} : \\
+      & \; \; \mathit{show} : \Nat \to \mathit{String} \\
+      & \; \; \mathit{show} \; x := \caseof{x} \\
+      & \; \; \; \; Z \Rightarrow \mathit{"Z"} \\
+      & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+    \end{flalign*}
   \end{subfigure}
   \hfill
   \begin{subfigure}{0.4\textwidth}
-  \begin{flalign*}
-  & \instance{\Showable}{\Nat} : \\
-  & \; \; \mathit{show} : \Nat \to \mathit{String} \\
-  & \; \; \mathit{show} \; x := \caseof{x} \\
-  & \; \; \; \; Z \Rightarrow \mathit{"0"} \\
-  & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
-  \end{flalign*}
+    \begin{flalign*}
+      & \instance{\Showable}{\Nat} : \\
+      & \; \; \mathit{show} : \Nat \to \mathit{String} \\
+      & \; \; \mathit{show} \; x := \caseof{x} \\
+      & \; \; \; \; Z \Rightarrow \mathit{"0"} \\
+      & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+    \end{flalign*}
   \end{subfigure}
-\label{fig:showable-nat}
-\caption{Incoherent instance declarations for $\Showable(\Nat)$}
+  \label{fig:showable-nat}
+  \caption{Incoherent instance declarations for $\Showable(\Nat)$}
 \end{figure}
+
+Consider the following instance declarations (fig. \ref{fig:showable-nat}):
 
 If there is more than one instance declaration in the same environment for the same type class and type,
 the program may be indeterministic.
