@@ -307,6 +307,11 @@ instance  Num Int  where
 
 
 In order to be able to reason about type classes, the instances in scope need to be \emph{coherent}, i.e. they need to be uniquely determined as will be shown in section \ref{sec:coherence}.
+Incoherent instances can lead to unexpected behaviors in programs.
+E.g. in Haskell sets are implemented as binary search trees relying on an ordering specified by the $Ord$ type class.
+If this ordering is not uniquely determined, insert and delete operations may break as well which would make the library unusable. \cite{Kilpatrick2019-cy}
+
+% ???
 In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs.
 
 \cite{wadlerblott}
@@ -322,17 +327,17 @@ Now there are two ways to substitute any type for the first argument of the func
 
 Similarily, the hierarchy of type classes can express a similar relationship exhibited by subtyping.
 E.g. the \mintinline{Haskell}{Fractional} type class is a subclass of the type class \mintinline{Haskell}{Num}.
-Similarily with subtyping we can define a type $\mathit{Fractional}$ representing all fractional numbers and make it a subtype of $\mathit{Number}$.
-
-If we make instances explicit (like in ML-modules) type class overloading can be implemented solely with passing specific instance definitions.
-This is no coincidence as dictionary passing is a typical way of implementing type classes as shown in section \ref{sec:dictionaryPassing}.
+Similarily with subtyping we can define a type $\mathit{Fractional}$ as the union of all types that are instances of \mintinline{Haskell}{Fractional} representing all fractional numbers and make it a subtype of $\mathit{Number}$ represented as the union of all types that stand for numbers.
 
 A way to model type classes solely with subtyping can be to define the overloaded type class methods directly.
 So instead of a type class method $f : \forall \alpha. C \alpha \Rightarrow \tau[\alpha]$ and instance $C \alpha_1, \dots, C \alpha_n$,
-we could directly define $f$ using union types for covariant type classes as $f : forall \alpha_1,\dots,\alpha_n. \tau[\alpha_1 \join \dots \join \alpha_n]$.
+we could directly define $f$ using union types for covariant type classes as $f : \forall \alpha_1,\dots,\alpha_n. \tau[\alpha_1 \join \dots \join \alpha_n]$.
 Dually we could do the same using intersection types for contravariant type classes.
 The obvious drawback would be that such functions are non-modular, i.e. they can only be defined at one point in the program.
 Unlike instances the definition cannot be expanded in submodules.
+
+If we make instances explicit (like in ML-modules) type class overloading can be implemented solely with passing specific instance definitions.
+This is no coincidence as dictionary passing is a typical way of implementing type classes as shown in section \ref{sec:dictionaryPassing}.
 
 \subsection{Coherence}\label{sec:coherence}
 % for each type there t may be globally at most one instance C t defined
