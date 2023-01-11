@@ -8,6 +8,7 @@
   journal = {Sigplan Notices - SIGPLAN},
   doi     = {10.1145/2034574.2034788}
 }
+
 @article{curien2000duality,
   title     = {The duality of computation},
   author    = {Curien, Pierre-Louis and Herbelin, Hugo},
@@ -18,7 +19,6 @@
   year      = {2000},
   publisher = {ACM New York, NY, USA}
 }
-
 @book{dolan2017subtyping,
   author    = {Dolan, Stephen},
   title     = {Algebraic Subtyping: Distinguished Dissertation 2017},
@@ -29,13 +29,13 @@
   abstract  = {Type inference gives programmers the benefit of static, compile-time type checking without the cost of manually specifying types, and has long been a standard feature of functional programming languages. However, it has proven difficult to integrate type inference with subtyping, since the unification engine at the core of classical type inference accepts only equations, not subtyping constraints. This thesis presents a type system combining ML-style parametric polymorphism and subtyping, with type inference, principal types, and decidable type subsumption. Type inference is based on biunification, an analogue of unification that works with subtyping constraints. Making this possible are several contributions, beginning with the notion of an extensible type system, in which an open world of types is assumed, so that no typeable program becomes untypeable by the addition of new types to the language. While previous formulations of subtyping fail to be extensible, this thesis shows that adopting a more algebraic approach can remedy this. Using such an approach, this thesis develops the theory of biunification, shows how it is used to infer types, and shows how it can be efficiently implemented, exploiting deep connections between the algebra of regular languages and polymorphic subtyping.}
 }
 
-
 @article{downen2017phd,
   title     = {Sequent Calculus: A Logic and a Language for Computation and Duality},
   author    = {Downen, Paul},
   year      = {2017},
   publisher = {University of Oregon}
 }
+
 
 @article{downen2018tutorial,
   title     = {A tutorial on computational classical logic and the sequent calculus},
@@ -125,6 +125,21 @@
   booktitle = {Proceedings of the 15th ACM SIGPLAN international conference on Functional programming},
   pages     = {375--386},
   year      = {2010}
+}
+
+@inproceedings{peytonjones1997type,
+  author    = {Peyton Jones, Simon and Jones, Mark and Meijer, Erik},
+  title     = {Type classes: an exploration of the design space},
+  booktitle = {Haskell workshop},
+  year      = {1997},
+  month     = {January},
+  abstract  = {When type classes were first introduced in Haskell they were regarded as a fairly experimental language feature, and therefore warranted a fairly conservative design. Since that time, practical experience has convinced many programmers of the benefits and convenience of type classes. However, on occasion, these same programmers have discovered examples where seemingly natural applications for type class overloading are prevented by the restrictions imposed by the Haskell design.
+               
+               It is possible to extend the type class mechanism of Haskell in various ways to overcome these limitations, but such proposals must be designed with great care. For example, several different extensions have been implemented in Gofer. Some of these, particularly the support for multi-parameter classes, have proved to be very useful, but interactions between other aspects of the design have resulted in a type system that is both unsound and undecidable. Another illustration is the introduction of constructor classes in Haskell 1.3, which came without the proper generalization of the notion of a context. As a consequence, certain quite reasonable programs are not typable.
+               
+               In this paper we review the rationale behind the design of Haskell's class system, we identify some of the weaknesses in the current situation, and we explain the choices that we face in attempting to remove them.},
+  url       = {https://www.microsoft.com/en-us/research/publication/type-classes-an-exploration-of-the-design-space/},
+  edition   = {Haskell workshop}
 }
 
 @book{reynolds_1998,
