@@ -32,8 +32,11 @@ The only other possibilies are dropping and/or rearranging elements of the list 
 Many such \emph{theorems for free} can be derived using parametric polymorphism, as Wadler has shown. \cite{wadlertheorems}
 This is especially useful for combining functions.
 E.g. we can do optimizations based solely on the type of functions.
-Given $\mathbf{head}  : \forall \alpha. \mathit{List } \alpha \to \alpha$ and $\mathbf{map} : \forall \alpha \beta. (\alpha \to \beta) \to \mathit{List } \alpha \to \mathit{List } \beta$
-we can deduce that $\mathbf{head} \circ \mathbf{map} f$ and $f \circ \mathbf{head}$ behave in the same way, whereas the latter is more efficient due to it operating in constant rather than linear time complexity.
+Given
+$$\mathbf{head}  : \forall \alpha. \mathit{List } \alpha \to \alpha$$
+$$\mathbf{map} : \forall \alpha \beta. (\alpha \to \beta) \to \mathit{List } \alpha \to \mathit{List } \beta$$
+we can deduce that: $$\mathbf{head} \circ \mathbf{map} f = f \circ \mathbf{head}$$
+Whereas the latter is more efficient due to it operating in constant rather than linear time complexity.
 
 \section{Subtyping}\label{sec:subtyping}
 
