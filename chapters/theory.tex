@@ -1095,6 +1095,10 @@ The only case for which intensional type analysis appears superior is for the ca
   That means we have to consider the derivable instances of type class based of sub- or supertypes.
   This imposes some restrictions not present in type systems based on type equalities.
 
+  For Hindley-Milner type systems we want to avoid \emph{overlapping instances}, i.e. instances for types that can be unified. \cite{peytonjones1997type}
+  In the context of subtyping, overlaps of types have to be expressed differently because we no longer use unification for type inference but biunification.
+  In order to check for an overlap of types, we have to create the intersection of those types and check whether it is empty.
+
   E.g. given $\instance \Phi a$ and $sub \sub a$ and $a \sub sup$, we can neither have $\instance \Phi{sub}$ , nor $\instance \Phi{sup}$,
   as $\Phi(sup)$ would imply $\Phi(a)$ and $\Phi(a)$ would imply $\Phi(sup)$.
 
