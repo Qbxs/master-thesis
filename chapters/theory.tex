@@ -902,7 +902,7 @@ Instead of the first derivation we may also use the following additionally using
 \begin{prooftree}
   \AxiomC{$w : \instance{\Phi^+}{\tau}$}
   \RightLabel{\textsc{Decl}}
-  \UnaryInfC{$i_/tau(w) : \Phi^+(\tau)$}
+  \UnaryInfC{$i_\tau(w) : \Phi^+(\tau)$}
   \AxiomC{}
   \RightLabel{\textsc{Refl}}
   \UnaryInfC{$\refl_\tau : \tau \sub \tau$}
@@ -1096,6 +1096,10 @@ The only case for which intensional type analysis appears superior is for the ca
   This imposes some restrictions not present in type systems based on type equalities.
 
   For Hindley-Milner type systems we want to avoid \emph{overlapping instances}, i.e. instances for types that can be unified. \cite{peytonjones1997type}
+  Syntactically, types are overlapping if one can be substituted for the other or they can be unified.
+  E.g. $\mathit{List } \alpha$ and $\mathit{List } \Nat$ are overlapping with the substitution $\sigma(\alpha) \to \Nat$.
+  In Haskell, it is very easy to check an overlap, although more restrictive: We only need to syntactically check whether two types share the same head constructor ($\mathit{List}$ in the example above).
+
   In the context of subtyping, overlaps of types have to be expressed differently because we no longer use unification for type inference but biunification.
   In order to check for an overlap of types, we have to create the intersection of those types and check whether it is empty.
 
@@ -1134,7 +1138,14 @@ The only case for which intensional type analysis appears superior is for the ca
   Dolan \cite{downen2017phd} has shown how we can translate types to type automata in order to simplify lattice types.
   These type automata are a form of finite automata, so all the standard algorithms for finite automata (such as determinisation, minimisation) can be performed on them.
   By translating types for which we want to check for an overlap, we can construct an intersection automaton using the standard algorithm for intersections of finite automata.
-  All that is left to do from there, is to check whether the resulting automaton accepts the empty language,  i.e. no final state is reachable from the start state.
+  All that is left to do from there, is to check whether the resulting automaton accepts the empty language,  i.e. no final state is reachable from the start state.\
+  The following outlines how this achieved:
+
+  \begin{itemize}
+    \item We create a type automaton $G = (q_0, N, E, \delta)$
+    \item We construct the intersection automaton as $G_\cap = \dots$
+    \item We check whether $G_\cap$ accepts the empty language, i.e. represents the empty type $\bot$
+  \end{itemize}
 
   \subsection{Rest}
   We should always check in an instance declaration whether this constraint globally holds. \\
