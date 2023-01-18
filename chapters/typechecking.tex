@@ -35,11 +35,16 @@
 The resolution rules for type class witnesses in section \ref{sec:witnesses} provide us with means to implement type checking for type class methods.
 For every call to a type class method resolution either fails or provides a dictionary, i.e. a witness, for the type class constraint.
 
+For simplicity, we annotate calls of type class methods with types.
+These types will be used to resolve a suitable instance.
+Omitting type annotations, poses some additional challenges as discussed in further work.
+
 What makes this kind of typing derivation special is that it not only decomposes judgements upwards,
-but fills in the gap displayed by the type class constraint downwards by resolving a fitting dictionary.
+but fills in the hole displayed by the type class constraint downwards by resolving a fitting witness.
+This resolved hole stands for the concrete witness that will be passed to the type class method for evaluation.
 
 Type inference for type class method calls (fig. \ref{fig:showable-example}):
-$w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution.
+$w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution and $\tau$ is the annotated type.
 $k$ is the continuation that is passed to the type class method.
 
 Generally we generate constraints between the types introduced in the class declaration of the method and the unification variables generated for its arguments.
@@ -49,12 +54,11 @@ At compilation it will be filled with a resolved instance, so that the evaluatio
 
 \begin{figure}[h]
     \centering
-    \AxiomC{$\tau$ fresh}
     \AxiomC{$\ctx w : \Showable(\tau)$}
     \AxiomC{$\ctx x : \tau$}
     \AxiomC{$\ctx k : \String \to \sigma$}
     \RightLabel{\textsc{T-Class}$^+$}
-    \QuaternaryInfC{$\ctx \showTerm w \; x \; k : \sigma$}
+    \TrinaryInfC{$\ctx \showTerm [\tau] w \; x \; k : \sigma$}
     \DisplayProof
 \caption{Derivation for $\showTerm w \; x \; k : \sigma$}
 \label{fig:showable-example}
@@ -65,17 +69,20 @@ In this case, the type class constraint is applied to the argument type of the c
 
 \begin{figure}[h]
     \centering
-    \AxiomC{$\tau$ fresh}
     \AxiomC{$\ctx w : \Readable(\tau)$}
     \AxiomC{$\ctx x : \String$}
     \AxiomC{$\ctx k : \tau \to \sigma$}
     \RightLabel{\textsc{T-Class}$^-$}
-    \QuaternaryInfC{$\ctx \readTerm w \; x \; k : \sigma$}
+    \TrinaryInfC{$\ctx \readTerm [\tau] w \; x \; k : \sigma$}
     \DisplayProof
 \caption{Derivation for $\readTerm w \; x \; k : \sigma$}
 \label{fig:readable-example}
 \end{figure}
 
+We use a simplified notion here by requiring type annotations for type class method calls.
+Therefore, no fresh variables will be generated at this point.
+Instead, we use the annotated type to resolve a fitting instance for the type class constraint.
+In section (TODO) we discuss why generating fresh unification variables at this point is challenging.
 
 Outlined below is the algorithm used to infer a principle(?) type for any given term without the presence of type classes.
 We will then examine, which alterations need to be done in order to achieve the same with the addition of type class constraints.
