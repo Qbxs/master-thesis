@@ -17,6 +17,8 @@
 \BinaryInfC{$\ctx e_1 \; e_2 : \tau$}
 \DisplayProof
 
+{\vskip.2in}
+
 \AxiomC{$\Gamma, x : \sigma \vdash e : \tau$}
 \RightLabel{\textsc{T-Abs}}
 \UnaryInfC{$\ctx \lambda x.e : \sigma \to \tau$}
@@ -90,15 +92,18 @@ We will then examine, which alterations need to be done in order to achieve the 
 \section{Type Inference}
 \label{sec:type-inference}
 
-The core of type inference is done using an unifaction algorithm.
-For this, in the first step, we generate subtyping and type class constraint based on the term.
+The core of type inference is done using a biunifaction algorithm which keeps track of lower and upper bounds for each unification variable.
+For this, in the first step, we generate subtyping and type class constraints based on the term.
 When solving the constraint set, the algorithm either fails (i.e. the term does not type check) or for all unification variables we obtain lower and upper bounds, as well as type class constraints.
 The resulting bisubstitution is used to compute a principal type which can later be simplified using a translation to its type automata representation which is being minimized.
 As a result, we obtain a simple principal type for any term that typechecks.
 
 \subsection{Constraint Generation}
 
+We generate constraints in a constraint set for each term. (Fig. \ref{fig:constraint-generation})
 
+
+% do we need this?
 \begin{figure}[h]
 \begin{center}
     $\constraintGen{\alpha}_\tau^\bot := \alpha$ \\
@@ -120,11 +125,15 @@ As a result, we obtain a simple principal type for any term that typechecks.
         \UnaryInfC{$\Gamma \vdash x : \tau \toConstr \emptyset$}
         \DisplayProof
 
+        {\vskip.1in}
+
         \AxiomC{$\Gamma \vdash e : \tau \toConstr \Xi$}
         \AxiomC{$\mathit{Fresh}(\beta)$}
         \RightLabel{\textsc{Lam}}
         \BinaryInfC{$\Gamma \vdash \lambda x. e : \beta \to \tau \toConstr \Xi$}
         \DisplayProof
+
+        {\vskip.1in}
 
         \AxiomC{$\Gamma \vdash e_1 : \sigma_1 \toConstr \Xi_1$}
         \AxiomC{$\Gamma \vdash e_2 : \sigma_2 \toConstr \Xi_2$}
@@ -133,18 +142,20 @@ As a result, we obtain a simple principal type for any term that typechecks.
         \TrinaryInfC{$\Gamma \vdash e_1e_2 : \beta \toConstr \{ \sigma_1 \sub \sigma_2 \to \beta \} \cup \Xi_1 \cup \Xi_2$}
         \DisplayProof
 
+        {\vskip.1in}
+
         \AxiomC{$\Gamma \vdash x : \sigma \toConstr \Xi$}
         \AxiomC{$P(\mathbf{m}) := \forall \alpha. \Phi(\alpha) \Rightarrow \alpha \to \rho$}
-        \AxiomC{$\mathit{Fresh}(\beta)$}
         \RightLabel{\textsc{Method}$^+$}
-        \TrinaryInfC{$\Gamma \vdash \mathbf{m} \; x : \tau \toConstr \{ \Phi_m(\beta), \sigma \sub \beta, \tau \sub \rho \} \cup \Xi$}
+        \BinaryInfC{$\Gamma \vdash \mathbf{m} [\beta] \; x : \tau \toConstr \{ \Phi_m(\beta), \sigma \sub \beta, \tau \sub \rho \} \cup \Xi$}
         \DisplayProof
+
+        {\vskip.1in}
 
         \AxiomC{$\Gamma \vdash x : \sigma \toConstr \Xi$}
         \AxiomC{$P(\mathbf{m}) := \forall \alpha. \Phi(\alpha) \Rightarrow \rho \to \alpha$}
-        \AxiomC{$\mathit{Fresh}(\beta)$}
         \RightLabel{\textsc{Method}$^-$}
-        \TrinaryInfC{$\Gamma \vdash \mathbf{m} \; x : \tau \toConstr \{ \Phi_m(\beta), \beta \sub \tau, \sigma \sub \rho \} \cup \Xi$}
+        \BinaryInfC{$\Gamma \vdash \mathbf{m} [\beta] \; x : \tau \toConstr \{ \Phi_m(\beta), \beta \sub \tau, \sigma \sub \rho \} \cup \Xi$}
         \DisplayProof
 
     \end{center}
@@ -153,6 +164,10 @@ As a result, we obtain a simple principal type for any term that typechecks.
 \end{figure}
 
 \subsection{Constraint Solving}
+
+Constraints are solved by decomposition into simpler constraints. (Fig. \ref{fig:constraint-decomposition})
+Simple constraints will be added to the lower and upper bounds of unification variables.
+Constraints which cannot be solved (e.g. $\Nat \sub \Nat \to \bot$) lead to an error, thus type inference for the term fails, as expected.
 
 \begin{figure}[h]
     \begin{center}
