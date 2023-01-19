@@ -5,33 +5,33 @@
 \section{Typing Rules}
 
 \begin{figure}[h]
-\begin{center}
-\AxiomC{}
-\RightLabel{\textsc{T-Var}}
-\UnaryInfC{$\Gamma, x : \tau \vdash x : \tau$}
-\DisplayProof
-{\hskip.2in}
-\AxiomC{$\ctx e_1 : \sigma \to \tau$}
-\AxiomC{$\ctx e_2 : \sigma$}
-\RightLabel{\textsc{T-App}}
-\BinaryInfC{$\ctx e_1 \; e_2 : \tau$}
-\DisplayProof
+    \begin{center}
+        \AxiomC{}
+        \RightLabel{\textsc{T-Var}}
+        \UnaryInfC{$\Gamma, x : \tau \vdash x : \tau$}
+        \DisplayProof
+        {\hskip.2in}
+        \AxiomC{$\ctx e_1 : \sigma \to \tau$}
+        \AxiomC{$\ctx e_2 : \sigma$}
+        \RightLabel{\textsc{T-App}}
+        \BinaryInfC{$\ctx e_1 \; e_2 : \tau$}
+        \DisplayProof
 
-{\vskip.2in}
+        {\vskip.2in}
 
-\AxiomC{$\Gamma, x : \sigma \vdash e : \tau$}
-\RightLabel{\textsc{T-Abs}}
-\UnaryInfC{$\ctx \lambda x.e : \sigma \to \tau$}
-\DisplayProof
-{\hskip.2in}
-\AxiomC{$\ctx e : \sigma$}
-\AxiomC{$\sigma \sub \tau$}
-\RightLabel{\textsc{T-Sub}}
-\BinaryInfC{$\ctx e : \tau$}
-\DisplayProof
-\end{center}
-\caption{Typing Rules}
-\label{fig:typing-rules}
+        \AxiomC{$\Gamma, x : \sigma \vdash e : \tau$}
+        \RightLabel{\textsc{T-Abs}}
+        \UnaryInfC{$\ctx \lambda x.e : \sigma \to \tau$}
+        \DisplayProof
+        {\hskip.2in}
+        \AxiomC{$\ctx e : \sigma$}
+        \AxiomC{$\sigma \sub \tau$}
+        \RightLabel{\textsc{T-Sub}}
+        \BinaryInfC{$\ctx e : \tau$}
+        \DisplayProof
+    \end{center}
+    \caption{Typing Rules}
+    \label{fig:typing-rules}
 \end{figure}
 
 The resolution rules for type class witnesses in section \ref{sec:witnesses} provide us with means to implement type checking for type class methods.
@@ -62,8 +62,8 @@ At compilation it will be filled with a resolved instance, so that the evaluatio
     \RightLabel{\textsc{T-Class}$^+$}
     \TrinaryInfC{$\ctx \showTerm [\tau] w \; x \; k : \sigma$}
     \DisplayProof
-\caption{Derivation for $\showTerm w \; x \; k : \sigma$}
-\label{fig:showable-example}
+    \caption{Derivation for $\showTerm w \; x \; k : \sigma$}
+    \label{fig:showable-example}
 \end{figure}
 
 For contravariant type classes such as $\Readable$ the inference looks slightly different:
@@ -77,8 +77,8 @@ In this case, the type class constraint is applied to the argument type of the c
     \RightLabel{\textsc{T-Class}$^-$}
     \TrinaryInfC{$\ctx \readTerm [\tau] w \; x \; k : \sigma$}
     \DisplayProof
-\caption{Derivation for $\readTerm w \; x \; k : \sigma$}
-\label{fig:readable-example}
+    \caption{Derivation for $\readTerm w \; x \; k : \sigma$}
+    \label{fig:readable-example}
 \end{figure}
 
 We use a simplified notion here by requiring type annotations for type class method calls.
@@ -105,16 +105,16 @@ We generate constraints in a constraint set for each term. (Fig. \ref{fig:constr
 
 % do we need this?
 \begin{figure}[h]
-\begin{center}
-    $\constraintGen{\alpha}_\tau^\bot := \alpha$ \\
-    $\constraintGen{\alpha}_\tau^\top := \alpha$ \\
-    $\constraintGen{\nu \to \nu'}_\tau^\bot := \constraintGen{\nu}_\tau^\top \to \constraintGen{\nu'}_\tau^\bot$ \\
-    $\constraintGen{\nu \to \nu'}_\tau^\top := \constraintGen{\nu}_\tau^\bot \to \constraintGen{\nu'}_\tau^\top$ \\
-    $\constraintGen{\mu\alpha.\nu}_\tau^\bot := \mu\alpha.\constraintGen{\nu}_\tau^\bot$ \\
-    $\constraintGen{\mu\alpha.\nu}_\tau^\top := \mu\alpha.\constraintGen{\nu}_\tau^\top$ \\
-\end{center}
-\caption{Upper/lower bound translation}
-\label{fig:bound-translation}
+    \begin{center}
+        $\constraintGen{\alpha}_\tau^\bot := \alpha$ \\
+        $\constraintGen{\alpha}_\tau^\top := \alpha$ \\
+        $\constraintGen{\nu \to \nu'}_\tau^\bot := \constraintGen{\nu}_\tau^\top \to \constraintGen{\nu'}_\tau^\bot$ \\
+        $\constraintGen{\nu \to \nu'}_\tau^\top := \constraintGen{\nu}_\tau^\bot \to \constraintGen{\nu'}_\tau^\top$ \\
+        $\constraintGen{\mu\alpha.\nu}_\tau^\bot := \mu\alpha.\constraintGen{\nu}_\tau^\bot$ \\
+        $\constraintGen{\mu\alpha.\nu}_\tau^\top := \mu\alpha.\constraintGen{\nu}_\tau^\top$ \\
+    \end{center}
+    \caption{Upper/lower bound translation}
+    \label{fig:bound-translation}
 \end{figure}
 
 \begin{figure}[h]
@@ -186,14 +186,14 @@ Constraints which cannot be solved (e.g. $\Nat \sub \Nat \to \bot$) lead to an e
 \begin{figure}[h]
     % We might add witnesses here?
     \begin{flalign*}
-        \decompose{\tau}{\top} & := & \emptyset \\
-        \decompose{\bot}{\tau} & := & \emptyset \\
-        \decompose{\tau_1 \join \tau_2}{\sigma} & := & \{ \tau_1 \sub \sigma, \tau_2 \sub \sigma \} \\
-        \decompose{\sigma}{\tau_1 \meet \tau_2} & := & \{ \sigma \sub \tau_1, \sigma \sub \tau_2 \} \\
-        \decompose{\tau}{\mu\alpha.\sigma} & := & \{ \tau \sub \sigma[\mu\alpha.\sigma / \alpha] \} \\
-        \decompose{\mu\alpha.\sigma}{\tau} & := & \{ \sigma[\mu\alpha.\sigma / \alpha] \sub \tau \} \\
-        \decompose{\alpha}{\alpha} & := & \emptyset \\
-        \decompose{\sigma_1 \to \tau_1}{\sigma_2 \to \tau_2} & := & \{ \sigma_2 \sub \sigma_1, \tau_1 \sub \tau_2 \} \\
+        \decompose{\tau}{\top}                               & := & \emptyset                                         \\
+        \decompose{\bot}{\tau}                               & := & \emptyset                                         \\
+        \decompose{\tau_1 \join \tau_2}{\sigma}              & := & \{ \tau_1 \sub \sigma, \tau_2 \sub \sigma \}      \\
+        \decompose{\sigma}{\tau_1 \meet \tau_2}              & := & \{ \sigma \sub \tau_1, \sigma \sub \tau_2 \}      \\
+        \decompose{\tau}{\mu\alpha.\sigma}                   & := & \{ \tau \sub \sigma[\mu\alpha.\sigma / \alpha] \} \\
+        \decompose{\mu\alpha.\sigma}{\tau}                   & := & \{ \sigma[\mu\alpha.\sigma / \alpha] \sub \tau \} \\
+        \decompose{\alpha}{\alpha}                           & := & \emptyset                                         \\
+        \decompose{\sigma_1 \to \tau_1}{\sigma_2 \to \tau_2} & := & \{ \sigma_2 \sub \sigma_1, \tau_1 \sub \tau_2 \}  \\
     \end{flalign*}
     \caption{Constraint Decomposition}
     \label{fig:constraint-decomposition}

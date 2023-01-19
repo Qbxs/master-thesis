@@ -17,7 +17,7 @@ This form of polymorphism allows us furthermore to reason about the behavior of 
 The $\mathbf{id}$ function mentioned above can only be implemented in one way:
 
 $$
-\mathbf{id} := \lambda x.x
+  \mathbf{id} := \lambda x.x
 $$
 
 Its type enables us only to simply return the argument, because without knowing its type there is nothing else we could do with it.
@@ -67,17 +67,17 @@ Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \S
 Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$:
 
 \begin{figure}[h]
-\begin{flalign*}
-  ts          := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes} \\
-  \tau,\sigma := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String         & \textit{Simple types} \\
-                 & \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots  & \textit{Singleton types} \\
-                 & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types} \\
-                 & \; \tau \to \sigma                                                       & \textit{Function types} \\
-                 & \; \mu\alpha.\tau                                                        & \textit{Recursive types} \\
-                 & \; \alpha                                                                & \textit{Recursive type variables}
-\end{flalign*}
-\label{fig:type-syntax}
-\caption{The syntax of types}
+  \begin{flalign*}
+    ts          := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes}             \\
+    \tau,\sigma := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String         & \textit{Simple types}             \\
+                   & \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots  & \textit{Singleton types}          \\
+                   & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types}            \\
+                   & \; \tau \to \sigma                                                       & \textit{Function types}           \\
+                   & \; \mu\alpha.\tau                                                        & \textit{Recursive types}          \\
+                   & \; \alpha                                                                & \textit{Recursive type variables}
+  \end{flalign*}
+  \label{fig:type-syntax}
+  \caption{The syntax of types}
 \end{figure}
 
 The subtyping lattice is defined by the following derivation rules where $\tau$, $\sigma$ and $\rho$ are meta variables for types.
@@ -100,20 +100,20 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
   \end{prooftree}
 
   % top/bot
- \begin{center}
-  \AxiomC{}
-  \RightLabel{\textsc{Top}}
-  \UnaryInfC{$\tau \sub \top$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{}
-  \RightLabel{\textsc{Bot}}
-  \UnaryInfC{$\bot \sub \tau$}
-  \DisplayProof
-\end{center}
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{Top}}
+    \UnaryInfC{$\tau \sub \top$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{Bot}}
+    \UnaryInfC{$\bot \sub \tau$}
+    \DisplayProof
+  \end{center}
 
- % join intro
- \begin{center}
+  % join intro
+  \begin{center}
     \AxiomC{$\tau \sub \sigma$}
     \RightLabel{\textsc{JoinI}$_1$}
     \UnaryInfC{$\tau \sub \sigma \join \rho$}
@@ -123,14 +123,14 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
     \RightLabel{\textsc{JoinI}$_2$}
     \UnaryInfC{$\tau \sub \rho \join \sigma$}
     \DisplayProof
- \end{center}
+  \end{center}
 
- \begin{prooftree}
-  \AxiomC{$\tau \sub \rho$}
-  \AxiomC{$\sigma \sub \rho$}
-  \RightLabel{\textsc{JoinI}}
-  \BinaryInfC{$\tau \join \sigma \sub \rho$}
-\end{prooftree}
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \rho$}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{JoinI}}
+    \BinaryInfC{$\tau \join \sigma \sub \rho$}
+  \end{prooftree}
 
   % meet intro
   \begin{center}
@@ -143,24 +143,24 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
     \RightLabel{\textsc{MeetI}$_2$}
     \UnaryInfC{$\tau \meet \sigma \sub \rho$}
     \DisplayProof
- \end{center}
+  \end{center}
 
- \begin{prooftree}
-  \AxiomC{$\tau \sub \rho$}
-  \AxiomC{$\tau \sub \sigma$}
-  \RightLabel{\textsc{MeetI}}
-  \BinaryInfC{$\tau \sub \sigma \meet \rho$}
- \end{prooftree}
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \rho$}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{MeetI}}
+    \BinaryInfC{$\tau \sub \sigma \meet \rho$}
+  \end{prooftree}
 
- \begin{prooftree}
-  \AxiomC{$\tau' \sub \tau$}
-  \AxiomC{$\sigma \sub \sigma'$}
-  \RightLabel{\textsc{Func}}
-  \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
- \end{prooftree}
+  \begin{prooftree}
+    \AxiomC{$\tau' \sub \tau$}
+    \AxiomC{$\sigma \sub \sigma'$}
+    \RightLabel{\textsc{Func}}
+    \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
+  \end{prooftree}
 
-   % recursive types
-   \begin{center}
+  % recursive types
+  \begin{center}
     \AxiomC{}
     \RightLabel{\textsc{Rec}$_1$}
     \UnaryInfC{$\mu\rho.\tau \sub \tau [\mu\rho.\tau\ / \rho]$}
@@ -170,66 +170,66 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
     \RightLabel{\textsc{Rec}$_2$}
     \UnaryInfC{$\tau[\mu\rho.\tau / \rho] \sub \mu\rho.\tau$}
     \DisplayProof
- \end{center}
+  \end{center}
 
- \caption{Subtyping rules}
- \label{fig:subtyping}
+  \caption{Subtyping rules}
+  \label{fig:subtyping}
 \end{figure}
 
- Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules:
+Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules:
 
- \begin{figure}[h]
- % join elim
- \begin{center}
-  \AxiomC{$\tau \join \sigma \sub \rho$}
-  \RightLabel{\textsc{JoinE}$_1$}
-  \UnaryInfC{$\tau \sub \rho$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$\tau \join \sigma \sub \rho$}
-  \RightLabel{\textsc{JoinE}$_2$}
-  \UnaryInfC{$\sigma \sub \rho$}
-  \DisplayProof
-\end{center}
+\begin{figure}[h]
+  % join elim
+  \begin{center}
+    \AxiomC{$\tau \join \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinE}$_1$}
+    \UnaryInfC{$\tau \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \join \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinE}$_2$}
+    \UnaryInfC{$\sigma \sub \rho$}
+    \DisplayProof
+  \end{center}
 
-\begin{prooftree}
-  \AxiomC{$\tau \sub \sigma \join \rho$}
-  \AxiomC{$\sigma \sub \upsilon$}
-  \AxiomC{$\rho \sub \upsilon$}
-  \RightLabel{\textsc{JoinE}}
-  \TrinaryInfC{$\tau \sub \upsilon$}
- \end{prooftree}
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma \join \rho$}
+    \AxiomC{$\sigma \sub \upsilon$}
+    \AxiomC{$\rho \sub \upsilon$}
+    \RightLabel{\textsc{JoinE}}
+    \TrinaryInfC{$\tau \sub \upsilon$}
+  \end{prooftree}
 
-% meet elim
-\begin{center}
-  \AxiomC{$\tau \sub \sigma \meet \rho$}
-  \RightLabel{\textsc{MeetE}$_1$}
-  \UnaryInfC{$\tau \sub \sigma$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{$\tau \sub \rho \meet \sigma$}
-  \RightLabel{\textsc{MeetE}$_2$}
-  \UnaryInfC{$\tau \sub \sigma$}
-  \DisplayProof
-\end{center}
+  % meet elim
+  \begin{center}
+    \AxiomC{$\tau \sub \sigma \meet \rho$}
+    \RightLabel{\textsc{MeetE}$_1$}
+    \UnaryInfC{$\tau \sub \sigma$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \sub \rho \meet \sigma$}
+    \RightLabel{\textsc{MeetE}$_2$}
+    \UnaryInfC{$\tau \sub \sigma$}
+    \DisplayProof
+  \end{center}
 
-\begin{center}
-\AxiomC{$\tau \meet \sigma \sub \rho$}
-\AxiomC{$\sigma \sub \upsilon$}
-\RightLabel{\textsc{MeetE}}
-\BinaryInfC{$\tau \sub \upsilon$}
-\DisplayProof
-{\hskip.2in}
-\AxiomC{$\tau \meet \sigma \sub \rho$}
-\AxiomC{$\tau \sub \upsilon$}
-\RightLabel{\textsc{MeetE}}
-\BinaryInfC{$\sigma \sub \upsilon$}
-\DisplayProof
-\end{center}
+  \begin{center}
+    \AxiomC{$\tau \meet \sigma \sub \rho$}
+    \AxiomC{$\sigma \sub \upsilon$}
+    \RightLabel{\textsc{MeetE}}
+    \BinaryInfC{$\tau \sub \upsilon$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \meet \sigma \sub \rho$}
+    \AxiomC{$\tau \sub \upsilon$}
+    \RightLabel{\textsc{MeetE}}
+    \BinaryInfC{$\sigma \sub \upsilon$}
+    \DisplayProof
+  \end{center}
 
 
-\caption{Derived subtyping rules}
-\label{fig:subtypingDerived}
+  \caption{Derived subtyping rules}
+  \label{fig:subtypingDerived}
 \end{figure}
 
 
@@ -237,20 +237,20 @@ Finally, we can add primitive rules (Fig. \ref{fig:prim-sub-rules}).
 We want to express that every natural number is also an integer and therefore introduce a corresponding rule, as well as a rule for the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}$ to be subtypes of $\Nat$:
 
 \begin{figure}
-\begin{center}
-  \AxiomC{}
-  \RightLabel{\textsc{NatPrim}}
-  \UnaryInfC{$\Nat \sub \Int$}
-  \DisplayProof
-  {\hskip.2in}
-  \AxiomC{}
-  \RightLabel{\textsc{SingletonPrim}}
-  \UnaryInfC{$\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots \sub \Nat$}
-  \DisplayProof
-\end{center}
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{NatPrim}}
+    \UnaryInfC{$\Nat \sub \Int$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{SingletonPrim}}
+    \UnaryInfC{$\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots \sub \Nat$}
+    \DisplayProof
+  \end{center}
 
-\caption{Primitve subtyping rules}
-\label{fig:prim-sub-rules}
+  \caption{Primitve subtyping rules}
+  \label{fig:prim-sub-rules}
 \end{figure}
 
 % add function types
@@ -258,10 +258,10 @@ We want to express that every natural number is also an integer and therefore in
 Liskov \cite{liskov} describes subtyping to adhere to the following substitution principle:
 
 \begin{quote}
-The intuitive idea of a subtype is one whose objects provide all the behavior of objects of another type (the supertype) plus something extra.
-What is wanted here is something like the following substitution property:
-If for each object [$e_1$] of type [$\tau$] there is an object [$e_2$] of type [$\sigma$] such that for all programs $P$ defined in terms of [$\sigma$],
-the behavior of $P$ is unchanged when [$e_1$] is substituted for [$e_2$], then [$\tau$] is a subtype of [$\sigma$].
+  The intuitive idea of a subtype is one whose objects provide all the behavior of objects of another type (the supertype) plus something extra.
+  What is wanted here is something like the following substitution property:
+  If for each object [$e_1$] of type [$\tau$] there is an object [$e_2$] of type [$\sigma$] such that for all programs $P$ defined in terms of [$\sigma$],
+  the behavior of $P$ is unchanged when [$e_1$] is substituted for [$e_2$], then [$\tau$] is a subtype of [$\sigma$].
 \end{quote}
 
 In essence, given subtyping types are no longer disjoint but can be mixed together to display natural inclusion properties that we may expect.
@@ -353,9 +353,9 @@ It is therefore crucial, that for each type the corresponding instance - if it e
 Reynolds \cite{reynolds_coherence} describes the issue of coherence as follows:
 
 \begin{quote}
-    When a programming language has a sufficiently rich type structure, there can be more than one proof of the same
-    typing judgment; potentially this can lead to semantic ambiguity since the semantics of a typed language is a function
-    of such proofs. When no such ambiguity arises, we say that the language is coherent.
+  When a programming language has a sufficiently rich type structure, there can be more than one proof of the same
+  typing judgment; potentially this can lead to semantic ambiguity since the semantics of a typed language is a function
+  of such proofs. When no such ambiguity arises, we say that the language is coherent.
 \end{quote}
 
 When talking about predicates on types we have to enforce that if $\Phi(\tau)$ holds for some predicate $\Phi$ on some type $\tau$,
@@ -405,13 +405,13 @@ In Haskell98 type class coherence guarantees that all such diagrams commute.
 So even if there may be different ways to resolve type class constraints, all of them preserve the same semantics.
 
 \begin{tikzcd}
-    &  & \mintinline{Haskell}|Ord (Maybe a)| \arrow[llddd, "{\footnotesize\mintinline{Haskell}|class Eq a => Ord a|}"'] \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|}"] &  &                            \\
-    &  &                                &  &                            \\
-    &  &                                &  &                            \\
-    \mintinline{Haskell}|Eq (Maybe a)| \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Eq a => Eq (Maybe a)|}"'] &  &                                &  & \mintinline{Haskell}|Ord a| \arrow[llddd, "{\footnotesize \mintinline{Haskell}|class Eq a => Ord a|}"] \\
-    &  &                                &  &                            \\
-    &  &                                &  &                            \\
-    &  & \mintinline{Haskell}|Eq a|                  &  &                           
+  &  & \mintinline{Haskell}|Ord (Maybe a)| \arrow[llddd, "{\footnotesize\mintinline{Haskell}|class Eq a => Ord a|}"'] \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|}"] &  &                            \\
+  &  &                                &  &                            \\
+  &  &                                &  &                            \\
+  \mintinline{Haskell}|Eq (Maybe a)| \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Eq a => Eq (Maybe a)|}"'] &  &                                &  & \mintinline{Haskell}|Ord a| \arrow[llddd, "{\footnotesize \mintinline{Haskell}|class Eq a => Ord a|}"] \\
+  &  &                                &  &                            \\
+  &  &                                &  &                            \\
+  &  & \mintinline{Haskell}|Eq a|                  &  &
 \end{tikzcd}
 
 Even though there are multiple ways to derive an instance for \mintinline{Haskell}|Eq a| from an instance of \mintinline{Haskell}|Ord (Maybe a)|, the derived instance has to be uniquely determined.
