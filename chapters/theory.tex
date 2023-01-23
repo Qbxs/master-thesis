@@ -928,7 +928,7 @@ Because with $\tau \sub \sigma$ for every $e : \tau$ we also have $e : \sigma$, 
 Thus all properties are preserved for terms over the subtyping relation.
 
 Given inclusive subtyping, it we may be motivated to introduces some other rules.
-E.g. given $\Showable{\Bool}$ and $\Showable{\Nat}$, it may seem tempting to derive $\Showable{\Bool \join \Nat}$,
+E.g. given $\Showable(\Bool)$ and $\Showable(\Nat)$, it may seem tempting to derive $\Showable(\Bool \join \Nat)$,
 so that the term $\lambda b. \showTerm(\ifthenelseTerm b \; b \; 42)$ is typeable.
 Introducing union types can only be done with some restrictions:
 
@@ -989,7 +989,116 @@ However, there is no guarantee that a term of type $\tau$ or of type $\sigma$ is
 \end{prooftree}
 
 
-\section{Dictionary Passing}
+In the end however, we can only resolve these constraints if the predicate in question is monotonous on the witnesses of a type.
+Predicates that relate witnesses with each other such as $\Ordable$ are not trivially satisfied for the union of two types if they hold for both respectively.
+Consider an ordering of natural numbers $o_\Nat : \Ordable \Nat$ and an ordering of booleans $o_\Bool : \Ordable \Bool$.
+It is not ambiguous how to define the ordering $o : \Ordable (\Nat \join \Bool)$.
+$o(\mathbf{true}, 1)$ has to be defined in some way, but since it is ambiguous we cannot define it without violating type class coherence.
+
+
+The rules \textsc{Join}$^+$ and \textsc{Meet}$^-$ as mentioned before cannot be derived from the subtyping rules alone.
+It may seem intuitive that given $Show \; \tau$ and $Show \; \sigma$ we also have $Show \; \tau \; \join \; \sigma$.
+Dually we could also be able to resolve $Read \; \tau \; \meet \; \sigma$ from $Read \; \tau$ and $Read \; \sigma$.
+
+However these rules cannot be implemented generally.
+Consider type classes with methods in which the bound type variable occurs more than once (unlike in $Show$ and $Read$).
+As an example where this rule cannot be implemented, let us look at the $Eq$ type class:
+
+\begin{gather}
+\nonumber {\bf class} \; Eq(a) \; where\\
+\nonumber  eq : a \to a \to \Bool
+\end{gather}
+
+Given instances $Eq(\Nat)$ and $Eq(\Bool)$, we may expect to have $Eq(\Nat \join \Bool)$ but e.g. the term $eq \; 5 \; True$ cannot be trivially implemented based on known implementations for $eq$.
+Based on the assumptions we already know how to compare terms of type $\Nat$ with each other and terms of type $\Bool$ with each other,
+however we have no information available on how to compare a term of type $\Bool$ with a term of type $\Nat$.
+In this example, it would be easy to provide $false$ as a default value but constructing default values is going to be complicated for more sophisticated type classes.
+In fact the $Ord$ type class already would be problematic using default values.
+
+Therefore, these non-derivable rules cannot be used for type class resolution.
+
+% not a good counterexample: here we should just choose the "smaller" instance
+% even though this is undecidable in other cases, see above
+
+% More surprisingly perhaps, even finding an implementation for $\Readable(\tau \meet \sigma)$ can lead to problems.
+% Consider the following instances for $\Readable(\Nat)$ and $\Readable(\Int)$:
+
+
+% \begin{figure}[h]
+%   \centering
+%   \begin{subfigure}{0.4\textwidth}
+%   \begin{flalign*}
+%   & \instance{\Readable}{\Nat} : \\
+%   & \; \; \mathit{read} : \mathit{String} \to \Nat \\
+%   & \; \; \mathit{read} \; str := \; 0
+%   \end{flalign*}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}{0.4\textwidth}
+%   \begin{flalign*}
+%   & \instance{\Readable}{\Int} : \\
+%   & \; \; \mathit{read} : \mathit{String} \to \Int \\
+%   & \; \; \mathit{read} \; str := \; 1
+%   \end{flalign*}
+%   \end{subfigure}
+% \label{fig:read-instances}
+% \caption{Instances for $\Readable(\Nat)$ and $\Readable(\Int)$}
+% \end{figure}
+
+% The intersection type $\Nat \meet \Int$ is equivalent to $\Nat$.
+% However, based on these instance declarations it is ambiguous whether the derived instance for $\Readable(\Nat \meet \Int)$ will be the same as the declared instance for $\Readable{\Nat}$.
+
+
+% explain problems for intersection in contravariant type classes
+
+
+There is a problem when we want to implement the union type.
+
+Consider again the \texttt{Show} typeclass. It is intuitive to see how we can construct the \texttt{show} method for the union of two types, given that it is defined for both respecetively.
+However, looking at the \texttt{Eq} typeclass, we can not generally deduce an instance of the join of two types.
+If we solely know how to compare terms of type $\tau$ with each other and how to compare terms of type $\sigma$ with each other,
+we do not know how to compare a term of type $\tau$ with a term of type $\sigma$, even though the derived instance tells we should be able to do so.
+
+\begin{gather}
+  \nonumber show_{a\join b} \; x := {\bf if} \; typeOf \; x == a \; {\bf then} \; show_a \; x \; {\bf else} \; show_b \; x
+\end{gather}
+
+We might be able to just return \texttt{False} as a default value in such cases but even default values can be ambiguous.
+Consider now the \texttt{Ord} type class. Given \texttt{Ord a} and \texttt{Ord b} we may say that in \texttt{Ord a $\join$ b} every $a$ is ordered before $b$.
+But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
+
+
+\section{Representations of Type Class Witnesses}
+\label{sec:representations}
+
+For an implementation, we need some representation of witnesses which is going to be used for the execution of programs using type class methods.
+Since type classes hide the concrete implementation of their methods, we need a means to extract this concrete implementation when needed.
+There are essentialy two ways to implement type class overloading in practise: Intensional type analysis which dispatches a type representation at runtime and dictionary passing which treats witnesses as records or dictionaries which can be resolved at compile time.
+
+\subsection{Intensional type analysis}
+\label{sec:intensional-analysis}
+
+Instead of passing around dictionaries, we can also resolve the relevant instance at runtime dispatching on the term's type.
+This requires our language to tag term with some representation of their type at runtime.
+In the before mentioned case, the definition of \mintinline{Haskell}{show} could look something like this:
+
+\begin{minted}{Haskell}
+  show t x = case t of
+    Bool -> boolShow x
+    Int -> intShow x
+\end{minted}
+
+In the context of subtyping we would not require type equality but for \mintinline{Haskell}{t} to be a subtype of some type for which an instance is defined.
+This also renders intensional type analysis more difficult:
+We can not simply match on a type (or its encoded representation \cite{weirich2000}) because we have to essentially solve the problem of subtyping between the type at hand and (at worst case) for each type for which an instance declaration is in scope.
+So, intensional type analysis may introduce a dramatic overhead in the presence of subtyping.
+
+This overhead seems natural when we want to implement a dynamically type checked language.
+However, type class resolution should already guarantee us static type safety, so additionally using type tags for dynamic type checking or type analysis seems superfluous.
+The only case for which intensional type analysis appears superior is for the case of union and intersection types.
+
+
+\subsection{Dictionary Passing}
 \label{sec:dictionaryPassing}
 
 One typical way of implementing type classes is using \emph{dicitonary passing style}.
@@ -1069,26 +1178,6 @@ The inferred type of this expression should be \mintinline{text}{Int \/ String}.
 What we need here are essentially two dictionaries: One for \mintinline{text}{Int} and one for \mintinline{text}{String} because it is undecidable at compile time which dictionary is going to be used at runtime.
 % Would it not be possible to just construct a new dictionary consisting of both variants?
 
-\section{Intensional type analysis}
-
-Instead of passing around dictionaries, we can also resolve the relevant instance at runtime dispatching on the term's type.
-This requires our language to tag term with some representation of their type at runtime.
-In the before mentioned case, the definition of \mintinline{Haskell}{show} could look something like this:
-
-\begin{minted}{Haskell}
-  show t x = case t of
-    Bool -> boolShow x
-    Int -> intShow x
-\end{minted}
-
-In the context of subtyping we would not require type equality but for \mintinline{Haskell}{t} to be a subtype of some type for which an instance is defined.
-This also renders intensional type analysis more difficult:
-We can not simply match on a type (or its encoded representation \cite{weirich2000}) because we have to essentially solve the problem of subtyping between the type at hand and (at worst case) for each type for which an instance declaration is in scope.
-So, intensional type analysis may introduce a dramatic overhead in the presence of subtyping.
-
-This overhead seems natural when we want to implement a dynamically type checked language.
-However, type class resolution should already guarantee us static type safety, so additionally using type tags for dynamic type checking or type analysis seems superfluous.
-The only case for which intensional type analysis appears superior is for the case of union and intersection types.
 
 \section{Type class coherence in the context of subtyping}
 % Main thesis for class coherence with subtyping
@@ -1096,10 +1185,10 @@ To ensure type class coherence, we have to take conclusions of the subtyping rel
 That means we have to consider the derivable instances of type class based of sub- or supertypes.
 This imposes some restrictions not present in type systems based on type equalities.
 
-For Hindley-Milner type systems we want to avoid \emph{overlapping instances}, i.e. instances for types that can be unified. \cite{peytonjones1997type}
-Syntactically, types are overlapping if one can be substituted for the other or they can be unified.
-E.g. $\mathit{List } \alpha$ and $\mathit{List } \Nat$ are overlapping with the substitution $\sigma(\alpha) \to \Nat$.
-In Haskell, it is very easy to check an overlap, although more restrictive: We only need to syntactically check whether two types share the same head constructor ($\mathit{List}$ in the example above).
+  For Hindley-Milner type systems we want to avoid \emph{overlapping instances}, i.e. instances for types that can be unified. \cite{peytonjones1997type}
+  Syntactically, types are overlapping if one can be substituted for the other or they can be unified.
+  E.g. $\mathit{List} \; \alpha$ and $\mathit{List} \; \Nat$ are overlapping with the substitution $\sigma(\alpha) \to \Nat$.
+  In Haskell specifically, it is very easy to check an overlap, albeit more restrictive: We only need to syntactically check whether two types share the same head constructor ($\mathit{List}$ in the example above).
 
 In the context of subtyping, overlaps of types have to be expressed differently because we no longer use unification for type inference but biunification.
 In order to check for an overlap of types, we have to create the intersection of those types and check whether it is empty.
@@ -1120,10 +1209,10 @@ Using the append operator exposed by the Monoid typeclass, therefore may lead to
 In the simple arithmetic expression $(a \oplus b) \oplus c$ $\oplus$ can have two different meanings based on the inferred types of $a,b$ and $c$.
 Since type inferrence with subtyping is generally not quite obvious it may seem
 
-Could we just use the most specific instance? This might have unexpected results.
-E.g. if we have $NonEmptyList \sub List$, we may not know during compilation whether $NonEmptyList$ or $List$ is being picked.
-~Generally to infer the most specific type seems very hard. In this example filtering a $NonEmptyList$ may or may not return an empty list and we may just have to assume that it is possibly empty.
-This may lead to hard to track behaviour when using overlapping instances.
+  It may seem that we could choose the most specific instance. This, however, might have unexpected results.
+  E.g. if we have $\mathit{NonEmptyList} \; \alpha \sub \mathit{List} \; \alpha$, we may not know during compilation whether $\mathit{NonEmptyList} \; \alpha $ or $\mathit{List} \; \alpha$ is being picked.
+  ~Generally to infer the most specific type seems very hard. In this example filtering a $\mathit{NonEmptyList}$ may or may not return an empty list and we may just have to assume that it is possibly empty.
+  This may lead to hard to track behaviour when using overlapping instances.
 
 A simple example for undecidable most specific instances can be better given with record types.
 If we need to resolve an instance for $C \{x : Int\}$ and we already have instances for $C \{x : Int, y : Int\}$ and $C \{x : Int, z : Int\}$ neither instance is more specific than the other.
@@ -1171,78 +1260,3 @@ The following outlines how this achieved:
 We should always check in an instance declaration whether this constraint globally holds. \\
 To guarantee modularity we also have to check this for module imports, but since even the import of functions using different instances for the same type can lead to incoherences, we have to rule out any declaration of orphan instances.
 \cite{Kilpatrick2019-cy}.
-
-\section{Unions and Intersection of Type Classes}
-% also treated in the next section
-
-The rules \textsc{Join}$^+$ and \textsc{Meet}$^-$ as mentioned before cannot be derived from the subtyping rules alone.
-It may seem intuitive that given $Show \; \tau$ and $Show \; \sigma$ we also have $Show \; \tau \; \join \; \sigma$.
-Dually we could also be able to resolve $Read \; \tau \; \meet \; \sigma$ from $Read \; \tau$ and $Read \; \sigma$.
-
-However these rules cannot be implemented generally.
-Consider type classes with methods in which the bound type variable occurs more than once (unlike in $Show$ and $Read$).
-As an example where this rule cannot be implemented, let us look at the $Eq$ type class:
-
-\begin{gather}
-  \nonumber {\bf class} \; Eq(a) \; where\\
-  \nonumber  eq : a \to a \to \Bool
-\end{gather}
-
-Given instances $Eq(\Nat)$ and $Eq(\Bool)$, we may expect to have $Eq(\Nat \join \Bool)$ but e.g. the term $eq \; 5 \; True$ cannot be trivially implemented based on known implementations for $eq$.
-Based on the assumptions we already know how to compare terms of type $\Nat$ with each other and terms of type $\Bool$ with each other,
-however we have no information available on how to compare a term of type $\Bool$ with a term of type $\Nat$.
-In this example, it would be easy to provide $false$ as a default value but constructing default values is going to be complicated for more sophisticated type classes.
-In fact the $Ord$ type class already would be problematic using default values.
-
-Therefore, these non-derivable rules cannot be used for type class resolution.
-
-% not a good counterexample: here we should just choose the "smaller" instance
-% even though this is undecidable in other cases, see above
-
-% More surprisingly perhaps, even finding an implementation for $\Readable(\tau \meet \sigma)$ can lead to problems.
-% Consider the following instances for $\Readable(\Nat)$ and $\Readable(\Int)$:
-
-
-% \begin{figure}[h]
-%   \centering
-%   \begin{subfigure}{0.4\textwidth}
-%   \begin{flalign*}
-%   & \instance{\Readable}{\Nat} : \\
-%   & \; \; \mathit{read} : \mathit{String} \to \Nat \\
-%   & \; \; \mathit{read} \; str := \; 0
-%   \end{flalign*}
-%   \end{subfigure}
-%   \hfill
-%   \begin{subfigure}{0.4\textwidth}
-%   \begin{flalign*}
-%   & \instance{\Readable}{\Int} : \\
-%   & \; \; \mathit{read} : \mathit{String} \to \Int \\
-%   & \; \; \mathit{read} \; str := \; 1
-%   \end{flalign*}
-%   \end{subfigure}
-% \label{fig:read-instances}
-% \caption{Instances for $\Readable(\Nat)$ and $\Readable(\Int)$}
-% \end{figure}
-
-% The intersection type $\Nat \meet \Int$ is equivalent to $\Nat$.
-% However, based on these instance declarations it is ambiguous whether the derived instance for $\Readable(\Nat \meet \Int)$ will be the same as the declared instance for $\Readable{\Nat}$.
-
-
-% explain problems for intersection in contravariant type classes
-
-\section{Implementation}
-
-There is a problem when we want to implement the union type.
-
-Consider again the \texttt{Show} typeclass. It is intuitive to see how we can construct the \texttt{show} method for the union of two types, given that it is defined for both respecetively.
-However, looking at the \texttt{Eq} typeclass, we can not generally deduce an instance of the join of two types.
-If we solely know how to compare terms of type $\tau$ with each other and how to compare terms of type $\sigma$ with each other,
-we do not know how to compare a term of type $\tau$ with a term of type $\sigma$, even though the derived instance tells we should be able to do so.
-
-\begin{gather}
-  \nonumber show_{a\join b} \; x := {\bf if} \; typeOf \; x == a \; {\bf then} \; show_a \; x \; {\bf else} \; show_b \; x
-\end{gather}
-
-We might be able to just return \texttt{False} as a default value in such cases but even default values can be ambiguous.
-Consider now the \texttt{Ord} type class. Given \texttt{Ord a} and \texttt{Ord b} we may say that in \texttt{Ord a $\join$ b} every $a$ is ordered before $b$.
-But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
