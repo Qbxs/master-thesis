@@ -802,6 +802,44 @@ For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses lik
 %   \DisplayProof
 % \end{center}
 
+\subsection{Examples}
+
+\begin{figure}[h]
+  \begin{prooftree}
+    \AxiomC{$w : \mathbf{instance} \; \Showable(\Int)$}
+    \RightLabel{\textsc{Decl}}
+    \UnaryInfC{$i_\Int(w) : \Showable(\Int)$}
+    \AxiomC{}
+    \RightLabel{\textsc{NatPrim}$^+$}
+    \UnaryInfC{$\mathit{natPrim} : \Nat \sub \Int$}
+    \RightLabel{\textsc{Meet}$^+_2$}
+    \UnaryInfC{$\mathit{proj}_2(\mathit{natPrim}) : \Singleton{1} \meet \Nat \sub \Int$}
+    \RightLabel{\textsc{CoV}}
+    \BinaryInfC{$cov(i_\Int(w), \mathit{proj}_2(\mathit{natPrim})) : \Showable(\Singleton{1} \meet \Nat)$}
+  \end{prooftree}
+  \label{fig:witness-example-showable}
+  \caption{Witness derivation for $cov(i_\Int(w), \mathit{proj}_2(\mathit{natPrim})) : \Showable(\Unit \meet \Nat)$}
+\end{figure}
+
+\begin{figure}[h]
+  \begin{prooftree}
+    \AxiomC{$w : \mathbf{instance} \; \Defaultable(\Nat)$}
+    \RightLabel{\textsc{Decl}}
+    \UnaryInfC{$i_\Nat(w) : \Defaultable(\Nat)$}
+    \AxiomC{}
+    \RightLabel{\textsc{NatPrim}$^+$}
+    \UnaryInfC{$\mathit{natPrim} : \Nat \sub \Int$}
+    \RightLabel{\textsc{Meet}$^+_2$}
+    \UnaryInfC{$\mathit{in}_1(\mathit{natPrim}) : \Nat \sub \Bool \join \Int$}
+    \RightLabel{\textsc{CoV}}
+    \BinaryInfC{$contrav(i_\Nat(w), \mathit{in}_1(\mathit{natPrim})) : \Defaultable(\Int \join \Bool)$}
+  \end{prooftree}
+  \label{fig:witness-example-defaultable}
+  \caption{Witness derivation for $contrav(i_\Nat(w), \mathit{in}_1(\mathit{natPrim})) : \Defaultable(\Int \join \Bool)$}
+\end{figure}
+\section{Witnesses}
+\label{sec:witnesses}
+
 \section{Coherence}
 
 \subsection{Motivation}
@@ -1235,7 +1273,7 @@ The following outlines how this achieved:
 
 \begin{figure}
   \centering
-  \begin{tikzpicture}[node distance={25mm}, thick, main/.style = {draw, circle}]
+  \begin{tikzpicture}[node distance={25mm}, main/.style = {draw, circle}]
     \node[main] (1) {$\to$};
     \node[main] (2) [below left of=1] {$\Singleton{0}$};
     \node[main] (3) [below right of=1] {$\Nat$};
