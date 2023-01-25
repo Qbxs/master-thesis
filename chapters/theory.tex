@@ -1321,12 +1321,16 @@ The following outlines how this achieved:
   \begin{tikzpicture}[node distance={25mm}, main/.style = {draw, circle}]
     \node[main] (1) {$\to$};
     \node[main] (2) [below left of=1] {$\Singleton{0}$};
-    \node[main] (3) [below right of=1] {$\Nat$};
+    \node[main] (3) [below right of=1] {$\to$};
+    \node[main] (4) [below left of=3] {$\Nat$};
+    \node[main] (5) [below right of=3] {$\Nat$};
     \draw[->] (1) edge["l"] (2);
     \draw[->] (1) edge["r"] (3);
+    \draw[->] (3) edge["l"] (4);
+    \draw[->] (3) edge["r"] (5);
   \end{tikzpicture}
   \label{fig:example-type-automaton}
-  \caption{Type automaton for $\Singleton{0} \to \Nat$}
+  \caption{Type automaton for $\Singleton{0} \to (\Nat \to \Nat)$}
 \end{figure}
 
 \begin{itemize}
