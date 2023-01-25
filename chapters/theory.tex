@@ -310,12 +310,11 @@ Note that this corresponds to implications even though the arrow is flipped as i
 
 Consider the predicates $\Showable$ and $\Defaultable$.
 A type $\tau$ satsifies the covariant predicate $\Showable$ if a total function of $\tau \to String$ can be defined.
-Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a function of type $Unit \to \tau$ can be defined.
+Dually, a type $\tau$ satsifies the contravariant predicate $\Defaultable$ if a value of type $\tau$ can be defined.
 
-Let context $\Gamma := \{ \Showable(\Int), \Defaultable(\Nat) \}$.
-We obtain the following derivations for $\Showable(\Singleton{1} \meet \Nat)$ and $\Defaultable(\Int \join \Bool)$:
-We can interpret these derivations as a proof for \emph{Given a way to show an integer, we can also show anything that is both a natural number and of the singleton type $\Singleton{1}$} and
-\emph{Given a default value for $\Nat$, we also obtain a default value for the union of $\Int$ and $\Bool$}
+Let context $\Gamma := \{ \Showable(\Int), \Defaultable(\Nat),  \Monoid(\Nat) \}$.
+We obtain the following derivations for $\Showable(\Singleton{1} \meet \Nat)$:
+We can interpret the derivation in fig. \ref{fig:example-showable} as a proof for \emph{Given a way to show an integer, we can also show anything that is both a natural number and of the singleton type $\Singleton{1}$} and
 
 \begin{figure}[h]
   \begin{prooftree}
@@ -327,9 +326,13 @@ We can interpret these derivations as a proof for \emph{Given a way to show an i
     \RightLabel{\textsc{Meet}$^+_2$}
     \UnaryInfC{$\ctx \Showable(\Singleton{1} \meet \Nat)$}
   \end{prooftree}
+  \caption{Derivation for $\ctx \Showable(\Singleton{1} \meet \Nat)$}
   \label{fig:example-showable}
-  \caption{Derivation for $\ctx \Showable(\Unit \meet \Nat)$}
 \end{figure}
+
+Using $\Gamma$ from above, we can derive $\Showable(\Singleton{1} \meet \Nat)$ (fig. \ref{fig:example-defaultable}).
+In natural language this proves that \emph{given a default value for $\Nat$, we also obtain a default value for the union of $\Int$ and $\Bool$}
+
 
 \begin{figure}[h]
   \begin{prooftree}
@@ -342,17 +345,49 @@ We can interpret these derivations as a proof for \emph{Given a way to show an i
     \RightLabel{\textsc{Join}$^-_1$}
     \UnaryInfC{$\ctx \Defaultable(\Int \join \Bool)$}
   \end{prooftree}
-  \label{fig:example-defaultable}
   \caption{Derivation for $\ctx \Defaultable(\Int \join \Bool)$}
+  \label{fig:example-defaultable}
 \end{figure}
+
+Finally, again using $\Gamma$ defined above, we can prove judgements for invariant predicates for non syntactically equal types.
+The derivation in fig. \ref{fig:example-monoid} combines the \textsc{InV}-rule with a proof that $\Nat$ and $\Nat \join \Singleton{1}$ are equivalent to prove that we can derive $\Monoid(\Nat \join \Singleton{1})$ from $\Monoid(\Nat)$.
+
+\begin{figure}[h]
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Axiom}}
+    \UnaryInfC{$\ctx \Monoid(\Nat)$}
+    \AxiomC{}
+    \RightLabel{\textsc{Refl}}
+    \UnaryInfC{$\Nat \sub \Nat$}
+    \RightLabel{\textsc{JoinI}$_1$}
+    \UnaryInfC{$\Nat \sub \Nat \join \Singleton{1}$}
+    \AxiomC{}
+    \RightLabel{\textsc{Refl}}
+    \UnaryInfC{$\Nat \sub \Nat$}
+    \AxiomC{}
+    \RightLabel{\textsc{SingletonPrim}$_\Singleton{1}$}
+    \UnaryInfC{$\Singleton{1} \sub \Nat$}
+    \RightLabel{\textsc{JoinI}}
+    \BinaryInfC{$\Nat \join \Singleton{1} \sub \Nat$}
+    \RightLabel{\textsc{Axiom}}
+    \alwaysSingleLine
+    \RightLabel{\textsc{InV}}
+    \TrinaryInfC{$\ctx \Monoid(\Nat \join \Singleton{1})$}
+  \end{prooftree}
+  \caption{Derivation for $\ctx \Monoid(\Nat \join \Singleton{1})$}
+  \label{fig:example-monoid}
+\end{figure}
+
 \section{Witnesses}
 \label{sec:witnesses}
 
 By annotating applications of predicates with specific witnesses we obtain a calculus
 that is not only able to prove that a type satisfies a predicate but also constructs a witness for such a proof.
 
-This directly corresponds to type class resolution if we interpret type classes as predicates on types.
-We again differentiate co- and contravariant type classes in order to transport type classes over the subtyping relation.
+Constructing witnesses directly corresponds to type class resolution if we interpret type classes as predicates on types.
+Multiple witnesses can be derived for the same judgement but in order to preserve type class coherence they have to satsify some form of equivalence.
+We again differentiate co-, contra-  and invariant type classes in order to transport type classes over the subtyping relation.
 
 \begin{figure}[h]
   % refl
@@ -803,6 +838,9 @@ For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses lik
 % \end{center}
 
 \subsection{Examples}
+
+We present witness derivations for the examples in the previous section.
+The context is replaced with an instance declaration which forms the leaf in the derivation.
 
 \begin{figure}[h]
   \begin{prooftree}
