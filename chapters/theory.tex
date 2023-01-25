@@ -12,7 +12,7 @@ To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. ty
 We are only interested in predicates that are preserved over the subtyping lattice.
 I.e. predicates that depend only on the terms of a type.
 That means only predicates that are \emph{monotonous} are considered while other predicates such as \emph{"has exactly two values"} are disregarded.
-We further differentiate between \emph{covariant} and \emph{contravariant} predicates over types.
+We further differentiate between \emph{covariant}, \emph{contravariant} and \emph{invariant} predicates over types.
 
 Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific predicates.
 
@@ -293,6 +293,8 @@ The rule for axioms is trivial: We can resolve known facts directly from the con
 
 Invariant type class predicates can essentially only be derived from type equalitites, i.e. where a type is both a sub- and supertype of another.
 Hence, there are no interesting derivable rules for them.
+
+A typical example for invariant predicates is $\Monoid$, satisfied by any type for which we can define a monoid, i.e. there is a total function combining two values of the type to a new one and a neutral element corresponding to this operation.
 
 Predicates may be constrained, i.e. they depend on other predicates.
 $\Phi(\tau) \Rightarrow \Psi(\tau)$ means $\Psi$ is constrained by $\Phi$.
@@ -1002,6 +1004,11 @@ We assume a naive set-theoretic definition of subtyping analagous to the one giv
 This notion of subtyping trivially satsifies the Liskov substitution principle.
 Because with $\tau \sub \sigma$ for every $e : \tau$ we also have $e : \sigma$, the coercion function is the identity.
 Thus all properties are preserved for terms over the subtyping relation.
+
+With the types at hand, this is easy to follow.
+We can trivially translate the types of $\Nat$ and $\Int$ into corresponding sets.
+The singleton types can be interpreted as $\Singleton{0} \rightsquigarrow \{0\}$, $\Singleton{1} \rightsquigarrow \{1\}$, \dots
+Adding lattice types $\bot \rightsquigarrow \emptyset$ and $\top \rightsquigarrow \{ S | \forall M. M \subseteq S \}$,  we also have correspondents to union and intersection types with the union and intersection of sets.
 
 Given inclusive subtyping, it we may be motivated to introduces some other rules.
 E.g. given $\Showable(\Bool)$ and $\Showable(\Nat)$, it may seem tempting to derive $\Showable(\Bool \join \Nat)$,
