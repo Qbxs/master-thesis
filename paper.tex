@@ -40,12 +40,16 @@
 \usepackage{listings}
 % basic duo style
 \lstdefinestyle{duoStyle}{%
-    morekeywords={if, then, else instance, class, >>, CBV, CBN, +, -, =>, case, of, cocase, mu, def, prd, cns, cmd, :=},
-    comment=[l]{--},
-    commentstyle=\color{grey},
-    keywordstyle=\ttfamily\bfseries\color{blue!80!black},
-    mathescape=true
-    %moredelim=**[is][\bfseries]{|}{|}
+  otherkeywords={case,cocase,def,of,forall,data,codata,rec,mu,import,module,return,set,Top,Bot,CBV,CBN,refinement,constructor,destructor,type,operator,leftassoc,rightassoc,cmd,prd,cns,class,instance,:=,=>,=<,>>,\\\\/,/\\\\,<:,\[,\]},
+  morekeywords=[1]{case,cocase,def,of,forall,data,codata,rec,mu,import,module,return,set,Top,Bot,CBV,CBN,refinement,constructor,destructor,type,operator,leftassoc,rightassoc,cmd,prd,cns,class,instance},
+  morekeywords=[2]{:=,=>,=<,>>,\\\\/,/\\\\,<:,\[,\]},
+  keywordstyle=[1]{\bf\color{blue}},
+  keywordstyle=[2]{\bf\color{black}},
+  comment=[l]{--},
+  commentstyle=\color{grey},
+  keywordstyle=\ttfamily\bfseries\color{blue!80!black},
+  mathescape=true
+  %moredelim=**[is][\bfseries]{|}{|}
 }
 \lstset{style=duoStyle}
 
