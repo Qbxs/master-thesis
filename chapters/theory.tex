@@ -2,6 +2,7 @@
 \label{ch:qualified-types}
 
 \section{Theory of Predicates}
+\label{sec:theory-predicates}
 
 To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. types that satisfy some predicate.
 
@@ -15,6 +16,9 @@ That means only predicates that are \emph{monotonous} are considered while other
 We further differentiate between \emph{covariant}, \emph{contravariant} and \emph{invariant} predicates over types.
 
 Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific predicates.
+
+\subsection{Covariant Predicates}
+\label{sec:covariant-predicates}
 
 \begin{definition}
   A \emph{covariant type class predicate} $\Phi^+$ is a predicate preserved by the subtyping relation, i.e. it adheres to the following rule:
@@ -132,6 +136,9 @@ With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can der
 A typical example for covariant predicates is $\Showable$: all types that are showable, which generally rules out function types.
 The \textsc{CoV} rule seems intuitive for this:
 If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can be shown in the same way.
+
+\subsection{Contravariant Predicates}
+\label{sec:contravariant-predicates}
 
 \begin{definition}
   A \emph{contravariant type class predicate} $\Phi^-$ is a predicate preserved by the supertyping or flipped subtyping relation, i.e. it adheres to the following rule:
@@ -277,6 +284,9 @@ The rule for axioms is trivial: We can resolve known facts directly from the con
   \UnaryInfC{$\Gamma, \Phi(\tau) \vdash \Phi(\tau)$}
 \end{prooftree}
 
+\subsection{Invariant Predicates}
+\label{sec:invariant-predicates}
+
 \begin{definition}
   An \emph{invariant type class predicate} $\Phi^-$ is a predicate preserved by the subtyping \emph{and} flipped subtyping relation, i.e. it adheres to the following rule:
 \end{definition}
@@ -295,6 +305,9 @@ Invariant type class predicates can essentially only be derived from type equali
 Hence, there are no interesting derivable rules for them.
 
 A typical example for invariant predicates is $\Monoid$, satisfied by any type for which we can define a monoid, i.e. there is a total function combining two values of the type to a new one and a neutral element corresponding to this operation.
+
+\subsection{Predicate Implications}
+\label{sec:predicate-implications}
 
 Predicates may be constrained, i.e. they depend on other predicates.
 $\Phi(\tau) \Rightarrow \Psi(\tau)$ means $\Psi$ is constrained by $\Phi$.
