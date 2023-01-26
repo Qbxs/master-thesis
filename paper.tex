@@ -41,6 +41,8 @@
 % basic duo style
 \lstdefinestyle{duoStyle}{%
     morekeywords={if, then, else instance, class, >>, CBV, CBN, +, -, =>, case, of, cocase, mu, def, prd, cns, cmd, :=},
+    comment=[l]{--},
+    commentstyle=\color{grey},
     keywordstyle=\ttfamily\bfseries\color{blue!80!black},
     mathescape=true
     %moredelim=**[is][\bfseries]{|}{|}
@@ -49,7 +51,7 @@
 
 \usepackage{minted}
 
-
+% mathbb String
 \usepackage{bussproofs}
 \EnableBpAbbreviations
 \def\ScoreOverhang{0pt}
