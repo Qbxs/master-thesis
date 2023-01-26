@@ -7,6 +7,20 @@
 \begin{figure}[h]
     \begin{center}
         \AxiomC{}
+        \RightLabel{\textsc{T-Singleton}}
+        \UnaryInfC{$\ctx 0 : \Singleton{0}, 1 : \Singleton{1}, \dots$}
+        \DisplayProof
+
+        {\vskip.2in}
+
+        \AxiomC{}
+        \RightLabel{\textsc{T-String}}
+        \UnaryInfC{$\ctx "[a-zA-Z]^*" : \mathit{String}$}
+        \DisplayProof
+
+        {\vskip.2in}
+
+        \AxiomC{}
         \RightLabel{\textsc{T-Var}}
         \UnaryInfC{$\Gamma, x : \tau \vdash x : \tau$}
         \DisplayProof

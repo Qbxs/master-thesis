@@ -80,6 +80,18 @@ Furthermore, for subtyping we consider the lattice types constructed by $\top, \
   \label{fig:type-syntax}
 \end{figure}
 
+\begin{figure}[h]
+  \begin{flalign*}
+    e := & \; x \; | \; y \; | \; z \; | \; \dots                                        & \textit{Variables} \\
+         & \; 0 \; | \; 1 \; | \; 2 \; | \; \dots                                        & \textit{Numeric Literals} \\
+         & \; \mathit{"foo"} \; | \; \mathit{"bar"} \; | \; \mathit{"baz"} \; | \; \dots & \textit{String Literals} \\
+         & \; \lambda x.e                                                                & \textit{Lambda abstractions} \\
+         & \; e_1e_2                                                                     & \textit{Function applications}
+  \end{flalign*}
+  \caption{The syntax of terms}
+  \label{fig:term-syntax}
+\end{figure}
+
 The subtyping lattice is defined by the following derivation rules where $\tau$, $\sigma$ and $\rho$ are meta variables for types.
 
 % elim rules are derivable
