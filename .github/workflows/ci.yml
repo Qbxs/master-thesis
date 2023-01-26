@@ -15,6 +15,7 @@ jobs:
         with:
           root_file: paper.tex
           latexmk_shell_escape: true
+          continue_on_error: true
       - name: Upload PDF
         uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
