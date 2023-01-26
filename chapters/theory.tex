@@ -125,8 +125,8 @@ With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can der
     \DisplayProof
   \end{center}
 
-  \label{fig:derived-covariant-rules}
   \caption{Derived rules for covariant predicates}
+  \label{fig:derived-covariant-rules}
 \end{figure}
 
 A typical example for covariant predicates is $\Showable$: all types that are showable, which generally rules out function types.
@@ -241,8 +241,8 @@ With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can
     \UnaryInfC{$\ctx \Phi^-(\Int)$}
     \DisplayProof
   \end{center}
-  \label{fig:contravariant-derived-rules}
   \caption{Derived rules for contravariant predicates}
+  \label{fig:contravariant-derived-rules}
 \end{figure}
 
 A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
@@ -485,8 +485,8 @@ We again differentiate co-, contra-  and invariant type classes in order to tran
     \UnaryInfC{$\unfoldL : \tau[\mu\rho.\tau / \rho] \sub \mu\rho.\tau$}
     \DisplayProof
   \end{center}
-  \label{fig:subtyping-witnesses}
   \caption{Rules for subtyping witnesses}
+  \label{fig:subtyping-witnesses}
 \end{figure}
 
 We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
@@ -509,8 +509,8 @@ We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given w
       & \tau \join \sigma &
     \end{tikzcd}
   \]
-  \label{fig:cd-proj/in}
   \caption{Witnesses for union \& intersection types}
+  \label{fig:cd-proj/in}
 \end{figure}
 
 $triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
@@ -654,8 +654,8 @@ For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses lik
     \DisplayProof
   \end{center}
 
-  \label{fig:derived-covariant-witnesses}
   \caption{Derivations for covariant witnesses}
+  \label{fig:derived-covariant-witnesses}
 \end{figure}
 
 
@@ -749,8 +749,8 @@ For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses lik
     \DisplayProof
   \end{center}
 
-  \label{fig:contravariant-witnesses}
   \caption{Derived rules for contravariant witnesses}
+  \label{fig:contravariant-witnesses}
 \end{figure}
 
 % We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
@@ -857,8 +857,8 @@ The context is replaced with an instance declaration which forms the leaf in the
     \RightLabel{\textsc{CoV}}
     \BinaryInfC{$cov(i_\Int(w), \mathit{proj}_2(\mathit{natPrim})) : \Showable(\Singleton{1} \meet \Nat)$}
   \end{prooftree}
-  \label{fig:witness-example-showable}
   \caption{Witness derivation for $cov(i_\Int(w), \mathit{proj}_2(\mathit{natPrim})) : \Showable(\Unit \meet \Nat)$}
+  \label{fig:witness-example-showable}
 \end{figure}
 
 \begin{figure}[h]
@@ -874,8 +874,8 @@ The context is replaced with an instance declaration which forms the leaf in the
     \RightLabel{\textsc{CoV}}
     \BinaryInfC{$contrav(i_\Nat(w), \mathit{in}_1(\mathit{natPrim})) : \Defaultable(\Int \join \Bool)$}
   \end{prooftree}
-  \label{fig:witness-example-defaultable}
   \caption{Witness derivation for $contrav(i_\Nat(w), \mathit{in}_1(\mathit{natPrim})) : \Defaultable(\Int \join \Bool)$}
+  \label{fig:witness-example-defaultable}
 \end{figure}
 \section{Witnesses}
 \label{sec:witnesses}
@@ -906,8 +906,8 @@ The context is replaced with an instance declaration which forms the leaf in the
        & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
     \end{flalign*}
   \end{subfigure}
-  \label{fig:showable-nat}
   \caption{Incoherent instance declarations for $\Showable(\Nat)$}
+  \label{fig:showable-nat}
 \end{figure}
 
 Consider the following instance declarations (fig. \ref{fig:showable-nat}):
@@ -1329,8 +1329,8 @@ The following outlines how this achieved:
     \draw[->] (3) edge["l"] (4);
     \draw[->] (3) edge["r"] (5);
   \end{tikzpicture}
-  \label{fig:example-type-automaton}
   \caption{Type automaton for $\Singleton{0} \to (\Nat \to \Nat)$}
+  \label{fig:example-type-automaton}
 \end{figure}
 
 \begin{itemize}
