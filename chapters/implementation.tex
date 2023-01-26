@@ -3,6 +3,60 @@
 
 \section{Example}
 
+We introduce the type class $\mathit{Summable}$ of types which can be summed up or folded into a natural number.
+
+\begin{flalign*}
+& \mathbf{class} \; \mathit{Summable}(+a)\{ \\
+& \;\;\; \mathbf{sum} : a  \to \Nat \\
+& \}
+\end{flalign*}
+
+We can implement this type class for pairs of natural  numbers by simply adding up the components.
+
+\begin{flalign*}
+& \mathbf{instance} \; \mathit{Summable} \; \mathit{Pair}(\Nat,\Nat) \{ \\
+& \;\;\; \mathbf{sum} := \lambda p. \mathbf{case} \; p \; of \\
+& \;\;\;\;\; (n,m) \Rightarrow n+m \\
+& \}
+\end{flalign*}
+
+Given a definition for non-empty lists, we can also use an instance recursively to sum up its elements:
+
+
+\begin{flalign*}
+& \mathbf{data} \; \mathit{NonEmpty} \{ \\
+& \;\;\; \mathit{Singleton}(\Nat) \\
+& \;\;\; \mathit{Cons}(\Nat, \mathit{NonEmpty})\\
+& \}
+\end{flalign*}
+
+\begin{flalign*}
+& \mathbf{instance} \; \mathit{Summable} \; \mathit{NonEmpty} \{ \\
+& \;\;\; \mathbf{sum} := \lambda l. \mathbf{case} \; l \; of \\
+& \;\;\;\;\; \mathit{Singleton}(n) \Rightarrow n \\
+& \;\;\;\;\; \mathit{Cons}(n, ns) \Rightarrow n + (\mathbf{sum}[\mathit{NonEmpty}] \; ns) \\
+& \}
+\end{flalign*}
+
+Similarily, we can define a \mathit{Summable} instance for leaf-oriented trees.
+
+\begin{flalign*}
+& \mathbf{data} \; \mathit{NatTree} \{ \\
+& \;\;\; \mathit{Leaf}(\Nat) \\
+& \;\;\; \mathit{Branch}(\mathit{NatTree}, \mathit{NatTree})\\
+& \}
+\end{flalign*}
+
+\begin{flalign*}
+& \mathbf{instance} \; \mathit{Summable} \; \mathit{NatTree} \{ \\
+& \;\;\; \mathbf{sum} := \lambda t. \mathbf{case} \; t \; of \\
+& \;\;\;\;\; \mathit{Leaf}(n) \Rightarrow n \\
+& \;\;\;\;\; \mathit{Branch}(l, r) \Rightarrow (\mathbf{sum}[\mathit{NatTree}] \; l) + (\mathbf{sum}[\mathit{NatTree}] \; r) \\
+& \}
+\end{flalign*}
+
+\section{Duo}
+
 \begin{lstlisting}
 
 
@@ -10,37 +64,37 @@
 
     import Data.Peano;
     import Data.Tensor;
-    
+
     -- | The class of nonempty types that can be folded into a natural number.
     class NatFoldable(+a : CBV){
         Fold(a, return Nat)
     };
-    
+
     instance natTensorFoldable : NatFoldable Tensor(Nat, Nat) {
         Fold(p, k) => case p of {
             MkTensor(n, m) => add n m >> k
         }
     };
-    
+
     -- | A non-empty list of natural numbers.
     data NatList {
         Singleton(Nat),
         Cons(Nat, NatList)
     };
-    
+
     instance natListFoldable : NatFoldable NatList {
         Fold(l, k) => case l of {
             Singleton(n) => n >> k,
             Cons(n, ns) => Fold(ns, mu x. add x n >> k)
         }
     };
-    
+
     -- | A leaf-oriented tree of natural numbers.
     data NatTree {
         Leaf(Nat),
         Branch(NatTree, NatTree)
     };
-    
+
     instance natTreeFoldable : NatFoldable NatTree {
         Fold(t, k) => case t of {
             Leaf(n) => n >> k,
@@ -50,7 +104,6 @@
 
 \end{lstlisting}
 
-\section{Duo}
 
 % Outline the duo language
 
