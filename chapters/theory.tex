@@ -547,7 +547,8 @@ Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to c
   \BinaryInfC{$s(w) : \Phi(\tau)$}
 \end{prooftree}
 
-For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses like this:
+We give witness derivation rules corresponding to \textsc{CoV}, \textsc{ContraV} and \textsc{InV}.
+In order to construct a witness for a covariant predicate judgement, we need evidence for the judgement about a supertype and evidence that the type is in fact a supertype.
 
 \begin{prooftree}
   \alwaysNoLine
@@ -558,6 +559,8 @@ For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses lik
   \BinaryInfC{$\cov(w,m) : \Phi^+(\tau)$}
 \end{prooftree}
 
+In order to construct a witness for a contravariant predicate judgement, we need evidence for the judgement about a subtype and evidence that the type is in fact a subtype.
+
 \begin{prooftree}
   \alwaysNoLine
   \AxiomC{$w : \Phi^-(\sigma)$}
@@ -566,6 +569,8 @@ For \textsc{CoV}, \textsc{ContraV} and \textsc{InV} we can resolve witnesses lik
   \RightLabel{\textsc{ContraV}}
   \BinaryInfC{$\contrav(w,m) : \Phi^-(\tau)$}
 \end{prooftree}
+
+Finally, in order to construct a witness for an invariant predicate judgement, we need evidence for the judgement about an equivalent type and evidence that the type is in fact equivalent, i.e. both a sub- and a supertype.
 
 \begin{prooftree}
   \AxiomC{$w : \Phi(\sigma)$}
@@ -1209,6 +1214,7 @@ The only case for which intensional type analysis appears superior is for the ca
 \label{sec:dictionaryPassing}
 
 One typical way of implementing type classes is using \emph{dicitonary passing style}.
+To examine this, we look at type classes in Haskell.
 We use an isomorphism between type classes and records:
 E.g. the type class \mintinline{Haskell}{Eq} defined as
 
