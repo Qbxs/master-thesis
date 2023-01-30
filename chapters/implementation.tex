@@ -57,55 +57,79 @@ Similarily, we can define a $\mathit{Summable}$ instance for leaf-oriented trees
 
 \section{Duo}
 
-\begin{lstlisting}[style=duostyle, label=code:duo-example, caption={Example duo code}]
+\emph{Duo} is a research language developed at the University of T\"ubingen. \cite{duo}
+It is a statically typed functional language with an emphasis on duality.
+Unlike most known functional languages its type system is based on sequent calculus style deduction rather than natural deduction.
+Most notably, computation happens as a "cut" using the \lstinline{>>} operator.
 
+\begin{lstlisting}[style=duostyle, label=code:duo-example, captionpos=b, caption={Example duo code}]
+def cmd foo := True >> case {
+    True => #ExitSuccess;
+    False => #ExitFailure
+};
+\end{lstlisting}
 
-    module Class.NatFoldable;
+The nature of \emph{duo} has some special implications for the implementation of type classes as well:
+In class declarations, we have a kind signature for the type variable bound by the declaration.
+Here, we also define the variance of the variable.
+We implement methods as commands.
 
-    import Data.Peano;
-    import Data.Tensor;
+\begin{lstlisting}[style=duostyle, label=code:duo-class-decl, captionpos=b, caption={Type class declaration  in \emph{duo}}]
 
-    -- | The class of nonempty types that can be folded into a natural number.
-    class NatFoldable(+a : CBV){
-        Fold(a, return Nat)
-    };
-
-    instance natTensorFoldable : NatFoldable Tensor(Nat, Nat) {
-        Fold(p, k) => case p of {
-            MkTensor(n, m) => add n m >> k
-        }
-    };
-
-    -- | A non-empty list of natural numbers.
-    data NatList {
-        Singleton(Nat),
-        Cons(Nat, NatList)
-    };
-
-    instance natListFoldable : NatFoldable NatList {
-        Fold(l, k) => case l of {
-            Singleton(n) => n >> k,
-            Cons(n, ns) => Fold(ns, mu x. add x n >> k)
-        }
-    };
-
-    -- | A leaf-oriented tree of natural numbers.
-    data NatTree {
-        Leaf(Nat),
-        Branch(NatTree, NatTree)
-    };
-
-    instance natTreeFoldable : NatFoldable NatTree {
-        Fold(t, k) => case t of {
-            Leaf(n) => n >> k,
-            Branch(l, r) => add (mu k1. Fold(l, k1)) (mu k2. Fold(r, k2)) >> k
-        }
-    };
+class Summable(+a : CBV){
+    Sum(a, return Nat)
+};
 
 \end{lstlisting}
 
+\emph{Duo} supports the usual algebraic data types. Non-empty lists of natural numbers can be defined like this:
+
+\begin{lstlisting}[style=duostyle, label=code:duo-nat-list, captionpos=b, caption={Data declaration for non-empty lists of natural numbers in \emph{duo}}]
+
+data NatList {
+    Singleton(Nat),
+    Cons(Nat, NatList)
+};
+
+\end{lstlisting}
+
+An instance is named, which makes it easier to reference internally.
+In the instance we have to implement each method declared in the class declaration as a command.
+
+\begin{lstlisting}[style=duostyle, label=code:duo-list-instance, captionpos=b, caption={Instance declaration for non-empty lists in \emph{duo}}]
+
+instance natListSummable : Summable NatList {
+    Sum(l, k) => case l of {
+        Singleton(n) => n >> k,
+        Cons(n, ns) => Sum(ns, mu x. add x n >> k)
+    }
+};
+
+\end{lstlisting}
+
+We can also add more instances. For example, for non-empty leaf-oriented binary trees.
+
+\begin{lstlisting}[style=duostyle, label=code:duo-tree-instance, captionpos=b, caption={Type class example  in \emph{duo}}]
+
+data NatTree {
+    Leaf(Nat),
+    Branch(NatTree, NatTree)
+};
+
+instance natTreeSummable : Summable NatTree {
+    Sum(t, k) => case t of {
+        Leaf(n) => n >> k,
+        Branch(l, r) => add (mu k1. Sum(l, k1))
+                            (mu k2. Sum(r, k2)) >> k
+    }
+};
+
+\end{lstlisting}
 
 % Outline the duo language
+Several checks have been implemented to ensure type class coherence in \emph{duo}:
+We disallow any orphan instances by requiring an instance declaration to be placed in the same module as the data or class declaration.
+When declaring an instance, we check for all instances of the same type class in scope whether the overlap with the type the instance is being declared for is empty.
 
 
 \section{Pipeline}
