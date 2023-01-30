@@ -52,19 +52,22 @@ In the case of OO-languages this means that, if the class $\mathit{SubC}$ is a s
 then any method defined in $\mathit{SuperC}$ is also going to be defined for objects of $\mathit{SubC}$.
 This enables us to use an object $\mathit{SubC}$ wherever a $\mathit{SuperC}$ is expected.
 
-We denote $\tau \sub \sigma$ for $\tau$ is a subtype of $\sigma$.
+We denote $\tau \sub \sigma$ for "$\tau$ is a subtype of $\sigma$".
 Syntactically, this implies that if we have obatined the judgement $e : \tau$, we also have $e : \sigma$.
 Therefore, we can use $e$ in any context that expects the usage of a term of type $\sigma$.
 Semantically, the subtyping relation can be understood analogously to sets in terms of the subset relationship $\subseteq$,
 meaning all terms $e$ of type $\tau$ are also of type $\sigma$.
 \cite{reynolds_1998}
 
-This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype.
+This permits many useful features in programming languages such as the reuse and abstraction of code to the supertypes and implicit coercions from a subtype to a supertype, while still being able to use the more refined subtype where it is required.
 
 
-We use the following syntax of types with the simple types of natural numbers $\Nat$, of integers $\Int$, the type of booleans $\Bool$ and the unit type $\Unit$.
+We use the following syntax of types (\ref{fig:type-syntax}) with the simple types of natural numbers $\Nat$, of integers $\Int$, the type of booleans $\Bool$ and the unit type $\Unit$.
 Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which are inhabited by exactly one value respectively, e.g. $1 : \Singleton{1}$.
-Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$:
+Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$.
+$\top$ stands for the greatest type which is a supertype of all other types.
+Dually, $\bot$ is the smallest type which is a subtype of all other types.
+Types constructed by the $\join$ and $\meet$ operators stand for the union and intersection types, respectively.
 
 \begin{figure}[h]
   \begin{flalign*}
