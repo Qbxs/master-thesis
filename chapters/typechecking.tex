@@ -255,12 +255,14 @@ The following outlines how this achieved:
     \node[main] (3) [below right of=1] {$\to$};
     \node[main] (4) [below left of=3] {$\Nat$};
     \node[main] (5) [below right of=3] {$\Nat$};
+    \node[main] (6) [below of=3] {$\Singleton{0}$};
     \draw[->] (1) edge["l"] (2);
     \draw[->] (1) edge["r"] (3);
     \draw[->] (3) edge["l"] (4);
     \draw[->] (3) edge["r"] (5);
+    \draw[->] (3) edge["r"] (6);
   \end{tikzpicture}
-  \caption{Type automaton for $\Singleton{0} \to (\Nat \to \Nat)$}
+  \caption{Type automaton for $\Singleton{0} \to (\Nat \to \Singleton{0} \join \Nat)$}
   \label{fig:example-type-automaton}
 \end{figure}
 

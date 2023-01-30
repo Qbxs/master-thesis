@@ -943,8 +943,11 @@ Using witnesses we may formalize type class coherence:
   Type class resolution is coherent if and only if for any pair of witnesses $i,j : \Phi(\tau)$ that witness the same predicate application we have $i \opeq j$.
 \end{definition}
 
-TODO: Define operational equality $\opeq$
+We can define operational equality $\opeq$ simply as two witnesses of a predicate application containing the same leaf, i.e. the same instance.
+Therefore, the usage of these witnesses can always be expected to behave in the same way.
 Witnesses always point to exactly one instance definition. Thus, it is sufficient show that for any pair of witnesses the leaf (i.e. the instance) is the same.
+
+\subsection{Consequences}
 
 Following this there are some constraints we have to impose on type class resolution.
 Generally, if there is an instance declaration for $\Psi(\tau)$ and if $\tau \sub \sigma$ or $\sigma \sub \tau$ there cannot be another instance declaration for $\Psi(\sigma)$.
@@ -1003,6 +1006,16 @@ Instead of the first derivation we may also use the following additionally using
 Since the derivation rules for qualified types do not branch, there will always be exactly one leaf in the derivation rule given as an instance declaration.
 Thus it suffices to show that for every judgement there  may be multiple witnesses but the corresponding instance declaration is unique.
 To achieve this, instances must be non-overlapping.
+
+Additionally, in some systems with subtyping there may be overlapping types which are not themselves in a subtyping relation with each other.
+In our type system, an example for this would be the types $\Singleton{0} \join \Singleton{1}$ and $\Singleton{1} \join \Singleton{2}$.
+Given $\Phi(\Singleton{0} \join \Singleton{1})$ and $\Phi(\Singleton{1} \join \Singleton{2})$, the judgement $\Phi(\Singleton{1})$ could be derived in two ways.
+In order to maintain coherence in this case, we have to ensure that witnesses for these judgements are derived from a common instance.
+We can not, however, declare an instance for both types individually.
+
+Generally, a global restriction follows when declaring instances:
+There may not be an instance for an overlapping type in scope.
+How this can be checked algorithmically is presented in chapter \ref{ch:type-system}.
 
 \section{Inclusive Subtyping}
 
