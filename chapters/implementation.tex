@@ -14,9 +14,8 @@ We introduce the type class $\mathit{Summable}$ of types which can be summed up 
 We can implement this type class for pairs of natural  numbers by simply adding up the components.
 
 \begin{flalign*}
-& \mathbf{instance} \; \mathit{Summable} \; \mathit{Pair}(\Nat,\Nat) \{ \\
-& \;\;\; \mathbf{sum} := \lambda p. \mathbf{case} \; p \; of \\
-& \;\;\;\;\; (n,m) \Rightarrow n+m \\
+& \mathbf{instance} \; \mathit{Summable} \; \Nat \{ \\
+& \;\;\; \mathbf{sum} := \mathbf{id} \\
 & \}
 \end{flalign*}
 
@@ -60,7 +59,9 @@ Similarily, we can define a $\mathit{Summable}$ instance for leaf-oriented trees
 \emph{Duo} is a research language developed at the University of T\"ubingen. \cite{duo}
 It is a statically typed functional language with an emphasis on duality.
 Unlike most known functional languages its type system is based on sequent calculus style deduction rather than natural deduction.
-Most notably, computation happens as a "cut" using the \lstinline{>>} operator.
+Most notably, computation happens as a "cut" between producer and consumer terms using the \lstinline{>>} operator.
+
+E.g. in the program in listing \ref{code:duo-example} the producer \lstinline{True} is matched against a consumer, i.e. a pattern-match on booleans, which simply exits the program.
 
 \begin{lstlisting}[style=duostyle, label=code:duo-example, captionpos=b, caption={Example duo code}]
 def cmd foo := True >> case {
@@ -82,21 +83,23 @@ class Summable(+a : CBV){
 
 \end{lstlisting}
 
+An instance is named, which makes it easier to reference internally.
+In the instance we have to implement each method declared in the class declaration as a command.
+
+\begin{lstlisting}[style=duostyle, label=code:duo-nat-list, captionpos=b, caption={Instance declaration for natural numbers in \emph{duo}}]
+instance natSummable : Summable Nat {
+    Sum(n, k) => n >> k
+};
+\end{lstlisting}
+
 \emph{Duo} supports the usual algebraic data types. Non-empty lists of natural numbers can be defined like this:
 
-\begin{lstlisting}[style=duostyle, label=code:duo-nat-list, captionpos=b, caption={Data declaration for non-empty lists of natural numbers in \emph{duo}}]
+\begin{lstlisting}[style=duostyle, label=code:duo-nat-list, captionpos=b, caption={Data and instance declaration for non-empty lists of in \emph{duo}}]
 
 data NatList {
     Singleton(Nat),
     Cons(Nat, NatList)
 };
-
-\end{lstlisting}
-
-An instance is named, which makes it easier to reference internally.
-In the instance we have to implement each method declared in the class declaration as a command.
-
-\begin{lstlisting}[style=duostyle, label=code:duo-list-instance, captionpos=b, caption={Instance declaration for non-empty lists in \emph{duo}}]
 
 instance natListSummable : Summable NatList {
     Sum(l, k) => case l of {
