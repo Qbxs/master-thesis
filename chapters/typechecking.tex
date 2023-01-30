@@ -2,6 +2,11 @@
 \label{ch:type-system}
 % explain type inference with algebraic subtyping/bounds/bisubstitutions
 
+\section{Type Annotations}
+
+In order to simplify instance resolution, we use type annotations for type class method calls.
+That means, that we instantiate a suitable type for 
+
 \section{Typing Rules}
 
 \begin{figure}[h]
@@ -15,7 +20,7 @@
 
         \AxiomC{}
         \RightLabel{\textsc{T-String}}
-        \UnaryInfC{$\ctx "[a-zA-Z]^*" : \mathit{String}$}
+        \UnaryInfC{$\ctx "[a-zA-Z]^*" : \String$}
         \DisplayProof
 
         {\vskip.2in}
@@ -64,7 +69,7 @@ $w$ is the implicit witness for the type class constraint $\Showable(\tau)$ whic
 $k$ is the continuation that is passed to the type class method.
 
 Generally we generate constraints between the types introduced in the class declaration of the method and the unification variables generated for its arguments.
-In this case $\mathbf{show}$ is implemented in continuation passing style, so apart from the argument to be shown $x$, there is continutation $k$ which consumes the $\mathit{String}$ output.
+In this case $\mathbf{show}$ is implemented in continuation passing style, so apart from the argument to be shown $x$, there is continutation $k$ which consumes the $\String$ output.
 The argument $w$ is implicit and stands for the inferred witness of the type class.
 At compilation it will be filled with a resolved instance, so that the evaluation of the metod is well defined.
 

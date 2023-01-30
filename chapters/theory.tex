@@ -901,7 +901,7 @@ The context is replaced with an instance declaration which forms the leaf in the
   \begin{subfigure}{0.4\textwidth}
     \begin{flalign*}
        & \instance{\Showable}{\Nat} :                                                         \\
-       & \; \; \mathit{show} : \Nat \to \mathit{String}                                       \\
+       & \; \; \mathit{show} : \Nat \to \String                                       \\
        & \; \; \mathit{show} \; x := \caseof{x}                                               \\
        & \; \; \; \; Z \Rightarrow \mathit{"Z"}                                               \\
        & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
@@ -911,7 +911,7 @@ The context is replaced with an instance declaration which forms the leaf in the
   \begin{subfigure}{0.4\textwidth}
     \begin{flalign*}
        & \instance{\Showable}{\Nat} :                                                         \\
-       & \; \; \mathit{show} : \Nat \to \mathit{String}                                       \\
+       & \; \; \mathit{show} : \Nat \to \String                                       \\
        & \; \; \mathit{show} \; x := \caseof{x}                                               \\
        & \; \; \; \; Z \Rightarrow \mathit{"0"}                                               \\
        & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
@@ -1123,7 +1123,7 @@ Therefore, these non-derivable rules cannot be used for type class resolution.
 %   \begin{subfigure}{0.4\textwidth}
 %   \begin{flalign*}
 %   & \instance{\Readable}{\Nat} : \\
-%   & \; \; \mathit{read} : \mathit{String} \to \Nat \\
+%   & \; \; \mathit{read} : \String \to \Nat \\
 %   & \; \; \mathit{read} \; str := \; 0
 %   \end{flalign*}
 %   \end{subfigure}
@@ -1131,7 +1131,7 @@ Therefore, these non-derivable rules cannot be used for type class resolution.
 %   \begin{subfigure}{0.4\textwidth}
 %   \begin{flalign*}
 %   & \instance{\Readable}{\Int} : \\
-%   & \; \; \mathit{read} : \mathit{String} \to \Int \\
+%   & \; \; \mathit{read} : \String \to \Int \\
 %   & \; \; \mathit{read} \; str := \; 1
 %   \end{flalign*}
 %   \end{subfigure}
