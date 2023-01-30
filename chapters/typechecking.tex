@@ -231,3 +231,45 @@ This enables us to use all known algorithm that operate on finite state automata
 As an expansion for type automata we introduced constrained nodes.
 Any node can now be annotated by a set of type classes representing type class constraints.
 With this addition we have to consider how to merge nodes, as simplification should not impose any additional constraints.
+
+\subsection{Emptiness Check}
+
+Dolan \cite{downen2017phd} has shown how we can translate types to type automata in order to simplify inferred types.
+These type automata are a form of finite automata, so all the standard algorithms for finite automata (such as determinisation, minimisation) can be performed on them.
+Originally, this strategy was used to syntactically simplify inferred types but it opens up other possibilities.
+
+By translating types for which we want to check for an overlap, we can construct an intersection automaton using the standard algorithm for intersections of finite automata.
+All that is left to do from there, is to check whether the resulting automaton accepts the empty language,  i.e. no final state is reachable from the start state.\
+The following outlines how this achieved:
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[node distance={25mm}, main/.style = {draw, circle}]
+    \node[main] (1) {$\to$};
+    \node[main] (2) [below left of=1] {$\Singleton{0}$};
+    \node[main] (3) [below right of=1] {$\to$};
+    \node[main] (4) [below left of=3] {$\Nat$};
+    \node[main] (5) [below right of=3] {$\Nat$};
+    \draw[->] (1) edge["l"] (2);
+    \draw[->] (1) edge["r"] (3);
+    \draw[->] (3) edge["l"] (4);
+    \draw[->] (3) edge["r"] (5);
+  \end{tikzpicture}
+  \caption{Type automaton for $\Singleton{0} \to (\Nat \to \Nat)$}
+  \label{fig:example-type-automaton}
+\end{figure}
+
+\begin{itemize}
+  \item We create a type automaton $G = (q_0, N, E, \delta)$
+  \item We construct the intersection automaton as $G_\cap = \dots$
+  \item We check whether $G_\cap$ accepts the empty language, i.e. represents the empty type $\bot$
+\end{itemize}
+
+\subsubsection{Constructing type automata}
+\subsubsection{Minimizing type automata}
+
+
+\subsection{Rest}
+We should always check in an instance declaration whether this constraint globally holds. \\
+To guarantee modularity we also have to check this for module imports, but since even the import of functions using different instances for the same type can lead to incoherences, we have to rule out any declaration of orphan instances.
+\cite{Kilpatrick2019-cy}.
