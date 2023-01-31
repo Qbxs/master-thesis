@@ -14,9 +14,8 @@ We introduce the type class $\mathit{Summable}$ of types which can be summed up 
 We can implement this type class for pairs of natural  numbers by simply adding up the components.
 
 \begin{flalign*}
-& \mathbf{instance} \; \mathit{Summable} \; \mathit{Pair}(\Nat,\Nat) \{ \\
-& \;\;\; \mathbf{sum} := \lambda p. \mathbf{case} \; p \; of \\
-& \;\;\;\;\; (n,m) \Rightarrow n+m \\
+& \mathbf{instance} \; \mathit{Summable} \; \Nat \{ \\
+& \;\;\; \mathbf{sum} := \mathbf{id} \\
 & \}
 \end{flalign*}
 
@@ -57,55 +56,83 @@ Similarily, we can define a $\mathit{Summable}$ instance for leaf-oriented trees
 
 \section{Duo}
 
-\begin{lstlisting}[style=duostyle, label=code:duo-example, caption={Example duo code}]
+\emph{Duo} is a research language developed at the University of T\"ubingen. \cite{duo}
+It is a statically typed functional language with an emphasis on duality.
+Unlike most known functional languages its type system is based on sequent calculus style deduction rather than natural deduction.
+Most notably, computation happens as a "cut" between producer and consumer terms using the \lstinline{>>} operator.
 
+E.g. in the program in listing \ref{code:duo-example} the producer \lstinline{True} is matched against a consumer, i.e. a pattern-match on booleans, which simply exits the program.
 
-    module Class.NatFoldable;
+\begin{lstlisting}[style=duostyle, label=code:duo-example, captionpos=b, caption={Example duo code}]
+def cmd foo := True >> case {
+    True => #ExitSuccess;
+    False => #ExitFailure
+};
+\end{lstlisting}
 
-    import Data.Peano;
-    import Data.Tensor;
+The nature of \emph{duo} has some special implications for the implementation of type classes as well:
+In class declarations, we have a kind signature for the type variable bound by the declaration.
+Here, we also define the variance of the variable.
+We implement methods as commands.
 
-    -- | The class of nonempty types that can be folded into a natural number.
-    class NatFoldable(+a : CBV){
-        Fold(a, return Nat)
-    };
+\begin{lstlisting}[style=duostyle, label=code:duo-class-decl, captionpos=b, caption={Type class declaration  in \emph{duo}}]
 
-    instance natTensorFoldable : NatFoldable Tensor(Nat, Nat) {
-        Fold(p, k) => case p of {
-            MkTensor(n, m) => add n m >> k
-        }
-    };
-
-    -- | A non-empty list of natural numbers.
-    data NatList {
-        Singleton(Nat),
-        Cons(Nat, NatList)
-    };
-
-    instance natListFoldable : NatFoldable NatList {
-        Fold(l, k) => case l of {
-            Singleton(n) => n >> k,
-            Cons(n, ns) => Fold(ns, mu x. add x n >> k)
-        }
-    };
-
-    -- | A leaf-oriented tree of natural numbers.
-    data NatTree {
-        Leaf(Nat),
-        Branch(NatTree, NatTree)
-    };
-
-    instance natTreeFoldable : NatFoldable NatTree {
-        Fold(t, k) => case t of {
-            Leaf(n) => n >> k,
-            Branch(l, r) => add (mu k1. Fold(l, k1)) (mu k2. Fold(r, k2)) >> k
-        }
-    };
+class Summable(+a : CBV){
+    Sum(a, return Nat)
+};
 
 \end{lstlisting}
 
+An instance is named, which makes it easier to reference internally.
+In the instance we have to implement each method declared in the class declaration as a command.
+
+\begin{lstlisting}[style=duostyle, label=code:duo-nat-list, captionpos=b, caption={Instance declaration for natural numbers in \emph{duo}}]
+instance natSummable : Summable Nat {
+    Sum(n, k) => n >> k
+};
+\end{lstlisting}
+
+\emph{Duo} supports the usual algebraic data types. Non-empty lists of natural numbers can be defined like this:
+
+\begin{lstlisting}[style=duostyle, label=code:duo-nat-list, captionpos=b, caption={Data and instance declaration for non-empty lists of in \emph{duo}}]
+
+data NatList {
+    Singleton(Nat),
+    Cons(Nat, NatList)
+};
+
+instance natListSummable : Summable NatList {
+    Sum(l, k) => case l of {
+        Singleton(n) => n >> k,
+        Cons(n, ns) => Sum(ns, mu x. add x n >> k)
+    }
+};
+
+\end{lstlisting}
+
+We can also add more instances. For example, for non-empty leaf-oriented binary trees.
+
+\begin{lstlisting}[style=duostyle, label=code:duo-tree-instance, captionpos=b, caption={Type class example  in \emph{duo}}]
+
+data NatTree {
+    Leaf(Nat),
+    Branch(NatTree, NatTree)
+};
+
+instance natTreeSummable : Summable NatTree {
+    Sum(t, k) => case t of {
+        Leaf(n) => n >> k,
+        Branch(l, r) => add (mu k1. Sum(l, k1))
+                            (mu k2. Sum(r, k2)) >> k
+    }
+};
+
+\end{lstlisting}
 
 % Outline the duo language
+Several checks have been implemented to ensure type class coherence in \emph{duo}:
+We disallow any orphan instances by requiring an instance declaration to be placed in the same module as the data or class declaration.
+When declaring an instance, we check for all instances of the same type class in scope whether the overlap with the type the instance is being declared for is empty.
 
 
 \section{Pipeline}
