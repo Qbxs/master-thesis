@@ -105,6 +105,18 @@ Therefore, no fresh variables will be generated at this point.
 Instead, we use the annotated type to resolve a fitting instance for the type class constraint.
 In section (TODO) we discuss why generating fresh unification variables at this point is challenging.
 
+\begin{figure}[h]
+    \centering
+    \AxiomC{$\ctx w : \Phi(\tau)$}
+    \AxiomC{$\ctx x_1 : \tau_1$}
+    \AxiomC{$\ctx x_n : \tau_n$}
+    \RightLabel{\textsc{T-Class}$^+$}
+    \TrinaryInfC{$\ctx \mathbf{m} [\tau] w \; x_1 \dots x_n : \sigma$}
+    \DisplayProof
+    \caption{Typing rule for covariant type classes}
+    \label{fig:cov-typing}
+\end{figure}
+
 Outlined below is the algorithm used to infer a principle(?) type for any given term without the presence of type classes.
 We will then examine, which alterations need to be done in order to achieve the same with the addition of type class constraints.
 

@@ -286,7 +286,28 @@ E.g. every natural number is also an integer and therefore the type $\Nat$ of na
 If we omit subtyping, we have to give explicit coercion functions (e.g. $\mathbf{coerce} : \Nat \to \Int$) whenever the expected type is more general than the given type.
 Subtyping allows us to pass such more specific arguments in a more natural way and makes coercions implicit.
 
-\section{Ad-hoc polymorphism}\label{sec:ad-hoc-polymorphism}
+\subsection{Polar types}
+\label{sec:polar-types}
+
+If we want to use lattice types for type inference (like in section \ref{sec:type-inference}), we have to consider where lattice types can occur.
+Generally, union types and the $\bot$ type can only occur in output positions, while intersection types and the $\top$ type can only occur in inout positions. \cite{dolan2017subtyping}
+Therefore, we introduce \emph{polar types} as a means to distinguish positive types (for outputs) and negative types (for inputs).
+Since functions are covariant in their output and contravariant in their input, the polarity of types in the input position is flipped.
+Nominal types can occur both in positive and negative positions.
+
+\begin{figure}
+  \begin{flalign*}
+    \tau^+ := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
+              & \; \bot \; | \; \tau_1^+ \join \tau_2^+ \; | \; \tau_1^- \to \tau_2^+ \; | \; \mu\alpha.\tau^+ \; | \; \alpha                                 \\
+    \tau^- := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
+              & \; \top \; | \; \tau_1^- \meet \tau_2^- \; | \; \tau_1^+ \to \tau_2^- \; | \; \mu\alpha.\tau^- \; | \; \alpha                                                                         
+  \end{flalign*}
+  \caption{The syntax of polar types}
+  \label{fig:polar-type-syntax}
+\end{figure}
+
+\section{Ad-hoc polymorphism}
+\label{sec:ad-hoc-polymorphism}
 % overloading vs type classes
 % paper by wadler
 
