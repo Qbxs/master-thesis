@@ -2,10 +2,18 @@
 \label{ch:type-system}
 % explain type inference with algebraic subtyping/bounds/bisubstitutions
 
+Using the resolution rules for qualified types in chaprter \ref{ch:qualified-types}, we present typing rules and type inference for the presented language extended with type classes.
+
 \section{Type Annotations}
 
 In order to simplify instance resolution, we use type annotations for type class method calls.
-That means, that we instantiate a suitable type for 
+That means, that we instantiate a suitable type when invoking a type class method.
+Resolution still takes place, so the annotated type does not have to much the type of any instance.
+$$
+\mathbf{show} \; [\Nat] \; 42
+$$
+
+In a context with e.g. $\Showable(\Int)$ a suitable instance will be resolved for the invocation.
 
 \section{Typing Rules}
 
@@ -244,6 +252,7 @@ As Dolan has shown \cite{dolan2017subtyping} types can be translated into type a
 This enables us to use all known algorithm that operate on finite state automata on types, especially determinisation and minimisation.
 
 \subsubsection{Constrained Nodes}
+% no sense if we resolve type classes straight-forward
 
 As an expansion for type automata we introduced constrained nodes.
 Any node can now be annotated by a set of type classes representing type class constraints.

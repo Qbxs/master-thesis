@@ -290,8 +290,12 @@ Subtyping allows us to pass such more specific arguments in a more natural way a
 \label{sec:polar-types}
 
 If we want to use lattice types for type inference (like in section \ref{sec:type-inference}), we have to consider where lattice types can occur.
-Generally, union types and the $\bot$ type can only occur in output positions, while intersection types and the $\top$ type can only occur in inout positions. \cite{dolan2017subtyping}
-Therefore, we introduce \emph{polar types} as a means to distinguish positive types (for outputs) and negative types (for inputs).
+Generally, union types and the $\bot$ type can only occur in output positions and describe upper bounds.
+Intersection types and the $\top$ type on the other hand  can only occur in inout positions and describe lower bounds. \cite{dolan2017subtyping}
+The motivation for this can be given as follows: Consider a function that accepts two types as inputs and may return two types as output.
+Since the function is assumed to be total any input needs to be of both types (i.e. of the intersection of both types) and the output can be either type (i.e. the union of both types).
+
+Therefore, we introduce \emph{polar types} in fig. \ref{fig:polar-type-syntax} as a means to distinguish positive types (for outputs) and negative types (for inputs).
 Since functions are covariant in their output and contravariant in their input, the polarity of types in the input position is flipped.
 Nominal types can occur both in positive and negative positions.
 
