@@ -135,12 +135,39 @@ We disallow any orphan instances by requiring an instance declaration to be plac
 When declaring an instance, we check for all instances of the same type class in scope whether the overlap with the type the instance is being declared for is empty.
 
 
-\section{Pipeline}
+\section{Refinement Types}
+\label{sec:refinement-types}
 
-% explain, how to get from the surface syntax to a typechecked runnable program
-% parsing, resolution, desugaring, constraint generation, solving, instance resolution
+Refinement types can be viewed as a specialisation of nominal types.
+Using them, we can impose additional constraints on types and therefore obtain a more precise typing judgement. \cite{springer} %FIXME wrong citation
+In \emph{duo} refinement types are declared very similarily as nominal types:
 
-\section{Remarks}
+\begin{lstlisting}[style=duostyle, label=code:duo-refinement-declaration, captionpos=b, caption={Refinement type of peano numbers in \emph{duo}}]
 
-% Outline the interaction between type classes and miscelleanous language features
-% e.g. refinement types
+refinement data Nat {
+    Z,
+    S(Nat)
+};
+
+\end{lstlisting}
+
+The type inference algorithm in duo is expanded to refinement types and therefore able to infer very precise types for terms.
+As we can see in listing \ref{code:duo-refinement-example} the type for the simple term \lstinline{Z} reflects that it can only be constructed by \lstinline{Z}, therefore we know from looking at the type alone, that the only value of this term can be zero.
+We also need recursive types to allow recursive refinement types as seen in \lstinline{double}.
+Here we can see that any natural number is permitted as input but only numbers constructed by an even number of \lstinline{S} constructors will be in the output.
+In this case refinement types can assure us that this function will only produce even numbers.
+
+\begin{lstlisting}[style=duostyle, label=code:duo-refinement-example, captionpos=b, caption={Type inference for refinement types in \emph{duo}}]
+
+def rec prd zero : < Nat | Z > := Z;
+
+def rec prd double : (rec a.(<Nat | Z, S(a)>))
+                  -> (rec a.(<Nat | Z, S(< Nat | S(a)>)>))
+    := \n => case n of {
+      Z => Z,
+      S(n) => S(S(double n))
+    };
+    
+\end{lstlisting}
+
+% TODO: bring type classes and refinement types together
