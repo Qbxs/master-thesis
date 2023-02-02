@@ -39,7 +39,7 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
 
 With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules:
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
     \AxiomC{$\ctx \Phi^+(\top)$}
     \AxiomC{}
@@ -159,7 +159,7 @@ From the definition of contravariant predicates it follows that $\phi$ holds for
 
 With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can again derive several useful rules:
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
     \AxiomC{$\ctx \Phi^-(\tau)$}
     \AxiomC{}
@@ -331,7 +331,7 @@ Let context $\Gamma := \{ \Showable(\Int), \Defaultable(\Nat),  \Monoid(\Nat) \}
 We obtain the following derivations for $\Showable(\Singleton{1} \meet \Nat)$:
 We can interpret the derivation in fig. \ref{fig:example-showable} as a proof for \emph{Given a way to show an integer, we can also show anything that is both a natural number and of the singleton type $\Singleton{1}$} and
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{prooftree}
     \AxiomC{}
     \RightLabel{\textsc{Axiom}}
@@ -349,7 +349,7 @@ Using $\Gamma$ from above, we can derive $\Showable(\Singleton{1} \meet \Nat)$ (
 In natural language this proves that \emph{given a default value for $\Nat$, we also obtain a default value for the union of $\Int$ and $\Bool$}
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{prooftree}
     \AxiomC{}
     \RightLabel{\textsc{Axiom}}
@@ -367,7 +367,7 @@ In natural language this proves that \emph{given a default value for $\Nat$, we 
 Finally, again using $\Gamma$ defined above, we can prove judgements for invariant predicates for non syntactically equal types.
 The derivation in fig. \ref{fig:example-monoid} combines the \textsc{InV}-rule with a proof that $\Nat$ and $\Nat \join \Singleton{1}$ are equivalent to prove that we can derive $\Monoid(\Nat \join \Singleton{1})$ from $\Monoid(\Nat)$.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{prooftree}
     \AxiomC{}
     \RightLabel{\textsc{Axiom}}
@@ -404,7 +404,7 @@ Constructing witnesses directly corresponds to type class resolution if we inter
 Multiple witnesses can be derived for the same judgement but in order to preserve type class coherence they have to satsify some form of equivalence.
 We again differentiate co-, contra-  and invariant type classes in order to transport type classes over the subtyping relation.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   % refl
   \begin{prooftree}
     \AxiomC{}
@@ -504,7 +504,7 @@ We again differentiate co-, contra-  and invariant type classes in order to tran
 
 We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \[
     \begin{tikzcd}
       & \tau \meet \sigma \arrow[lddd, "proj_1"'] \arrow[rddd, "proj_2"] & \\
@@ -581,7 +581,7 @@ Finally, in order to construct a witness for an invariant predicate judgement, w
 \end{prooftree}
 
 % macros
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
     \AxiomC{$w : \Phi^+(\top)$}
     \AxiomC{}
@@ -677,7 +677,7 @@ Finally, in order to construct a witness for an invariant predicate judgement, w
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
     \AxiomC{$w : \Phi^-(\tau)$}
     \AxiomC{}
@@ -862,7 +862,7 @@ Finally, in order to construct a witness for an invariant predicate judgement, w
 We present witness derivations for the examples in the previous section.
 The context is replaced with an instance declaration which forms the leaf in the derivation.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{prooftree}
     \AxiomC{$w : \mathbf{instance} \; \Showable(\Int)$}
     \RightLabel{\textsc{Decl}}
@@ -879,7 +879,7 @@ The context is replaced with an instance declaration which forms the leaf in the
   \label{fig:witness-example-showable}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{prooftree}
     \AxiomC{$w : \mathbf{instance} \; \Defaultable(\Nat)$}
     \RightLabel{\textsc{Decl}}
@@ -901,7 +901,7 @@ The context is replaced with an instance declaration which forms the leaf in the
 \subsection{Motivation}
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \begin{subfigure}{0.4\textwidth}
     \begin{flalign*}
@@ -1136,7 +1136,7 @@ Therefore, these non-derivable rules cannot be used for type class resolution.
 % Consider the following instances for $\Readable(\Nat)$ and $\Readable(\Int)$:
 
 
-% \begin{figure}[h]
+% \begin{figure}[ht]
 %   \centering
 %   \begin{subfigure}{0.4\textwidth}
 %   \begin{flalign*}
