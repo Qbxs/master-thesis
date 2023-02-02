@@ -1,0 +1,247 @@
+\chapter{The Lattice of Types}
+\label{ch:lattice}
+
+\section{Terms}
+\label{sec:terms}
+
+\begin{figure}[ht]
+  \begin{flalign*}
+    e := & \; x \; | \; y \; | \; z \; | \; \dots                                        & \textit{Variables} \\
+         & \; 0 \; | \; 1 \; | \; 2 \; | \; \dots                                        & \textit{Numeric Literals} \\
+         & \; \mathit{"foo"} \; | \; \mathit{"bar"} \; | \; \mathit{"baz"} \; | \; \dots & \textit{String Literals} \\
+         & \; \lambda x.e                                                                & \textit{Lambda abstractions} \\
+         & \; e_1e_2                                                                     & \textit{Function applications}
+  \end{flalign*}
+  \caption{The syntax of terms}
+  \label{fig:term-syntax}
+\end{figure}
+
+\section{Types}
+\label{sec:types}
+
+We use the following syntax of types (\ref{fig:type-syntax}) with the simple types of natural numbers $\Nat$, of integers $\Int$, the type of booleans $\Bool$ and the unit type $\Unit$.
+Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which are inhabited by exactly one value respectively, e.g. $1 : \Singleton{1}$.
+Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$.
+$\top$ stands for the greatest type which is a supertype of all other types.
+Dually, $\bot$ is the smallest type which is a subtype of all other types.
+Types constructed by the $\join$ and $\meet$ operators stand for the union and intersection types, respectively.
+
+\begin{figure}[ht]
+  \begin{flalign*}
+    ts          := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes}             \\
+    \tau,\sigma := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String         & \textit{Simple types}             \\
+                   & \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots  & \textit{Singleton types}          \\
+                   & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types}            \\
+                   & \; \tau \to \sigma                                                       & \textit{Function types}           \\
+    % remove recursive types
+                   & \; \mu\alpha.\tau                                                        & \textit{Recursive types}          \\
+                   & \; \alpha                                                                & \textit{Recursive type variables}
+  \end{flalign*}
+  \caption{The syntax of types}
+  \label{fig:type-syntax}
+\end{figure}
+
+\subsection{Extensible Record Types}
+\label{sec:record-types}
+
+\subsection{Subtyping Rules}
+\label{sec:subtyping-rules}
+
+The subtyping lattice is defined by the following derivation rules where $\tau$, $\sigma$ and $\rho$ are meta variables for types.
+
+% elim rules are derivable
+\begin{figure}[ht]
+  % refl
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Refl}}
+    \UnaryInfC{$\tau \sub \tau$}
+  \end{prooftree}
+
+  % trans
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma$}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{Trans}}
+    \BinaryInfC{$\tau \sub \rho$}
+  \end{prooftree}
+
+  % top/bot
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{Top}}
+    \UnaryInfC{$\tau \sub \top$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{Bot}}
+    \UnaryInfC{$\bot \sub \tau$}
+    \DisplayProof
+  \end{center}
+
+  % join intro
+  \begin{center}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_1$}
+    \UnaryInfC{$\tau \sub \sigma \join \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_2$}
+    \UnaryInfC{$\tau \sub \rho \join \sigma$}
+    \DisplayProof
+  \end{center}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \rho$}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{JoinI}}
+    \BinaryInfC{$\tau \join \sigma \sub \rho$}
+  \end{prooftree}
+
+  % meet intro
+  \begin{center}
+    \AxiomC{$\tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_1$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_2$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+  \end{center}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \rho$}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{MeetI}}
+    \BinaryInfC{$\tau \sub \sigma \meet \rho$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\tau' \sub \tau$}
+    \AxiomC{$\sigma \sub \sigma'$}
+    \RightLabel{\textsc{Func}}
+    \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
+  \end{prooftree}
+
+  % recursive types
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{Rec}$_1$}
+    \UnaryInfC{$\mu\rho.\tau \sub \tau [\mu\rho.\tau\ / \rho]$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{Rec}$_2$}
+    \UnaryInfC{$\tau[\mu\rho.\tau / \rho] \sub \mu\rho.\tau$}
+    \DisplayProof
+  \end{center}
+
+  \caption{Subtyping rules}
+  \label{fig:subtyping}
+\end{figure}
+
+Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules:
+
+\begin{figure}[ht]
+  % join elim
+  \begin{center}
+    \AxiomC{$\tau \join \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinE}$_1$}
+    \UnaryInfC{$\tau \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \join \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinE}$_2$}
+    \UnaryInfC{$\sigma \sub \rho$}
+    \DisplayProof
+  \end{center}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma \join \rho$}
+    \AxiomC{$\sigma \sub \upsilon$}
+    \AxiomC{$\rho \sub \upsilon$}
+    \RightLabel{\textsc{JoinE}}
+    \TrinaryInfC{$\tau \sub \upsilon$}
+  \end{prooftree}
+
+  % meet elim
+  \begin{center}
+    \AxiomC{$\tau \sub \sigma \meet \rho$}
+    \RightLabel{\textsc{MeetE}$_1$}
+    \UnaryInfC{$\tau \sub \sigma$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \sub \rho \meet \sigma$}
+    \RightLabel{\textsc{MeetE}$_2$}
+    \UnaryInfC{$\tau \sub \sigma$}
+    \DisplayProof
+  \end{center}
+
+  \begin{center}
+    \AxiomC{$\tau \meet \sigma \sub \rho$}
+    \AxiomC{$\sigma \sub \upsilon$}
+    \RightLabel{\textsc{MeetE}}
+    \BinaryInfC{$\tau \sub \upsilon$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \meet \sigma \sub \rho$}
+    \AxiomC{$\tau \sub \upsilon$}
+    \RightLabel{\textsc{MeetE}}
+    \BinaryInfC{$\sigma \sub \upsilon$}
+    \DisplayProof
+  \end{center}
+
+
+  \caption{Derived subtyping rules}
+  \label{fig:subtypingDerived}
+\end{figure}
+
+
+Finally, we can add primitive rules (Fig. \ref{fig:prim-sub-rules}).
+We want to express that every natural number is also an integer and therefore introduce a corresponding rule, as well as a rule for the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}$ to be subtypes of $\Nat$:
+
+\begin{figure}
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{NatPrim}}
+    \UnaryInfC{$\Nat \sub \Int$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{SingletonPrim}}
+    \UnaryInfC{$\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots \sub \Nat$}
+    \DisplayProof
+  \end{center}
+
+  \caption{Primitve subtyping rules}
+  \label{fig:prim-sub-rules}
+\end{figure}
+
+
+\subsection{Polarity}
+\label{sec:polarity}
+
+
+If we want to use lattice types for type inference (like in section \ref{sec:type-inference}), we have to consider where lattice types can occur.
+Generally, union types and the $\bot$ type can only occur in output positions and describe upper bounds.
+Intersection types and the $\top$ type on the other hand  can only occur in inout positions and describe lower bounds. \cite{dolan2017subtyping}
+The motivation for this can be given as follows: Consider a function that accepts two types as inputs and may return two types as output.
+Since the function is assumed to be total any input needs to be of both types (i.e. of the intersection of both types) and the output can be either type (i.e. the union of both types).
+
+Therefore, we introduce \emph{polar types} in fig. \ref{fig:polar-type-syntax} as a means to distinguish positive types (for outputs) and negative types (for inputs).
+Since functions are covariant in their output and contravariant in their input, the polarity of types in the input position is flipped.
+Nominal types can occur both in positive and negative positions.
+
+\begin{figure}
+  \begin{flalign*}
+    \tau^+ := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
+              & \; \bot \; | \; \tau_1^+ \join \tau_2^+ \; | \; \tau_1^- \to \tau_2^+ \; | \; \mu\alpha.\tau^+ \; | \; \alpha                                 \\
+    \tau^- := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
+              & \; \top \; | \; \tau_1^- \meet \tau_2^- \; | \; \tau_1^+ \to \tau_2^- \; | \; \mu\alpha.\tau^- \; | \; \alpha                                                                         
+  \end{flalign*}
+  \caption{The syntax of polar types}
+  \label{fig:polar-type-syntax}
+\end{figure}
