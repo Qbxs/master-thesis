@@ -1,10 +1,11 @@
-\chapter{Polymorphism}\label{ch:polymorphism}
+\chapter{Polymorphism}
+\label{ch:polymorphism}
 
 Polymorphism is a general concept in programming languages to abstract code and hide implementation details.
 In order to generalize functions over data types there have been several proposals to abstract over types in different programming languages:
 These can be summarised in three categories: parametric polymorphism, subtyping and ad-hoc polymorphism.
 Each of these have a reasoning principle associated with them.
-In this chapter, we want to examine the different forms of polymorphism and how mixing them affects our ability to reason about them.
+In this chapter, we want to examine the different forms of polymorphism in Java and Haskell and how mixing them affects our ability to reason about them.
 
 \section{Parametric polymorphism}\label{sec:parmetric-polymorphism}
 
@@ -52,6 +53,36 @@ In the case of OO-languages this means that, if the class $\mathit{SubC}$ is a s
 then any method defined in $\mathit{SuperC}$ is also going to be defined for objects of $\mathit{SubC}$.
 This enables us to use an object $\mathit{SubC}$ wherever a $\mathit{SuperC}$ is expected.
 
+As an example, in listing \ref{code:java-example} there are three Java classes.
+The classes \mintinline{Java}{Circle} and \mintinline{Java}{Square} are both subtypes of the class \mintinline{Java}{Shape}.
+They inherit all properties of their superclass and therefore all operations that can be done on a \mintinline{Java}{Shape} can also be done on a \mintinline{Java}{Circle} or a \mintinline{Java}{Square}.
+
+\begin{code}
+\captionof{listing}{Subtyping in Java}
+\label{code:java-example}
+\begin{minted}{Java}
+class Shape {
+  String name;
+};
+
+class Circle extends Shape {
+  double radius;
+};
+
+class Square extends Shape {
+  double side;
+};
+
+class Main {
+  public static void main(String[] args) {
+    Circle circle = new Circle();
+    circle.name = "my circle";
+    circle.radius = 2.0;
+  }
+}
+\end{minted}
+\end{code}
+
 We denote $\tau \sub \sigma$ for "$\tau$ is a subtype of $\sigma$".
 Syntactically, this implies that if we have obatined the judgement $e : \tau$, we also have $e : \sigma$.
 Therefore, we can use $e$ in any context that expects the usage of a term of type $\sigma$.
@@ -82,7 +113,7 @@ Subtyping allows us to pass such more specific arguments in a more natural way a
 % paper by wadler
 
 In some - mostly imperative - languages it is possible to simply overload functions (e.g. we may define $+$ both on integers and on float values, the correct implementation is then picked based on the argument type).
-However, there is usually no way to express this in the type system of these languages.
+However, this approach to ad-hoc polymorphism is often not visible to the programmer as there is usually no way to express this in the type system of these languages.
 Whether or not an operator is overloaded is a hidden implementation detail. % cite...
 
 If our type system doesn't allow ad-hoc polymorphism it may seem neccessary to write verbose code for basic function with respect to every concrete type it should be used for.
