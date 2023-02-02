@@ -272,9 +272,9 @@ The following outlines how this achieved:
   \centering
   \begin{tikzpicture}[node distance={25mm}, main/.style = {draw, circle}]
     \node[main] (1) {$\to$};
-    \node[main] (2) [below left of=1] {$\Singleton{0}$};
+    \node[main, fill=gray!30] (2) [below left of=1] {$\Singleton{0}$};
     \node[main] (3) [below right of=1] {$\to$};
-    \node[main] (4) [below left of=3] {$\Nat$};
+    \node[main, fill=gray!30] (4) [below left of=3] {$\Nat$};
     \node[main] (5) [below right of=3] {$\Nat$};
     \node[main] (6) [below of=3] {$\Singleton{0}$};
     \draw[->] (1) edge["l"] (2);
