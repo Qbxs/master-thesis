@@ -29,7 +29,7 @@ Types constructed by the $\join$ and $\meet$ operators stand for the union and i
 \begin{figure}[ht]
   \begin{flalign*}
     ts          := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes}             \\
-    \tau,\sigma := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String         & \textit{Simple types}             \\
+    \tau,\sigma := & \; \Bool \; | \; \Nat \; | \; \Int \; | \; \String                       & \textit{Simple types}             \\
                    & \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots  & \textit{Singleton types}          \\
                    & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types}            \\
                    & \; \tau \to \sigma                                                       & \textit{Function types}           \\
@@ -237,9 +237,9 @@ Nominal types can occur both in positive and negative positions.
 
 \begin{figure}
   \begin{flalign*}
-    \tau^+ := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
-              & \; \bot \; | \; \tau_1^+ \join \tau_2^+ \; | \; \tau_1^- \to \tau_2^+ \; | \; \mu\alpha.\tau^+ \; | \; \alpha                                 \\
-    \tau^- := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
+    \tau^+ := & \; \Bool \; | \; \Nat \; | \; \Int \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
+              & \; \bot \; | \; \tau_1^+ \join \tau_2^+ \; | \; \tau_1^- \to \tau_2^+ \; | \; \mu\alpha.\tau^+ \; | \; \alpha                   \\
+    \tau^- := & \; \Bool \; | \; \Nat \; | \; \Int \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
               & \; \top \; | \; \tau_1^- \meet \tau_2^- \; | \; \tau_1^+ \to \tau_2^- \; | \; \mu\alpha.\tau^- \; | \; \alpha                                                                         
   \end{flalign*}
   \caption{The syntax of polar types}
