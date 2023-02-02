@@ -445,15 +445,15 @@ As shown in the diagram, we can take different paths to do so but type class coh
 In Haskell98 type class coherence guarantees that all such diagrams commute.
 So even if there may be different ways to resolve type class constraints, all of them preserve the same semantics.
 
-% \begin{tikzcd}
-%   &  & \mintinline{Haskell}|Ord (Maybe a)| \arrow[llddd, "{\footnotesize\mintinline{Haskell}|class Eq a => Ord a|}"'] \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|}"] &  &                            \\
-%   &  &                                &  &                            \\
-%   &  &                                &  &                            \\
-%   \mintinline{Haskell}|Eq (Maybe a)| \arrow[rrddd, "{\footnotesize\mintinline{Haskell}|instance Eq a => Eq (Maybe a)|}"'] &  &                                &  & \mintinline{Haskell}|Ord a| \arrow[llddd, "{\footnotesize \mintinline{Haskell}|class Eq a => Ord a|}"] \\
-%   &  &                                &  &                            \\
-%   &  &                                &  &                            \\
-%   &  & \mintinline{Haskell}|Eq a|                  &  &
-% \end{tikzcd}
+\begin{tikzcd}
+  &  & \text{\mintinline{Haskell}|Ord (Maybe a)|} \arrow[llddd, "{\text{\footnotesize\mintinline{Haskell}|class Eq a => Ord a|}}"'] \arrow[rrddd, "{\text{\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|}}"] &  &                            \\
+  &  &                                &  &                            \\
+  &  &                                &  &                            \\
+  \text{\mintinline{Haskell}|Eq (Maybe a)|} \arrow[rrddd, "{\text{\footnotesize\mintinline{Haskell}|instance Eq a => Eq (Maybe a)|}}"'] &  &   &  & \text{\mintinline{Haskell}|Ord a|} \arrow[llddd, "{\text{\footnotesize \mintinline{Haskell}|class Eq a => Ord a|}}"] \\
+  &  &                                &  &                            \\
+  &  &                                &  &                            \\
+  &  & \text{\mintinline{Haskell}|Eq a|}                  &  &
+\end{tikzcd}
 
 Even though there are multiple ways to derive an instance for \mintinline{Haskell}|Eq a| from an instance of \mintinline{Haskell}|Ord (Maybe a)|, the derived instance has to be uniquely determined.
 Since the diagram commutes, there has to be exactly one instance for \mintinline{Haskell}|Eq a|.
