@@ -17,7 +17,7 @@ In a context with e.g. $\Showable(\Int)$ a suitable instance will be resolved fo
 
 \section{Typing Rules}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \begin{center}
         \AxiomC{}
         \RightLabel{\textsc{T-Singleton}}
@@ -81,7 +81,7 @@ In this case $\mathbf{show}$ is implemented in continuation passing style, so ap
 The argument $w$ is implicit and stands for the inferred witness of the type class.
 At compilation it will be filled with a resolved instance, so that the evaluation of the metod is well defined.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \AxiomC{$\ctx w : \Showable(\tau)$}
     \AxiomC{$\ctx x : \tau$}
@@ -96,7 +96,7 @@ At compilation it will be filled with a resolved instance, so that the evaluatio
 For contravariant type classes such as $\Readable$ the inference looks slightly different:
 In this case, the type class constraint is applied to the argument type of the continuation.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \AxiomC{$\ctx w : \Readable(\tau)$}
     \AxiomC{$\ctx x : \String$}
@@ -113,7 +113,7 @@ Therefore, no fresh variables will be generated at this point.
 Instead, we use the annotated type to resolve a fitting instance for the type class constraint.
 In section (TODO) we discuss why generating fresh unification variables at this point is challenging.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \AxiomC{$\ctx w : \Phi(\tau)$}
     \AxiomC{$\ctx x_1 : \tau_1$}
@@ -143,7 +143,7 @@ We generate constraints in a constraint set for each term. (Fig. \ref{fig:constr
 
 
 % do we need this? no
-\begin{figure}[h]
+\begin{figure}[ht]
     \begin{center}
         $\constraintGen{\alpha}_\tau^\bot := \alpha$ \\
         $\constraintGen{\alpha}_\tau^\top := \alpha$ \\
@@ -156,7 +156,7 @@ We generate constraints in a constraint set for each term. (Fig. \ref{fig:constr
     \label{fig:bound-translation}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \begin{center}
 
         \AxiomC{$\Gamma(x) = \tau$}
@@ -208,7 +208,7 @@ Constraints are solved by decomposition into simpler constraints. (Fig. \ref{fig
 Simple constraints will be added to the lower and upper bounds of unification variables.
 Constraints which cannot be solved (e.g. $\Nat \sub \Nat \to \bot$) lead to an error, thus type inference for the term fails, as expected.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \begin{center}
         placeholder: rules for solvinf constraints
         \begin{itemize}
@@ -222,7 +222,7 @@ Constraints which cannot be solved (e.g. $\Nat \sub \Nat \to \bot$) lead to an e
     \label{fig:constraint-solving}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     % We might add witnesses here?
     \begin{flalign*}
         \decompose{\tau}{\top}                               & := & \emptyset                                         \\

@@ -69,7 +69,7 @@ $\top$ stands for the greatest type which is a supertype of all other types.
 Dually, $\bot$ is the smallest type which is a subtype of all other types.
 Types constructed by the $\join$ and $\meet$ operators stand for the union and intersection types, respectively.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{flalign*}
     ts          := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes}             \\
     \tau,\sigma := & \; \Nat \; | \; \Int \; | \; \Bool \; | \; \Unit \; | \; \String         & \textit{Simple types}             \\
@@ -84,7 +84,7 @@ Types constructed by the $\join$ and $\meet$ operators stand for the union and i
   \label{fig:type-syntax}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{flalign*}
     e := & \; x \; | \; y \; | \; z \; | \; \dots                                        & \textit{Variables} \\
          & \; 0 \; | \; 1 \; | \; 2 \; | \; \dots                                        & \textit{Numeric Literals} \\
@@ -99,7 +99,7 @@ Types constructed by the $\join$ and $\meet$ operators stand for the union and i
 The subtyping lattice is defined by the following derivation rules where $\tau$, $\sigma$ and $\rho$ are meta variables for types.
 
 % elim rules are derivable
-\begin{figure}[h]
+\begin{figure}[ht]
   % refl
   \begin{prooftree}
     \AxiomC{}
@@ -194,7 +194,7 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
 
 Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules:
 
-\begin{figure}[h]
+\begin{figure}[ht]
   % join elim
   \begin{center}
     \AxiomC{$\tau \join \sigma \sub \rho$}
