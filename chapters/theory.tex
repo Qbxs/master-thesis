@@ -1338,6 +1338,10 @@ We can do so by constructing the intersection of the type automata for $\tau$ an
 
 % NEED TO REWORK THE PREVIOUS PARAGRAPHES
 
+Resolution already guarantees that there is at most one instance resolved for any predicate application.
+This instance has to be uniquely determined in order for type class coherence to be satisfied.
+Thus, we need to enforce that there is at no point more than one instance in scope to witness a predicate application.
+
 Covariant predicates allow resolution 'downwards', i.e. instances for subtypes can be resolved from instances for supertypes.
 We therefore need to ensure globally that there is no common subtype (except the trivial type $\bot$) for which an instance can be resolved from two distinct instances.
 That means the types that we declare instances for have to be \emph{non-overlapping downwards}.
