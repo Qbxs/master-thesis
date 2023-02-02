@@ -1336,3 +1336,23 @@ Since for any pair of types $\tau$ and $\sigma$ that have a common subtype $\rho
 we have to ensure that $\tau \meet \sigma$ is equivalent to the empty type $\bot$.
 We can do so by constructing the intersection of the type automata for $\tau$ and $\sigma$ and checking whether this automaton accepts the empty language.
 
+% NEED TO REWORK THE PREVIOUS PARAGRAPHES
+
+Covariant predicates allow resolution 'downwards', i.e. instances for subtypes can be resolved from instances for supertypes.
+We therefore need to ensure globally that there is no common subtype (except the trivial type $\bot$) for which an instance can be resolved from two distinct instances.
+That means the types that we declare instances for have to be \emph{non-overlapping downwards}.
+
+\begin{definition}
+  Two types $\tau$ and $\sigma$ are \emph{non-overlapping downwards} iff. $\forall\rho. \rho \sub \tau$ and $\rho \sub \sigma \Rightarrow \rho = \bot$.
+\end{definition}
+
+Contravariant predicates, on the other hand, allow resolution 'upwards', i.e. instances for supertypes can be resolved from instances for subtypes.
+Here, we have to enforce globally that there is no common supertype (except the trivial type $\top$) for which an instance can be resolved from two distinct instances.
+That means the types that we declare instances for have to be \emph{non-overlapping upwards}.
+
+\begin{definition}
+  Two types $\tau$ and $\sigma$ are \emph{non-overlapping upwards} iff. $\forall\rho. \tau \sub \rho$ and $\sigma \sub \rho \Rightarrow \rho = \top$.
+\end{definition}
+
+Invariant predicates allow resolution neither 'upwards' nor 'downwards', thus no such restriction is required for them.
+We only need to enforce that there is no instance for an equivalent type declared.
