@@ -1342,6 +1342,8 @@ Resolution already guarantees that there is at most one instance resolved for an
 This instance has to be uniquely determined in order for type class coherence to be satisfied.
 Thus, we need to enforce that there is at no point more than one instance in scope to witness a predicate application.
 
+\subsubsection{Covariant Predicates}
+
 Covariant predicates allow resolution 'downwards', i.e. instances for subtypes can be resolved from instances for supertypes.
 We therefore need to ensure globally that there is no common subtype (except the trivial type $\bot$) for which an instance can be resolved from two distinct instances.
 That means the types that we declare instances for have to be \emph{non-overlapping downwards}.
@@ -1350,6 +1352,15 @@ That means the types that we declare instances for have to be \emph{non-overlapp
   Two types $\tau$ and $\sigma$ are \emph{non-overlapping downwards} iff. $\forall\rho. \rho \sub \tau$ and $\rho \sub \sigma \Rightarrow \rho = \bot$.
 \end{definition}
 
+This condition is equivalent to the intersection type $\tau \meet \sigma$ being empty.
+Since there is no expression $e : \bot$, deriving $\Phi(\bot)$ does not lead to any ambiguity and preserves type class coherence.
+Algorithmically, this can be enforced using type automata which will be presented in the chapter \ref{ch:type-system}.
+
+Given any covariant type class $\Phi^+$ and instances for $\Phi^+(\Singleton{0} \join \Singleton{1})$ and $\Phi^+(\Singleton{1} \join \Singleton{2})$,
+the intersection of both types is equivalent to $(\Singleton{0} \join \Singleton{1}) \meet \Singleton{1} \join \Singleton{2} = \Singleton{1} \neq \bot$, so type class coherence would be violated because the instance for $\Singleton{1}$ is ambiguous.
+
+\subsubsection{Contravariant Predicates}
+
 Contravariant predicates, on the other hand, allow resolution 'upwards', i.e. instances for supertypes can be resolved from instances for subtypes.
 Here, we have to enforce globally that there is no common supertype (except the trivial type $\top$) for which an instance can be resolved from two distinct instances.
 That means the types that we declare instances for have to be \emph{non-overlapping upwards}.
@@ -1357,6 +1368,13 @@ That means the types that we declare instances for have to be \emph{non-overlapp
 \begin{definition}
   Two types $\tau$ and $\sigma$ are \emph{non-overlapping upwards} iff. $\forall\rho. \tau \sub \rho$ and $\sigma \sub \rho \Rightarrow \rho = \top$.
 \end{definition}
+
+This condition is equivalent to $\tau \join \sigma = \top$.
+Enforcing this in our type system would be very restrictive.
+In more sophisticated type systems, it may not even be possible to find a non-trivial type $\tau^{-1} \neq \top$, such that $\tau \join \tau^{-1} = \top$.
+
+
+\subsubsection{Invariant Predicates}
 
 Invariant predicates allow resolution neither 'upwards' nor 'downwards', thus no such restriction is required for them.
 We only need to enforce that there is no instance for an equivalent type declared.
