@@ -1,0 +1,46 @@
+\chapter{Extensible Records}
+\label{ch:records}
+
+
+We extend the syntax of types by extensible record types:\cite{leijen2005extensible} \\
+$ \tau := \dots | \{ \ell_i : \tau_i \} $ \\
+
+The syntax of terms is extended by record definitions and field selections. \\
+$ e := \{ \ell_i = e_1, \dots \} \; | \; e.\ell_i $ \\
+
+
+Subtyping rule: \\
+$
+\AxiomC{$\forall j. \tau_j \sub \sigma_j$}
+\AxiomC{$\{ \overline{\ell_j} \} \subseteq \{ \overline{\ell_i} \}$}
+\RightLabel{\textsc{Extend}}
+\BinaryInfC{$\{ \overline{\ell_i : \tau_i} \} \sub \{ \overline{\ell_j : \sigma_j} \}$}
+\DisplayProof
+$
+\\
+
+Example: \\
+$
+\AxiomC{}
+\RightLabel{\textsc{NatPrim}}
+\UnaryInfC{$\Nat \sub \Int$}
+\AxiomC{$\{ \mathit{x}, \mathit{y} \} \subseteq \{ \mathit{x} \}$}
+\RightLabel{\textsc{Extend}}
+\BinaryInfC{$\{ \mathit{x} : \Nat, \mathit{y} : \Singleton{0} \} \sub \{ \mathit{x} : \Int \}$}
+\DisplayProof
+$
+\\
+
+Typing rules: \\
+$
+\AxiomC{$\ctx \overline{e_i : \tau_i}$}
+\RightLabel{\textsc{T-Record}}
+\UnaryInfC{$ \ctx \{ \overline{\ell_i = e_i} \} : \{ \overline{\ell_i : \tau_i} \}$}
+\DisplayProof
+$
+$
+\AxiomC{$ \ctx e : \{ \ell : \tau \}$}
+\RightLabel{\textsc{T-Select}}
+\UnaryInfC{$ \ctx e.\ell : \tau$}
+\DisplayProof
+$
