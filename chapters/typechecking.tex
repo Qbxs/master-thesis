@@ -270,7 +270,7 @@ By translating types for which we want to check for an overlap, we can construct
 All that is left to do from there, is to check whether the resulting automaton accepts the empty language,  i.e. no final state is reachable from the start state.\
 The following outlines how this achieved:
 
-\begin{figure}
+\begin{figure}[ht]
   \centering
   \begin{tikzpicture}[node distance={25mm}, main/.style = {draw, circle}]
     \node[main] (1) {$\to$};
@@ -296,7 +296,27 @@ The following outlines how this achieved:
 \end{itemize}
 
 \subsubsection{Constructing type automata}
-\subsubsection{Minimizing type automata}
+
+We employ a technique for constructing type automata similar to that of MLsub \cite{dolanMLsub}.
+When creating the type automaton for a positive type $\tau$, we create a node $\tau_i$ for each subterm $\tau_i$ of $\tau$.
+The state $q(\tau_0)$ representing the whole term is the start state.
+The transition table $\delta$ is defined in fig. \ref{fig:automaton-transitions}
+
+\begin{figure}[ht]
+    \begin{align*}
+        q(\tau_1  \join \tau_2)  \transition{\epsilon} q(\tau_1) &
+        q(\tau_1  \join \tau_2)  \transition{\epsilon} q(\tau_2) \\
+        q(\tau_1  \meet \tau_2)  \transition{\epsilon} q(\tau_1) &
+        q(\tau_1  \meet \tau_2)  \transition{\epsilon} q(\tau_2) \\
+        q(\tau_1  \to \tau_2)  \transition{d} q(\tau_1) &
+        q(\tau_1  \to \tau_2)  \transition{r} q(\tau_2) \\
+        q(\mu\alpha.\tau_1)  \transition{\epsilon} q(\tau_1)  &
+    \end{align*}
+    \caption{Transition table $\delta$ for a type automaton}
+    \label{fig:automaton-transitions}
+\end{figure}
+
+\subsubsection{Simplifying type automata}
 
 
 \subsection{Rest}
