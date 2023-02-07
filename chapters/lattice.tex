@@ -26,7 +26,7 @@ variables, functions introduced by lambda-abstractions and function applications
 \label{sec:types}
 
 We use the following syntax of types (fig. \ref{fig:type-syntax}) with the simple types of natural numbers $\Nat$, of integers $\Int$ and the type of booleans $\Bool$.
-Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which are inhabited by exactly one value respectively, e.g. $1 : \Singleton{1}$.
+Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which each are only inhabited by the term in their index, e.g. $1 : \Singleton{1}$.
 Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$.
 $\top$ stands for the greatest type which is a supertype of all other types.
 Dually, $\bot$ is the smallest type which is a subtype of all other types.
