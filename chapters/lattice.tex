@@ -1,12 +1,18 @@
 \chapter{The Lattice of Types}
 \label{ch:lattice}
 
+We introduce a simple language with a few nominal types to describe a type system with subtyping.
+
 \section{Terms}
 \label{sec:terms}
+
+Our language (fig. \ref{fig:term-syntax}) consists of numeric, boolean and String literals, as well as the constructs of the lambda calculus:
+variables, functions introduced by lambda-abstractions and function applications.
 
 \begin{figure}[ht]
   \begin{flalign*}
     e := & \; x \; | \; y \; | \; z \; | \; \dots                                        & \textit{Variables} \\
+         & \; \mathit{true} \; | \; \mathit{false}                                       & \textit{Boolean Literals} \\
          & \; 0 \; | \; 1 \; | \; 2 \; | \; \dots                                        & \textit{Numeric Literals} \\
          & \; \mathit{"foo"} \; | \; \mathit{"bar"} \; | \; \mathit{"baz"} \; | \; \dots & \textit{String Literals} \\
          & \; \lambda x.e                                                                & \textit{Lambda abstractions} \\
@@ -19,7 +25,7 @@
 \section{Types}
 \label{sec:types}
 
-We use the following syntax of types (\ref{fig:type-syntax}) with the simple types of natural numbers $\Nat$, of integers $\Int$, the type of booleans $\Bool$ and the unit type $\Unit$.
+We use the following syntax of types (fig. \ref{fig:type-syntax}) with the simple types of natural numbers $\Nat$, of integers $\Int$ and the type of booleans $\Bool$.
 Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which are inhabited by exactly one value respectively, e.g. $1 : \Singleton{1}$.
 Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$.
 $\top$ stands for the greatest type which is a supertype of all other types.
