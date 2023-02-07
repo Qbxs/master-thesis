@@ -13,7 +13,7 @@ To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. ty
 We are only interested in predicates that are preserved over the subtyping lattice.
 I.e. predicates that depend only on the terms of a type.
 That means only predicates that are \emph{monotonous} are considered while other predicates such as \emph{"has exactly two values"} are disregarded.
-We further differentiate between \emph{covariant}, \emph{contravariant} and \emph{invariant} predicates over types.
+We further differentiate between \emph{covariant}, \emph{contravariant} and \emph{invariant} predicates over types, which will be defined in the following sections.
 
 Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific predicates.
 
@@ -940,6 +940,9 @@ the search tree properties may break. \cite{Kilpatrick2019-cy}
 
 Moreover, in the presence of subtyping, instances for types related by the subtyping relation may not be declared for the same type class.
 
+Therefore, we want to define a criterion which globally guarantees that no such ambiguity can arise when resolving type class constraints.
+
+
 \subsection{Definition}
 
 Using witnesses we may formalize type class coherence:
@@ -950,7 +953,8 @@ Using witnesses we may formalize type class coherence:
 
 We can define operational equality $\opeq$ simply as two witnesses of a predicate application containing the same leaf, i.e. the same instance.
 Therefore, the usage of these witnesses can always be expected to behave in the same way.
-Witnesses always point to exactly one instance definition. Thus, it is sufficient show that for any pair of witnesses the leaf (i.e. the instance) is the same.
+Witnesses always point to exactly one instance definition.
+Thus, in our system it is sufficient show that for any pair of witnesses the leaf (i.e. the instance) is the same.
 
 \subsection{Consequences}
 
