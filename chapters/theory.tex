@@ -1393,7 +1393,7 @@ In $\mathcal{U}$, we can conclude that $\Bool = \top$ and still have the empty t
 This can be seen as a simplified version of boolean refinement types. \cite{springer}
 
 Conversely, looking at extensible records, if our universe only consists of records and the record labels $fst : \Singleton{0}$ and $snd : \Singleton{1}$, we can set $\{\} = \top$ and $\{ fst : \Singleton{0}, snd : \Singleton{1} \} = \bot$, as there are no further extensions possible.
-Formally, this would represent the type universe $\mathcal{U}' := \{ \{ fst : Singleton{0}, snd : \Singleton{1} \}, \{ fst : Singleton{0} \}, \{ snd : \Singleton{1} \}, \{\} \}$ with the subtyping relation defined for extensible records. %TODO fix, extensible records are not defined yet
+Formally, this would represent the type universe $\mathcal{U}' := \{ \{ fst : \Singleton{0}, snd : \Singleton{1} \}, \{ fst : \Singleton{0} \}, \{ snd : \Singleton{1} \}, \{\} \}$ with the subtyping relation defined for extensible records. %TODO fix, extensible records are not defined yet
 
 Using $\Showable$ as example for covariant and $\Defaultable$ as example for contravariant predicates, fig. \ref{fig:satisfiability-example} shows how refinements and extensions behave when resolving co- and contravariant predicates and exhibits an interesting symmetry:
 Refinements for covariant predicates behave like extensions for contravariant predicates, whereas refinements for contravariant predicates behave like extensions for covariant predicates.
