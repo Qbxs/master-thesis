@@ -1383,11 +1383,13 @@ In more sophisticated type systems, it may not even be possible to find a non-tr
 Invariant predicates allow resolution neither 'upwards' nor 'downwards', thus no such restriction is required for them.
 We only need to enforce that there is no instance for an equivalent type declared.
 
+\emph{instances trivially satisfy the type they are declared for which is not listed} (fig. \ref{fig:satisfiability-example})
+
+
 \newpage
 \begin{landscape}
 
-\emph{instances trivially satisfy the type they are declared for which is not listed}
-
+\begin{figure}[ht]
 \begin{center}
   \begin{tabular}{ c | c c |}
         & Covariant instance & Satisfies \\
@@ -1419,5 +1421,9 @@ We only need to enforce that there is no instance for an equivalent type declare
           & $\Defaultable(\{ \})$ & \\
   \end{tabular}
 \end{center}
+\caption{Satsifiability for co- and contravariant predicates for data and codata}
+\label{fig:satisfiability-example}
+
+\end{figure}
 
 \end{landscape}
