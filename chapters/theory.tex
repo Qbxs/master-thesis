@@ -1382,3 +1382,42 @@ In more sophisticated type systems, it may not even be possible to find a non-tr
 
 Invariant predicates allow resolution neither 'upwards' nor 'downwards', thus no such restriction is required for them.
 We only need to enforce that there is no instance for an equivalent type declared.
+
+\newpage
+\begin{landscape}
+
+\emph{instances trivially satisfy the type they are declared for which is not listed}
+
+\begin{center}
+  \begin{tabular}{ c | c c |}
+        & Covariant instance & Satisfies \\
+  \hline
+   Data & $\Showable(<\Bool | \text{true}, \text{false}>)$ & $\Showable(<\Bool | \text{true}>), \Showable(<\Bool | \text{false}>), \Showable(<\Bool | >)$ \\
+        & $\Showable(<\Bool | \text{true}>)$               & $\Showable(<\Bool | >)$ \\
+        & $\Showable(<\Bool | \text{false}>)$              & $\Showable(<\Bool | >)$ \\
+        & $\Showable(<\Bool | >)$                          &                         \\
+   \hline 
+   Codata & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ & \\
+          & $\Showable(\{ fst : \Singleton{0} \})$                      & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}$ \\
+          & $\Showable(\{ snd : \Singleton{1} \})$                      & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ \\
+          & $\Showable(\{ \})$                                          & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}), \Showable(\{ fst : \Singleton{0} \}), \Showable(\{ snd : \Singleton{1} \})$ \\
+  \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ c | c c |}
+        & Contravariant instance & Satisfies \\
+  \hline
+   Data & $\Defaultable(<\Bool | \text{true}, \text{false}>)$ & \\
+        & $\Defaultable(<\Bool | \text{true}>)$ & $\Defaultable(<\Bool | \text{true}, \text{false}>)$ \\
+        & $\Defaultable(<\Bool | \text{false}>)$ & $\Defaultable(<\Bool | \text{true}, \text{false}>)$ \\
+        & $\Defaultable(<\Bool | >)$ & $\Defaultable(<\Bool | \text{true}, \text{false}>), \Defaultable(<\Bool | \text{true}>), \Defaultable(<\Bool | \text{false}>)$ \\
+   \hline 
+   Codata & $\Defaultable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ & $\Defaultable(\{ fst : \Singleton{0} \}), \Defaultable(\{ snd : \Singleton{1} \}), \Defaultable(\{ \})$ \\
+          & $\Defaultable(\{ fst : \Singleton{0} \})$ & $\Defaultable(\{ \})$ \\
+          & $\Defaultable(\{ snd : \Singleton{1} \})$ & $\Defaultable(\{ \})$ \\
+          & $\Defaultable(\{ \})$ & \\
+  \end{tabular}
+\end{center}
+
+\end{landscape}
