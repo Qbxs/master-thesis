@@ -1387,13 +1387,15 @@ We only need to enforce that there is no instance for an equivalent type declare
 
 \subsubsection{Simplified type universes}
 
-Consider the refinement type of $<\Bool | \text{true}, \text{false}>$.
-Here $\Bool$ indicates the type to be refined whereas $\text{true}$ and $\text{false}$ are constructors.
-If our universe of type only consists of this type and its refinements (i.e. removing constructors), we can conclude that $<\Bool | \text{true}, \text{false}> = \top$ and $<\Bool |>  = \bot$.
+Consider the type universe $\mathcal{U} := \{ \Bool, \mathbb{T}, \mathbb{F} \}$.
+We define the subtyping relation by $\mathbb{T} \sub \Bool$ and $\mathbb{F} \sub \Bool$.
+In $\mathcal{U}$, we can conclude that $\Bool = \top$ and still have the empty type $\bot$ as a subtype of all other types.
+This can be seen as a simplified version of boolean refinement types. \cite{springer}
 
 Conversely, looking at extensible records, if our universe only consists of records and the record labels $fst : \Singleton{0}$ and $snd : \Singleton{1}$, we can set $\{\} = \top$ and $\{ fst : \Singleton{0}, snd : \Singleton{1} \} = \bot$, as there are no further extensions possible.
+Formally, this would represent the type universe $\mathcal{U}' := \{ \{ fst : Singleton{0}, snd : \Singleton{1} \}, \{ fst : Singleton{0} \}, \{ snd : \Singleton{1} \}, \{\} \}$ with the subtyping relation defined for extensible records. %TODO fix, extensible records are not defined yet
 
-Fig. \ref{fig:satisfiability-example} shows how refinements and extensions behave when resolving co- and contravariant predicates and exhibits an interesting symmetry:
+Using $\Showable$ as example for covariant and $\Defaultable$ as example for contravariant predicates, fig. \ref{fig:satisfiability-example} shows how refinements and extensions behave when resolving co- and contravariant predicates and exhibits an interesting symmetry:
 Refinements for covariant predicates behave like extensions for contravariant predicates, whereas refinements for contravariant predicates behave like extensions for covariant predicates.
 
 
@@ -1405,10 +1407,10 @@ Refinements for covariant predicates behave like extensions for contravariant pr
   \begin{tabular}{ c | c c |}
         & Covariant instance & Satisfies \\
   \hline
-   Data & $\Showable(<\Bool | \text{true}, \text{false}>)$ & $\Showable(<\Bool | \text{true}>), \Showable(<\Bool | \text{false}>), \Showable(<\Bool | >)$ \\
-        & $\Showable(<\Bool | \text{true}>)$               & $\Showable(<\Bool | >)$ \\
-        & $\Showable(<\Bool | \text{false}>)$              & $\Showable(<\Bool | >)$ \\
-        & $\Showable(<\Bool | >)$                          &                         \\
+   Data & $\Showable(\Bool)$ & $\Showable(\mathbb{T}), \Showable(\mathbb{F}), \Showable(\bot)$ \\
+        & $\Showable(\mathbb{T})$               & $\Showable(\bot)$ \\
+        & $\Showable(\mathbb{F})$              & $\Showable(\bot)$ \\
+        & $\Showable(\bot)$                          &                         \\
    \hline 
    Codata & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ & \\
           & $\Showable(\{ fst : \Singleton{0} \})$                      & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}$ \\
@@ -1421,10 +1423,10 @@ Refinements for covariant predicates behave like extensions for contravariant pr
   \begin{tabular}{ c | c c |}
         & Contravariant instance & Satisfies \\
   \hline
-   Data & $\Defaultable(<\Bool | \text{true}, \text{false}>)$ & \\
-        & $\Defaultable(<\Bool | \text{true}>)$ & $\Defaultable(<\Bool | \text{true}, \text{false}>)$ \\
-        & $\Defaultable(<\Bool | \text{false}>)$ & $\Defaultable(<\Bool | \text{true}, \text{false}>)$ \\
-        & $\Defaultable(<\Bool | >)$ & $\Defaultable(<\Bool | \text{true}, \text{false}>), \Defaultable(<\Bool | \text{true}>), \Defaultable(<\Bool | \text{false}>)$ \\
+   Data & $\Defaultable(\Bool)$ & \\
+        & $\Defaultable(\mathbb{T})$ & $\Defaultable(\Bool)$ \\
+        & $\Defaultable(\mathbb{F})$ & $\Defaultable(\Bool)$ \\
+        & $\Defaultable(\bot)$ & $\Defaultable(\Bool), \Defaultable(\mathbb{T}), \Defaultable(\mathbb{F})$ \\
    \hline 
    Codata & $\Defaultable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ & $\Defaultable(\{ fst : \Singleton{0} \}), \Defaultable(\{ snd : \Singleton{1} \}), \Defaultable(\{ \})$ \\
           & $\Defaultable(\{ fst : \Singleton{0} \})$ & $\Defaultable(\{ \})$ \\
