@@ -1,10 +1,14 @@
 \chapter{Qualified Types}
 \label{ch:qualified-types}
 
+We generalise the notion of type classes as \emph{qualified tpyes}. \cite{jones2003qualified}
+When types instantiate a type class, we say that they satisfy a predicate which is given by the type class declaration.
+E.g. if a type $\tau$ instantiates the type class $\mathit{Show}$, we can derive the judgement $\mathit{Showable}(\tau)$.
+
 \section{Theory of Predicates}
 \label{sec:theory-predicates}
 
-To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. types that satisfy some predicate.
+Formally, we can define predicates over types as follows:
 
 \begin{definition} Predicates\\
   Given a universe of types $\Unit$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\Unit)$.
@@ -13,7 +17,7 @@ To reason about ad-hoc polymorhism we talk about \emph{qualified types}, i.e. ty
 We are only interested in predicates that are preserved over the subtyping lattice.
 I.e. predicates that depend only on the terms of a type.
 That means only predicates that are \emph{monotonous} are considered while other predicates such as \emph{"has exactly two values"} are disregarded.
-We further differentiate between \emph{covariant}, \emph{contravariant} and \emph{invariant} predicates over types, which will be defined in the following sections.
+We further differentiate between \emph{covariant}, \emph{contravariant} and \emph{invariant} predicates over types, because the resolution rules vary accordingly.
 
 Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific predicates.
 
@@ -321,6 +325,9 @@ Note that this corresponds to implications even though the arrow is flipped as i
   \BinaryInfC{$\Gamma \vdash \Phi(\tau)$}
 \end{prooftree}
 
+As an example, the type class $\Ordable$ depends on the type class $\Eq$ as we need to have a notion of equality of terms to define an ordering of terms.
+We thus write $\Eq(\tau) \Rightarrow \Ordable(\tau)$.
+
 \subsection{Examples}
 
 Consider the predicates $\Showable$ and $\Defaultable$.
@@ -398,11 +405,13 @@ The derivation in fig. \ref{fig:example-monoid} combines the \textsc{InV}-rule w
 \label{sec:witnesses}
 
 By annotating applications of predicates with specific witnesses we obtain a calculus
-that is not only able to prove that a type satisfies a predicate but also constructs a witness for such a proof.
+that is not only able to prove that a type satisfies a predicate but also constructs concrete evidence for such a judgement.
 
 Constructing witnesses directly corresponds to type class resolution if we interpret type classes as predicates on types.
-Multiple witnesses can be derived for the same judgement but in order to preserve type class coherence they have to satsify some form of equivalence.
+Multiple witnesses can be derived for the same judgement but in order to preserve type class coherence they have to satsify some form of equivalence, as we will discuss later.
 We again differentiate co-, contra-  and invariant type classes in order to transport type classes over the subtyping relation.
+
+The witness rules in fig. \ref{fig:subtyping-witnesses} are an expansion of the subtyping rules in section \ref{sec:subtyping-rules}.
 
 \begin{figure}[ht]
   % refl
@@ -502,7 +511,7 @@ We again differentiate co-, contra-  and invariant type classes in order to tran
   \label{fig:subtyping-witnesses}
 \end{figure}
 
-We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
+We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses. % ???
 
 \begin{figure}[ht]
   \[
@@ -1184,7 +1193,7 @@ Consider now the \texttt{Ord} type class. Given \texttt{Ord a} and \texttt{Ord b
 But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
 
 
-\section{Representations of Type Class Witnesses}
+\section{Representations of Type Class Witnesses} % not quite correct
 \label{sec:representations}
 
 For an implementation, we need some representation of witnesses which is going to be used for the execution of programs using type class methods.

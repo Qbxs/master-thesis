@@ -50,7 +50,31 @@ Types constructed by the $\join$ and $\meet$ operators stand for the union and i
 \subsection{Subtyping Rules}
 \label{sec:subtyping-rules}
 
-The subtyping lattice is defined by the following derivation rules where $\tau$, $\sigma$ and $\rho$ are meta variables for types.
+We define primitive subtyping rules for nominal types. (Fig. \ref{fig:prim-sub-rules}).
+We want to express that every natural number is also an integer and therefore introduce a corresponding rule, as well as a rule for the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}$ to be subtypes of $\Nat$:
+
+\begin{figure}[ht]
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{NatPrim}}
+    \UnaryInfC{$\Nat \sub \Int$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{SingletonPrim}}
+    \UnaryInfC{$\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots \sub \Nat$}
+    \DisplayProof
+  \end{center}
+
+  \caption{Primitve subtyping rules}
+  \label{fig:prim-sub-rules}
+\end{figure}
+
+The subtyping lattice is defined by the following derivation rules where $\tau$, $\sigma$ and $\rho$ are meta variables for types. (fig. \ref{fig:subtyping})
+These rules directly reflect certain facts about the lattice types:
+$\top$ is a supertype of all other types, $\bot$ conversly is a subtype of all other types.
+Union and intersection types are dual to each other.
+Functions are contravariant in their input type, thus flipping the subtyping relation, and covariant in their output type.
 
 % elim rules are derivable
 \begin{figure}[ht]
@@ -146,7 +170,7 @@ The subtyping lattice is defined by the following derivation rules where $\tau$,
   \label{fig:subtyping}
 \end{figure}
 
-Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules:
+Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules. (fig. \ref{fig:subtyping-derived})
 
 \begin{figure}[ht]
   % join elim
@@ -199,29 +223,10 @@ Using the \textsc{Trans} rule and the introduction rules, we can derive correspo
 
 
   \caption{Derived subtyping rules}
-  \label{fig:subtypingDerived}
+  \label{fig:subtyping-derived}
 \end{figure}
 
-
-Finally, we can add primitive rules (Fig. \ref{fig:prim-sub-rules}).
-We want to express that every natural number is also an integer and therefore introduce a corresponding rule, as well as a rule for the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}$ to be subtypes of $\Nat$:
-
-\begin{figure}
-  \begin{center}
-    \AxiomC{}
-    \RightLabel{\textsc{NatPrim}}
-    \UnaryInfC{$\Nat \sub \Int$}
-    \DisplayProof
-    {\hskip.2in}
-    \AxiomC{}
-    \RightLabel{\textsc{SingletonPrim}}
-    \UnaryInfC{$\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots \sub \Nat$}
-    \DisplayProof
-  \end{center}
-
-  \caption{Primitve subtyping rules}
-  \label{fig:prim-sub-rules}
-\end{figure}
+% NOTE: If we add a primitive rule between singletons and integers, we can (probably) omit transitivty.
 
 
 \subsection{Polarity}
