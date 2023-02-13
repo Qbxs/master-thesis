@@ -126,21 +126,31 @@ Type classes express the concept of ad-hoc polymorphism in the type system in a 
 Type class constraints are annotated in the type system. They refine a range of types which hold a specified property, i.e. implement a specific type class instance.
 The class \mintinline{Haskell}|Num| in Haskell expects that we can implement a number of numerical functions for a type $\tau$ if it is ought to be a member of the \mintinline{Haskell}|Num| type class.
 
-Shortened definition of the \mintinline{Haskell}|Num| type class in Haskell.
+Typically type classes are specified using \emph{class declarations} that define the methods that need to be defined for types in that type class.
+In Haskell, the \mintinline{Haskell}|Num| type class is roughly declared like this:
 \footnote{As can be found in the default \texttt{Prelude}: \url{https://hackage.haskell.org/package/base-4.16.2.0/docs/Prelude.html\#t:Num}}
 
 \begin{minted}{Haskell}
-class  Num a  where
+class Num a where
     (+), (-), (*) :: a -> a -> a
 \end{minted}
 
-An instance would look like:
+In order to implement type classes, we have to declare \emph{instances} for specific types.
+E.g. in Haskell, we can define an instancce for \mintinline{Haskell}{Num Int} by using already existing functions for the methods that need to be implemented.
 
 \begin{minted}{Haskell}
 instance  Num Int  where
     (+) = intAdd
     (-) = intMinus
     (*) = intMul
+\end{minted}
+
+Using \emph{type class constraints}, we can then define functions which are polymorphic for all types that are instances of the type class.
+This makes ad-hoc polymorphism 'less ad-hoc' \cite{wadlerblott} because constraints are directly reflected in the type.
+
+\begin{minted}{Haskell}
+f :: Num a => a -> a -> a
+f x y = x*x + y*y
 \end{minted}
 
 
@@ -152,7 +162,6 @@ If this ordering is not uniquely determined, insert and delete operations may br
 % ???
 In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs.
 
-\cite{wadlerblott}
 
 \section{Relation between different forms of Subtyping}\label{sec:relations}
 
@@ -165,7 +174,7 @@ Now there are two ways to substitute any type for the first argument of the func
 
 Similarily, the hierarchy of type classes can express a similar relationship exhibited by subtyping.
 E.g. the \mintinline{Haskell}{Fractional} type class is a subclass of the type class \mintinline{Haskell}{Num}.
-Similarily with subtyping we can define a type $\mathit{Fractional}$ as the union of all types that are instances of \mintinline{Haskell}{Fractional} representing all fractional numbers and make it a subtype of $\mathit{Number}$ represented as the union of all types that stand for numbers.
+Similarily with subtyping we can define a type $\mathit{Fractional}$ as the union (or a common supertype) of all types that are instances of \mintinline{Haskell}{Fractional} representing all fractional numbers and make it a subtype of $\mathit{Number}$ represented as the union of all types that stand for numbers.
 
 A way to model type classes solely with subtyping can be to define the overloaded type class methods directly.
 So instead of a type class method $f : \forall \alpha. C \alpha \Rightarrow \tau[\alpha]$ and instance $C \alpha_1, \dots, C \alpha_n$,
@@ -197,7 +206,7 @@ Reynolds \cite{reynolds_coherence} describes the issue of coherence as follows:
 \end{quote}
 
 When talking about predicates on types we have to enforce that if $\Phi(\tau)$ holds for some predicate $\Phi$ on some type $\tau$,
-then all evidence for this judgement has to be in some sense equivalent.
+then all evidence for this judgement has to be equivalent in the sense of using different evidence does not change the behavior of the program.
 
 For type classes, this means that no two instances should be able to be resolved for the application of a type class constraint on the same type.
 A rather obvious example would be to define two different instances for the same type.
