@@ -212,13 +212,11 @@ Constraints which cannot be solved (e.g. $\Nat \sub \Nat \to \bot$) lead to an e
 
 \begin{figure}[ht]
     \begin{center}
-        placeholder: rules for solvinf constraints
-        \begin{itemize}
-            \item cache hits
-            \item adding to lower/upper bounds
-            \item decomposing
-            \item fail
-        \end{itemize}
+    $\mathbf{solve}(\emptyset) = \emptyset$ \\
+    $\mathbf{solve}(\{ u_1 \sub u_2 \} \cup cs) = $\\
+    $\mathbf{solve}(\{ \alpha \sub u \} \cup cs) = $\\
+    $\mathbf{solve}(\{ u \sub \alpha \} \cup cs) = $\\
+    $\mathbf{solve}(\{ \tau \sub \sigma \} \cup cs) = \mathbf{decompose}(\tau \sub \sigma) \cup \mathbf{solve}(cs)$\\
     \end{center}
     \caption{Constraint Solving}
     \label{fig:constraint-solving}
@@ -318,6 +316,11 @@ The transition table $\delta$ is defined in fig. \ref{fig:automaton-transitions}
 
 \subsubsection{Simplifying type automata}
 
+% Remove $\epsilon$-transitions by merging nodes reachable by one or more $\epsilon$-transitions.
+
+% 'Type automata can be converted to standard NFAs, by labelling each transition with the polarity of the state from which it originates, and converting H(q) to a set of transitions (also labelled with polarity) to a new accepting state $q_\infinity$' \cite{dolanMLsub}.
+
+% We can then determinise and minimise the automaton, thus 
 
 \subsection{Rest}
 We should always check in an instance declaration whether this constraint globally holds. \\
