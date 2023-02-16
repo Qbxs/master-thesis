@@ -1372,7 +1372,7 @@ We therefore need to ensure globally that there is no common subtype (except the
 That means the types that we declare instances for have to be \emph{non-overlapping downwards}.
 
 \begin{definition}
-  Two types $\tau$ and $\sigma$ are \emph{non-overlapping downwards} iff. $\forall\rho. \rho \sub \tau$ and $\rho \sub \sigma \Rightarrow \rho = \bot$.
+  Two types $\tau$ and $\sigma$ are \emph{non-overlapping downwards} iff. $\forall\rho. \rho \sub \tau$ and $\rho \sub \sigma \Rightarrow \rho$ is uninhabited.
 \end{definition}
 
 This condition is equivalent to the intersection type $\tau \meet \sigma$ being empty, which means that it has to be \emph{uninhabited}, i.e. there exist no values of that type.
@@ -1392,7 +1392,7 @@ It is unproblematic to resolve a contravariant predicate for $\top$ because (typ
 That means the types that we declare instances for have to be \emph{non-overlapping upwards}.
 
 \begin{definition}
-  Two types $\tau$ and $\sigma$ are \emph{non-overlapping upwards} iff. $\forall\rho. \tau \sub \rho$ and $\sigma \sub \rho \Rightarrow \rho = \top$.
+  Two types $\tau$ and $\sigma$ are \emph{non-overlapping upwards} iff. $\forall\rho. \tau \sub \rho$ and $\sigma \sub \rho \Rightarrow \rho$ is couninhabited.
 \end{definition}
 
 This condition is equivalent to $\tau \join \sigma = \top$.
