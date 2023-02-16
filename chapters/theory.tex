@@ -1491,6 +1491,6 @@ For contravariant type classes, this approach seems too restrictive because we w
 In this case, it is more useful to fail during resolution when ambiguous instances can be resolved.
 
 There are two cases where we can have two distinct instances declared at the same time without violating type class coherence:
-On the one hand we can declare non-overlapping instances for covariant type classes of data, i.e. $\Showable{\mathbb{T}}$ and $\Showable{\mathbb{F}}$ which both let us only resolve the constraint $\Showable{\bot}$, which is unproblematic as $\bot$ uninhabited.
-On the other hand we can declare non-overlapping instances for contravariant type classes of codata, i.e. $\Defaultable{\{fst : \Singleton{0}\}}$ and $\Defaultable{\{snd : \Singleton{1}\}}$ which both let us only resolve the constraint $\Defaultable{\top}$ (which is equivalent to $\Defaultable{\{\}}$), which is unproblematic as $\top$ couninhabited.
+On the one hand we can declare non-overlapping instances for covariant type classes of data, i.e. $\Showable(\mathbb{T})$ and $\Showable(\mathbb{F})$ which both let us only resolve the constraint $\Showable(\bot)$, which is unproblematic as $\bot$ uninhabited.
+On the other hand we can declare non-overlapping instances for contravariant type classes of codata, i.e. $\Defaultable(\{fst : \Singleton{0}\})$ and $\Defaultable(\{snd : \Singleton{1}\})$ which both let us only resolve the constraint $\Defaultable(\top)$ (which is equivalent to $\Defaultable(\{\})$), which is unproblematic as $\top$ couninhabited.
 The record containing all fields in this universe is couninhabited because there are no field selectors which play the role of destructors for records.
