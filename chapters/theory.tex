@@ -1421,34 +1421,47 @@ Refinements for covariant predicates behave like extensions for contravariant pr
 
 \begin{figure}[ht]
 \begin{center}
-  \begin{tabular}{ c | c c |}
+  \begin{tabular}{| c | c c |}
+  \hline
         & Covariant instance & Satisfies \\
   \hline
-   Data & $\Showable(\Bool)$ & $\Showable(\mathbb{T}), \Showable(\mathbb{F}), \Showable(\bot)$ \\
-        & $\Showable(\mathbb{T})$               & $\Showable(\bot)$ \\
-        & $\Showable(\mathbb{F})$              & $\Showable(\bot)$ \\
-        & $\Showable(\bot)$                          &                         \\
+   Data & $\Showable(\Bool)$      & $\Showable(\mathbb{T}), \Showable(\mathbb{F}), \Showable(\bot)$ \\
+        & $\Showable(\mathbb{T})$ & $\Showable(\bot)$ \\
+        & $\Showable(\mathbb{F})$ & $\Showable(\bot)$ \\
+        & $\Showable(\bot)$       &                   \\
+   \hline
+   Compatible & \multicolumn{2}{c|}{$\{\Showable(\Bool)\}, \{ \Showable(\mathbb{T}) \}, \{ \Showable(\mathbb{F}) \}, \{ \Showable(\mathbb{T}), \Showable(\mathbb{F}) \}, \{\Showable(\bot)\} $}  \\
    \hline 
    Codata & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ & \\
           & $\Showable(\{ fst : \Singleton{0} \})$                      & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}$ \\
           & $\Showable(\{ snd : \Singleton{1} \})$                      & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ \\
           & $\Showable(\{ \})$                                          & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}), \Showable(\{ fst : \Singleton{0} \}), \Showable(\{ snd : \Singleton{1} \})$ \\
+   \hline
+   Compatible & \multicolumn{2}{c|}{$\{\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})\}, \{\Showable(\{ fst : \Singleton{0} \})\}, \{\Showable(\{ snd : \Singleton{1} \})\}, \{\Showable(\{ \})\}$}  \\
+   \hline 
   \end{tabular}
 \end{center}
 
 \begin{center}
-  \begin{tabular}{ c | c c |}
+  \begin{tabular}{| c | c c |}
+  \hline
         & Contravariant instance & Satisfies \\
   \hline
    Data & $\Defaultable(\Bool)$ & \\
         & $\Defaultable(\mathbb{T})$ & $\Defaultable(\Bool)$ \\
         & $\Defaultable(\mathbb{F})$ & $\Defaultable(\Bool)$ \\
         & $\Defaultable(\bot)$ & $\Defaultable(\Bool), \Defaultable(\mathbb{T}), \Defaultable(\mathbb{F})$ \\
+   \hline
+   Compatible & \multicolumn{2}{c|}{$\{\Defaultable(\Bool)\}, \{ \Defaultable(\mathbb{T}) \}, \{ \Defaultable(\mathbb{F}) \}, \{\Defaultable(\bot)\} $}  \\
    \hline 
    Codata & $\Defaultable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ & $\Defaultable(\{ fst : \Singleton{0} \}), \Defaultable(\{ snd : \Singleton{1} \}), \Defaultable(\{ \})$ \\
           & $\Defaultable(\{ fst : \Singleton{0} \})$ & $\Defaultable(\{ \})$ \\
           & $\Defaultable(\{ snd : \Singleton{1} \})$ & $\Defaultable(\{ \})$ \\
           & $\Defaultable(\{ \})$ & \\
+   \hline
+   Compatible & \multicolumn{2}{c|}{$\{\Defaultable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})\}, \{\Defaultable(\{ fst : \Singleton{0} \})\}, \{\Defaultable(\{ snd : \Singleton{1} \})\}$} \\
+              & \multicolumn{2}{c|}{$\{\Defaultable(\{ fst : \Singleton{0} \}), \Defaultable(\{ snd : \Singleton{1} \})\}, \{\Defaultable(\{ \})\}$}  \\
+   \hline 
   \end{tabular}
 \end{center}
 \caption{Satsifiability for co- and contravariant predicates for data and codata. \\ Reflexivity of satisfiability is implicit. }
