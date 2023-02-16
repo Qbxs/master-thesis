@@ -2,11 +2,14 @@
 \label{ch:records}
 
 
-We extend the syntax of types by extensible record types:\cite{leijen2005extensible} \\
-$ \tau := \dots | \{ \ell_i : \tau_i \} $ \\
+We extend the syntax of types with extensible record types. \cite{leijen2005extensible}
+Extensible records are a form of codata as they are defined via thair destructors or field labels.
+Because they are extensible, they are in an interesting subtyping relation, i.e. we can add fields which make a record more specific but still a subtype of another one.
+E.g. the record type $\{ x : \Singleton{1}, y : \Nat \}$ is a subtype of the type $\{ y : \Nat \}$ as it simply represents the same type with one addtional field $x$. \\
+$ \tau := \dots | \; \{ \ell_i : \tau_i \} $ \\
 
 The syntax of terms is extended by record definitions and field selections. \\
-$ e := \{ \ell_i = e_1, \dots \} \; | \; e.\ell_i $ \\
+$ e := \dots | \; \{ \ell_i = e_1, \dots \} \; | \; e.\ell_i $ \\
 
 
 Subtyping rule: \\
@@ -24,7 +27,7 @@ $
 \AxiomC{}
 \RightLabel{\textsc{NatPrim}}
 \UnaryInfC{$\Nat \sub \Int$}
-\AxiomC{$\{ \mathit{x}, \mathit{y} \} \subseteq \{ \mathit{x} \}$}
+\AxiomC{$\{ \mathit{x} \} \subseteq \{ \mathit{x}, \mathit{y} \}$}
 \RightLabel{\textsc{Extend}}
 \BinaryInfC{$\{ \mathit{x} : \Nat, \mathit{y} : \Singleton{0} \} \sub \{ \mathit{x} : \Int \}$}
 \DisplayProof
