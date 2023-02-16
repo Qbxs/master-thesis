@@ -79,7 +79,7 @@ $k$ is the continuation that is passed to the type class method.
 Generally we generate constraints between the types introduced in the class declaration of the method and the unification variables generated for its arguments.
 In this case $\mathbf{show}$ is implemented in continuation passing style, so apart from the argument to be shown $x$, there is continutation $k$ which consumes the $\String$ output.
 The argument $w$ is implicit and stands for the inferred witness of the type class.
-At compilation it will be filled with a resolved instance, so that the evaluation of the metod is well defined.
+At compilation it will be filled with a resolved instance, so that the evaluation of the method is well defined.
 
 \begin{figure}[ht]
     \centering
