@@ -2,7 +2,7 @@
 \label{ch:type-system}
 % explain type inference with algebraic subtyping/bounds/bisubstitutions
 
-Using the resolution rules for qualified types in chaprter \ref{ch:qualified-types}, we present typing rules and type inference for the presented language extended with type classes.
+Using the resolution rules for qualified types in chaprter \ref{ch:qualified-types}, we present typing rules for the presented language extended with type classes.
 
 \section{Type Annotations}
 
@@ -72,7 +72,7 @@ What makes this kind of typing derivation special is that it not only decomposes
 but fills in the hole displayed by the type class constraint downwards by resolving a fitting witness.
 This resolved hole stands for the concrete witness that will be passed to the type class method for evaluation.
 
-Type inference for type class method calls (fig. \ref{fig:showable-example}):
+Type checking for type class method calls (fig. \ref{fig:showable-example}):
 $w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution and $\tau$ is the annotated type.
 $k$ is the continuation that is passed to the type class method.
 
@@ -93,7 +93,7 @@ At compilation it will be filled with a resolved instance, so that the evaluatio
     \label{fig:showable-example}
 \end{figure}
 
-For contravariant type classes such as $\Readable$ the inference looks slightly different:
+For contravariant type classes such as $\Readable$ the type checking looks slightly different:
 In this case, the type class constraint is applied to the argument type of the continuation.
 
 \begin{figure}[ht]
