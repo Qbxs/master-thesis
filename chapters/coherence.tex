@@ -1,6 +1,46 @@
-\chapter{Coherence}
+\chapter{Type Class Coherence}
 \label{ch:coherence}
 
+\section{Classes and Instances}
+
+We introduce top-level declarations for type classes and type class instances.
+Fig. \ref{fig:class-showable} shows an example class declaration for the covariant type class $\Showable$.
+$\alpha$ is the bound type variable used in the type signature of the type class method.
+The superscript $^+$ constraints the variable to only occur in input positions in the signature of the type class method $\mathit{show}$.
+At the same time, this means that the type class is covariant which is important information for type class resolution.
+The superscript $^-$, conversely, constraints the variable to only occur in output positions and is used for contravariant type classes.
+If there is no such superscript, the type class is declared as invariant.
+
+\begin{figure}[ht]
+    \centering
+    \begin{flalign*}
+        & \class{\Showable}{\alpha^+} :            \\
+        & \; \; \mathit{show} : \alpha \to \String
+    \end{flalign*}
+    \caption{Class declaration for type class $\Showable$}
+    \label{fig:class-showable}
+\end{figure}
+
+Instance declarations are dependent on type class declarations.
+An example instance declaration for $\Showable(\Nat)$ is given in fig. \ref{fig:instance-showable}.
+We define a type for which the instance should be declared (in this case $\Nat$) and replace any occurences of the type variable in the class declaration with this type.
+We then need to define an implementation of the declared type class method.
+
+\begin{figure}[ht]
+    \centering
+    \begin{flalign*}
+        & \instance{\Showable}{\Nat} :                                                         \\
+        & \; \; \mathit{show} : \Nat \to \String                                               \\
+        & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
+        & \; \; \; \; Z \Rightarrow \mathit{"Z"}                                               \\
+        & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+    \end{flalign*}
+    \caption{Instance declaration for $\Showable(\Nat)$}
+    \label{fig:instance-showable}
+\end{figure}
+
+In our examples there is only one method declared per type class but in practise this can be an arbitrary number.
+It is common practise in Haskell, for example, to only declare a minimal subset of type class methods and use a default implementation based on them for the other type class methods.
 
 \section{Motivation}
 
@@ -8,28 +48,28 @@ Consider the following instance declarations (fig. \ref{fig:showable-nat}):
 
 
 \begin{figure}[ht]
-  \centering
-  \begin{subfigure}{0.4\textwidth}
-    \begin{flalign*}
-       & \instance{\Showable}{\Nat} :                                                         \\
-       & \; \; \mathit{show} : \Nat \to \String                                       \\
-       & \; \; \mathit{show} \; x := \caseof{x}                                               \\
-       & \; \; \; \; Z \Rightarrow \mathit{"Z"}                                               \\
-       & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
-    \end{flalign*}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.4\textwidth}
-    \begin{flalign*}
-       & \instance{\Showable}{\Nat} :                                                         \\
-       & \; \; \mathit{show} : \Nat \to \String                                       \\
-       & \; \; \mathit{show} \; x := \caseof{x}                                               \\
-       & \; \; \; \; Z \Rightarrow \mathit{"0"}                                               \\
-       & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
-    \end{flalign*}
-  \end{subfigure}
-  \caption{Incoherent instance declarations for $\Showable(\Nat)$}
-  \label{fig:showable-nat}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \begin{flalign*}
+             & \instance{\Showable}{\Nat} :                                                         \\
+             & \; \; \mathit{show} : \Nat \to \String                                               \\
+             & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
+             & \; \; \; \; Z \Rightarrow \mathit{"Z"}                                               \\
+             & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+        \end{flalign*}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        \begin{flalign*}
+             & \instance{\Showable}{\Nat} :                                                         \\
+             & \; \; \mathit{show} : \Nat \to \String                                               \\
+             & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
+             & \; \; \; \; Z \Rightarrow \mathit{"0"}                                               \\
+             & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+        \end{flalign*}
+    \end{subfigure}
+    \caption{Incoherent instance declarations for $\Showable(\Nat)$}
+    \label{fig:showable-nat}
 \end{figure}
 
 If there is more than one instance declaration in the same environment for the same type class and type,
