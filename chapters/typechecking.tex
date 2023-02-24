@@ -103,10 +103,6 @@ In this case, the type class constraint is applied to the argument type of the c
     \label{fig:readable-example}
 \end{figure}
 
-We use a simplified notion here by requiring type annotations for type class method calls.
-Therefore, no fresh variables will be generated at this point.
-Instead, we use the annotated type to resolve a fitting instance for the type class constraint.
-In section (TODO) we discuss why generating fresh unification variables at this point is challenging.
 
 \begin{figure}[ht]
     \centering
@@ -122,196 +118,196 @@ In section (TODO) we discuss why generating fresh unification variables at this 
 
 %DELETE:
 
-Outlined below is the algorithm used to infer a principle(?) type for any given term without the presence of type classes.
-We will then examine, which alterations need to be done in order to achieve the same with the addition of type class constraints.
+% Outlined below is the algorithm used to infer a principle(?) type for any given term without the presence of type classes.
+% We will then examine, which alterations need to be done in order to achieve the same with the addition of type class constraints.
 
-\section{Type Inference}
-\label{sec:type-inference}
+% \section{Type Inference}
+% \label{sec:type-inference}
 
-The core of type inference is done using a biunifaction algorithm which keeps track of lower and upper bounds for each unification variable.
-For this, in the first step, we generate subtyping and type class constraints based on the term.
-When solving the constraint set, the algorithm either fails (i.e. the term does not type check) or for all unification variables we obtain lower and upper bounds, as well as type class constraints.
-The resulting bisubstitution is used to compute a principal type which can later be simplified using a translation to its type automata representation which is being minimized.
-As a result, we obtain a simple principal type for any term that typechecks.
+% The core of type inference is done using a biunifaction algorithm which keeps track of lower and upper bounds for each unification variable.
+% For this, in the first step, we generate subtyping and type class constraints based on the term.
+% When solving the constraint set, the algorithm either fails (i.e. the term does not type check) or for all unification variables we obtain lower and upper bounds, as well as type class constraints.
+% The resulting bisubstitution is used to compute a principal type which can later be simplified using a translation to its type automata representation which is being minimized.
+% As a result, we obtain a simple principal type for any term that typechecks.
 
-\cite{binder22refinement}
+% \cite{binder22refinement}
 
-\subsection{Constraint Generation}
+% \subsection{Constraint Generation}
 
-We generate constraints in a constraint set for each term. (Fig. \ref{fig:constraint-generation})
+% We generate constraints in a constraint set for each term. (Fig. \ref{fig:constraint-generation})
 
 
-% do we need this? no
-\begin{figure}[ht]
-    \begin{center}
-        $\constraintGen{\alpha}_\tau^\bot := \alpha$ \\
-        $\constraintGen{\alpha}_\tau^\top := \alpha$ \\
-        $\constraintGen{\nu \to \nu'}_\tau^\bot := \constraintGen{\nu}_\tau^\top \to \constraintGen{\nu'}_\tau^\bot$ \\
-        $\constraintGen{\nu \to \nu'}_\tau^\top := \constraintGen{\nu}_\tau^\bot \to \constraintGen{\nu'}_\tau^\top$ \\
-        $\constraintGen{\mu\alpha.\nu}_\tau^\bot := \mu\alpha.\constraintGen{\nu}_\tau^\bot$ \\
-        $\constraintGen{\mu\alpha.\nu}_\tau^\top := \mu\alpha.\constraintGen{\nu}_\tau^\top$ \\
-    \end{center}
-    \caption{Upper/lower bound translation}
-    \label{fig:bound-translation}
-\end{figure}
+% % do we need this? no
+% \begin{figure}[ht]
+%     \begin{center}
+%         $\constraintGen{\alpha}_\tau^\bot := \alpha$ \\
+%         $\constraintGen{\alpha}_\tau^\top := \alpha$ \\
+%         $\constraintGen{\nu \to \nu'}_\tau^\bot := \constraintGen{\nu}_\tau^\top \to \constraintGen{\nu'}_\tau^\bot$ \\
+%         $\constraintGen{\nu \to \nu'}_\tau^\top := \constraintGen{\nu}_\tau^\bot \to \constraintGen{\nu'}_\tau^\top$ \\
+%         $\constraintGen{\mu\alpha.\nu}_\tau^\bot := \mu\alpha.\constraintGen{\nu}_\tau^\bot$ \\
+%         $\constraintGen{\mu\alpha.\nu}_\tau^\top := \mu\alpha.\constraintGen{\nu}_\tau^\top$ \\
+%     \end{center}
+%     \caption{Upper/lower bound translation}
+%     \label{fig:bound-translation}
+% \end{figure}
 
-\begin{figure}[ht]
-    \begin{center}
+% \begin{figure}[ht]
+%     \begin{center}
 
-        \AxiomC{$\Gamma(x) = \tau$}
-        \RightLabel{\textsc{Var}}
-        \UnaryInfC{$\Gamma \vdash x : \tau \toConstr \emptyset$}
-        \DisplayProof
+%         \AxiomC{$\Gamma(x) = \tau$}
+%         \RightLabel{\textsc{Var}}
+%         \UnaryInfC{$\Gamma \vdash x : \tau \toConstr \emptyset$}
+%         \DisplayProof
 
-        {\vskip.1in}
+%         {\vskip.1in}
 
-        \AxiomC{$\Gamma \vdash e : \tau \toConstr \Xi$}
-        \AxiomC{$\mathit{Fresh}(\beta)$}
-        \RightLabel{\textsc{Lam}}
-        \BinaryInfC{$\Gamma \vdash \lambda x. e : \beta \to \tau \toConstr \Xi$}
-        \DisplayProof
+%         \AxiomC{$\Gamma \vdash e : \tau \toConstr \Xi$}
+%         \AxiomC{$\mathit{Fresh}(\beta)$}
+%         \RightLabel{\textsc{Lam}}
+%         \BinaryInfC{$\Gamma \vdash \lambda x. e : \beta \to \tau \toConstr \Xi$}
+%         \DisplayProof
 
-        {\vskip.1in}
+%         {\vskip.1in}
 
-        \AxiomC{$\Gamma \vdash e_1 : \sigma_1 \toConstr \Xi_1$}
-        \AxiomC{$\Gamma \vdash e_2 : \sigma_2 \toConstr \Xi_2$}
-        \AxiomC{$\mathit{Fresh}(\beta)$}
-        \RightLabel{\textsc{App}}
-        \TrinaryInfC{$\Gamma \vdash e_1e_2 : \beta \toConstr \{ \sigma_1 \sub \sigma_2 \to \beta \} \cup \Xi_1 \cup \Xi_2$}
-        \DisplayProof
+%         \AxiomC{$\Gamma \vdash e_1 : \sigma_1 \toConstr \Xi_1$}
+%         \AxiomC{$\Gamma \vdash e_2 : \sigma_2 \toConstr \Xi_2$}
+%         \AxiomC{$\mathit{Fresh}(\beta)$}
+%         \RightLabel{\textsc{App}}
+%         \TrinaryInfC{$\Gamma \vdash e_1e_2 : \beta \toConstr \{ \sigma_1 \sub \sigma_2 \to \beta \} \cup \Xi_1 \cup \Xi_2$}
+%         \DisplayProof
 
-        {\vskip.1in}
+%         {\vskip.1in}
 
-        \AxiomC{$\Gamma \vdash x : \sigma \toConstr \Xi$}
-        \AxiomC{$P(\mathbf{m}) := \forall \alpha. \Phi(\alpha) \Rightarrow \alpha \to \rho$}
-        \RightLabel{\textsc{Method}$^+$}
-        \BinaryInfC{$\Gamma \vdash \mathbf{m} [\beta] \; x : \tau \toConstr \{ \Phi_m(\beta), \sigma \sub \beta, \tau \sub \rho \} \cup \Xi$}
-        \DisplayProof
+%         \AxiomC{$\Gamma \vdash x : \sigma \toConstr \Xi$}
+%         \AxiomC{$P(\mathbf{m}) := \forall \alpha. \Phi(\alpha) \Rightarrow \alpha \to \rho$}
+%         \RightLabel{\textsc{Method}$^+$}
+%         \BinaryInfC{$\Gamma \vdash \mathbf{m} [\beta] \; x : \tau \toConstr \{ \Phi_m(\beta), \sigma \sub \beta, \tau \sub \rho \} \cup \Xi$}
+%         \DisplayProof
 
-        {\vskip.1in}
+%         {\vskip.1in}
 
-        \AxiomC{$\Gamma \vdash x : \sigma \toConstr \Xi$}
-        \AxiomC{$P(\mathbf{m}) := \forall \alpha. \Phi(\alpha) \Rightarrow \rho \to \alpha$}
-        \RightLabel{\textsc{Method}$^-$}
-        \BinaryInfC{$\Gamma \vdash \mathbf{m} [\beta] \; x : \tau \toConstr \{ \Phi_m(\beta), \beta \sub \tau, \sigma \sub \rho \} \cup \Xi$}
-        \DisplayProof
+%         \AxiomC{$\Gamma \vdash x : \sigma \toConstr \Xi$}
+%         \AxiomC{$P(\mathbf{m}) := \forall \alpha. \Phi(\alpha) \Rightarrow \rho \to \alpha$}
+%         \RightLabel{\textsc{Method}$^-$}
+%         \BinaryInfC{$\Gamma \vdash \mathbf{m} [\beta] \; x : \tau \toConstr \{ \Phi_m(\beta), \beta \sub \tau, \sigma \sub \rho \} \cup \Xi$}
+%         \DisplayProof
 
-    \end{center}
-    \caption{Constraint Generation}
-    \label{fig:constraint-generation}
-\end{figure}
+%     \end{center}
+%     \caption{Constraint Generation}
+%     \label{fig:constraint-generation}
+% \end{figure}
 
-\subsection{Constraint Solving}
+% \subsection{Constraint Solving}
 
-Constraints are solved by decomposition into simpler constraints. (Fig. \ref{fig:constraint-decomposition})
-Simple constraints will be added to the lower and upper bounds of unification variables.
-Constraints which cannot be solved (e.g. $\Nat \sub \Nat \to \bot$) lead to an error, thus type inference for the term fails, as expected.
+% Constraints are solved by decomposition into simpler constraints. (Fig. \ref{fig:constraint-decomposition})
+% Simple constraints will be added to the lower and upper bounds of unification variables.
+% Constraints which cannot be solved (e.g. $\Nat \sub \Nat \to \bot$) lead to an error, thus type inference for the term fails, as expected.
 
-\begin{figure}[ht]
-    \begin{center}
-    $\mathbf{solve}(\emptyset) = \emptyset$ \\
-    $\mathbf{solve}(\{ u_1 \sub u_2 \} \cup cs) = $\\
-    $\mathbf{solve}(\{ \alpha \sub u \} \cup cs) = $\\
-    $\mathbf{solve}(\{ u \sub \alpha \} \cup cs) = $\\
-    $\mathbf{solve}(\{ \tau \sub \sigma \} \cup cs) = \mathbf{decompose}(\tau \sub \sigma) \cup \mathbf{solve}(cs)$\\
-    \end{center}
-    \caption{Constraint Solving}
-    \label{fig:constraint-solving}
-\end{figure}
+% \begin{figure}[ht]
+%     \begin{center}
+%     $\mathbf{solve}(\emptyset) = \emptyset$ \\
+%     $\mathbf{solve}(\{ u_1 \sub u_2 \} \cup cs) = $\\
+%     $\mathbf{solve}(\{ \alpha \sub u \} \cup cs) = $\\
+%     $\mathbf{solve}(\{ u \sub \alpha \} \cup cs) = $\\
+%     $\mathbf{solve}(\{ \tau \sub \sigma \} \cup cs) = \mathbf{decompose}(\tau \sub \sigma) \cup \mathbf{solve}(cs)$\\
+%     \end{center}
+%     \caption{Constraint Solving}
+%     \label{fig:constraint-solving}
+% \end{figure}
 
-\begin{figure}[ht]
-    % We might add witnesses here?
-    \begin{flalign*}
-        \decompose{\tau}{\top}                               & := & \emptyset                                         \\
-        \decompose{\bot}{\tau}                               & := & \emptyset                                         \\
-        \decompose{\tau_1 \join \tau_2}{\sigma}              & := & \{ \tau_1 \sub \sigma, \tau_2 \sub \sigma \}      \\
-        \decompose{\sigma}{\tau_1 \meet \tau_2}              & := & \{ \sigma \sub \tau_1, \sigma \sub \tau_2 \}      \\
-        \decompose{\tau}{\mu\alpha.\sigma}                   & := & \{ \tau \sub \sigma[\mu\alpha.\sigma / \alpha] \} \\
-        \decompose{\mu\alpha.\sigma}{\tau}                   & := & \{ \sigma[\mu\alpha.\sigma / \alpha] \sub \tau \} \\
-        \decompose{\alpha}{\alpha}                           & := & \emptyset                                         \\
-        \decompose{\sigma_1 \to \tau_1}{\sigma_2 \to \tau_2} & := & \{ \sigma_2 \sub \sigma_1, \tau_1 \sub \tau_2 \}  \\
-    \end{flalign*}
-    \caption{Constraint Decomposition}
-    \label{fig:constraint-decomposition}
-\end{figure}
+% \begin{figure}[ht]
+%     % We might add witnesses here?
+%     \begin{flalign*}
+%         \decompose{\tau}{\top}                               & := & \emptyset                                         \\
+%         \decompose{\bot}{\tau}                               & := & \emptyset                                         \\
+%         \decompose{\tau_1 \join \tau_2}{\sigma}              & := & \{ \tau_1 \sub \sigma, \tau_2 \sub \sigma \}      \\
+%         \decompose{\sigma}{\tau_1 \meet \tau_2}              & := & \{ \sigma \sub \tau_1, \sigma \sub \tau_2 \}      \\
+%         \decompose{\tau}{\mu\alpha.\sigma}                   & := & \{ \tau \sub \sigma[\mu\alpha.\sigma / \alpha] \} \\
+%         \decompose{\mu\alpha.\sigma}{\tau}                   & := & \{ \sigma[\mu\alpha.\sigma / \alpha] \sub \tau \} \\
+%         \decompose{\alpha}{\alpha}                           & := & \emptyset                                         \\
+%         \decompose{\sigma_1 \to \tau_1}{\sigma_2 \to \tau_2} & := & \{ \sigma_2 \sub \sigma_1, \tau_1 \sub \tau_2 \}  \\
+%     \end{flalign*}
+%     \caption{Constraint Decomposition}
+%     \label{fig:constraint-decomposition}
+% \end{figure}
 
-\subsection{Type Coalescing}
+% \subsection{Type Coalescing}
 
-The upper and lower bounds of unification variables are being coalesced to preserve transitivity of the subtyping relation and reduce the number of constraints of the inferred type.
-E.g. if $\alpha$ has the upper bound $\beta$ and $\beta$ has the upper bound $\Nat$, we can coalesce the bounds and deduce that $\alpha$ also has $\Nat$ as an upper bound.
+% The upper and lower bounds of unification variables are being coalesced to preserve transitivity of the subtyping relation and reduce the number of constraints of the inferred type.
+% E.g. if $\alpha$ has the upper bound $\beta$ and $\beta$ has the upper bound $\Nat$, we can coalesce the bounds and deduce that $\alpha$ also has $\Nat$ as an upper bound.
 
-\subsection{Type Simplification}
+% \subsection{Type Simplification}
 
-After type coalescing we are not yet done in inferring a principle type, as in many cases there are additional simplification steps possible.
-E.g. \dots
+% After type coalescing we are not yet done in inferring a principle type, as in many cases there are additional simplification steps possible.
+% E.g. \dots
 
-As Dolan has shown \cite{dolan2017subtyping} types can be translated into type automata, a distinguished form of finite state automata.
-This enables us to use all known algorithm that operate on finite state automata on types, especially determinisation and minimisation.
+% As Dolan has shown \cite{dolan2017subtyping} types can be translated into type automata, a distinguished form of finite state automata.
+% This enables us to use all known algorithm that operate on finite state automata on types, especially determinisation and minimisation.
 
-\subsubsection{Constrained Nodes}
-% no sense if we resolve type classes straight-forward
+% \subsubsection{Constrained Nodes}
+% % no sense if we resolve type classes straight-forward
 
-As an expansion for type automata we introduced constrained nodes.
-Any node can now be annotated by a set of type classes representing type class constraints.
-With this addition we have to consider how to merge nodes, as simplification should not impose any additional constraints.
+% As an expansion for type automata we introduced constrained nodes.
+% Any node can now be annotated by a set of type classes representing type class constraints.
+% With this addition we have to consider how to merge nodes, as simplification should not impose any additional constraints.
 
-\subsection{Emptiness Check}
+% \subsection{Emptiness Check}
 
-Dolan \cite{downen2017phd} has shown how we can translate types to type automata in order to simplify inferred types.
-These type automata are a form of finite automata, so all the standard algorithms for finite automata (such as determinisation, minimisation) can be performed on them.
-Originally, this strategy was used to syntactically simplify inferred types but it opens up other possibilities.
+% Dolan \cite{downen2017phd} has shown how we can translate types to type automata in order to simplify inferred types.
+% These type automata are a form of finite automata, so all the standard algorithms for finite automata (such as determinisation, minimisation) can be performed on them.
+% Originally, this strategy was used to syntactically simplify inferred types but it opens up other possibilities.
 
-By translating types for which we want to check for an overlap, we can construct an intersection automaton using the standard algorithm for intersections of finite automata.
-All that is left to do from there, is to check whether the resulting automaton accepts the empty language,  i.e. no final state is reachable from the start state.\
-The following outlines how this achieved:
+% By translating types for which we want to check for an overlap, we can construct an intersection automaton using the standard algorithm for intersections of finite automata.
+% All that is left to do from there, is to check whether the resulting automaton accepts the empty language,  i.e. no final state is reachable from the start state.\
+% The following outlines how this achieved:
 
-\begin{figure}[ht]
-  \centering
-  \begin{tikzpicture}[node distance={25mm}, main/.style = {draw, circle}]
-    \node[main] (1) {$\to$};
-    \node[main, fill=gray!30] (2) [below left of=1] {$\Singleton{0}$};
-    \node[main] (3) [below right of=1] {$\to$};
-    \node[main, fill=gray!30] (4) [below left of=3] {$\Nat$};
-    \node[main] (5) [below right of=3] {$\Nat$};
-    \node[main] (6) [below of=3] {$\Singleton{0}$};
-    \draw[->] (1) edge["l"] (2);
-    \draw[->] (1) edge["r"] (3);
-    \draw[->] (3) edge["l"] (4);
-    \draw[->] (3) edge["r"] (5);
-    \draw[->] (3) edge["r"] (6);
-  \end{tikzpicture}
-  \caption{Type automaton for $\Singleton{0} \to (\Nat \to \Singleton{0} \join \Nat)$}
-  \label{fig:example-type-automaton}
-\end{figure}
+% \begin{figure}[ht]
+%   \centering
+%   \begin{tikzpicture}[node distance={25mm}, main/.style = {draw, circle}]
+%     \node[main] (1) {$\to$};
+%     \node[main, fill=gray!30] (2) [below left of=1] {$\Singleton{0}$};
+%     \node[main] (3) [below right of=1] {$\to$};
+%     \node[main, fill=gray!30] (4) [below left of=3] {$\Nat$};
+%     \node[main] (5) [below right of=3] {$\Nat$};
+%     \node[main] (6) [below of=3] {$\Singleton{0}$};
+%     \draw[->] (1) edge["l"] (2);
+%     \draw[->] (1) edge["r"] (3);
+%     \draw[->] (3) edge["l"] (4);
+%     \draw[->] (3) edge["r"] (5);
+%     \draw[->] (3) edge["r"] (6);
+%   \end{tikzpicture}
+%   \caption{Type automaton for $\Singleton{0} \to (\Nat \to \Singleton{0} \join \Nat)$}
+%   \label{fig:example-type-automaton}
+% \end{figure}
 
-\begin{itemize}
-  \item We create a type automaton $G = (q_0, N, E, \delta)$
-  \item We construct the intersection automaton as $G_\cap = \dots$
-  \item We check whether $G_\cap$ accepts the empty language, i.e. represents the empty type $\bot$
-\end{itemize}
+% \begin{itemize}
+%   \item We create a type automaton $G = (q_0, N, E, \delta)$
+%   \item We construct the intersection automaton as $G_\cap = \dots$
+%   \item We check whether $G_\cap$ accepts the empty language, i.e. represents the empty type $\bot$
+% \end{itemize}
 
-\subsubsection{Constructing type automata}
+% \subsubsection{Constructing type automata}
 
-We employ a technique for constructing type automata similar to that of MLsub \cite{dolanMLsub}.
-When creating the type automaton for a positive type $\tau$, we create a node $\tau_i$ for each subterm $\tau_i$ of $\tau$.
-The state $q(\tau_0)$ representing the whole term is the start state.
-The transition table $\delta$ is defined in fig. \ref{fig:automaton-transitions}
+% We employ a technique for constructing type automata similar to that of MLsub \cite{dolanMLsub}.
+% When creating the type automaton for a positive type $\tau$, we create a node $\tau_i$ for each subterm $\tau_i$ of $\tau$.
+% The state $q(\tau_0)$ representing the whole term is the start state.
+% The transition table $\delta$ is defined in fig. \ref{fig:automaton-transitions}
 
-\begin{figure}[ht]
-    \begin{align*}
-        q(\tau_1  \join \tau_2)  \transition{\epsilon} q(\tau_1) &
-        q(\tau_1  \join \tau_2)  \transition{\epsilon} q(\tau_2) \\
-        q(\tau_1  \meet \tau_2)  \transition{\epsilon} q(\tau_1) &
-        q(\tau_1  \meet \tau_2)  \transition{\epsilon} q(\tau_2) \\
-        q(\tau_1  \to \tau_2)  \transition{d} q(\tau_1) &
-        q(\tau_1  \to \tau_2)  \transition{r} q(\tau_2) \\
-        q(\mu\alpha.\tau_1)  \transition{\epsilon} q(\tau_1)  &
-    \end{align*}
-    \caption{Transition table $\delta$ for a type automaton}
-    \label{fig:automaton-transitions}
-\end{figure}
+% \begin{figure}[ht]
+%     \begin{align*}
+%         q(\tau_1  \join \tau_2)  \transition{\epsilon} q(\tau_1) &
+%         q(\tau_1  \join \tau_2)  \transition{\epsilon} q(\tau_2) \\
+%         q(\tau_1  \meet \tau_2)  \transition{\epsilon} q(\tau_1) &
+%         q(\tau_1  \meet \tau_2)  \transition{\epsilon} q(\tau_2) \\
+%         q(\tau_1  \to \tau_2)  \transition{d} q(\tau_1) &
+%         q(\tau_1  \to \tau_2)  \transition{r} q(\tau_2) \\
+%         q(\mu\alpha.\tau_1)  \transition{\epsilon} q(\tau_1)  &
+%     \end{align*}
+%     \caption{Transition table $\delta$ for a type automaton}
+%     \label{fig:automaton-transitions}
+% \end{figure}
 
-\subsubsection{Simplifying type automata}
+% \subsubsection{Simplifying type automata}
 
 % Remove $\epsilon$-transitions by merging nodes reachable by one or more $\epsilon$-transitions.
 
