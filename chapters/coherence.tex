@@ -79,10 +79,10 @@ it is therefore undecidable which instance is being picked.
 
 Incoherence causes unpredictable behavior of programs.
 Not only does this potentially produce unexpected results, it also prevents us from reasoning about programs.
-E.g. if the $\mathit{insert}$ operation for search tree relies on the type class $\mathit{Ord}$ for which we have incoherent instances,
-the search tree properties may break. \cite{Kilpatrick2019-cy}
+E.g. if the $\mathit{insert}$ operation for search trees relies on the type class $\mathit{Ord}$ for which we have incoherent instances,
+the search tree properties may be violated. \cite{Kilpatrick2019-cy}
 
-Moreover, in the presence of subtyping, instances for types related by the subtyping relation may not be declared for the same type class.
+Moreover, in the presence of subtyping, instances for types related by the subtyping relation may not be declared for the same type class because they allow resolution for the same type class constraint from different instances.
 
 Therefore, we want to define a criterion which globally guarantees that no such ambiguity can arise when resolving type class constraints.
 
@@ -167,10 +167,6 @@ Given $\Phi(\Singleton{0} \join \Singleton{1})$ and $\Phi(\Singleton{1} \join \S
 In order to maintain coherence in this case, we have to ensure that witnesses for these judgements are derived from a common instance.
 We can not, however, declare an instance for both types individually.
 
-Generally, a global restriction follows when declaring instances:
-There may not be an instance for an overlapping type in scope.
-How this can be checked algorithmically is presented in chapter \ref{ch:type-system}.
-
 To ensure type class coherence, we have to take conclusions of the subtyping relation into account.
 That means we have to consider the derivable instances of type class based of sub- or supertypes.
 This imposes some restrictions not present in type systems based on type equalities.
@@ -224,8 +220,10 @@ Thus, we need to enforce that there is at no point more than one instance in sco
 \subsection{Covariant Predicates}
 
 Covariant predicates allow resolution 'downwards', i.e. instances for subtypes can be resolved from instances for supertypes.
-We therefore need to ensure globally that there is no common subtype (except the trivial type $\bot$) for which an instance can be resolved from two distinct instances.
-That means the types that we declare instances for have to be \emph{non-overlapping downwards}.
+We can say that any covariant instance for type $\tau$ allows resolution for a sublattice which is a \emph{downward closed set} of $\tau$. 
+
+We therefore need to ensure globally that there is no common non-trivial subtype for which an instance can be resolved from two distinct instances.
+That means the types that we declare instances for have to be \emph{non-overlapping downwards} or the two lower sets of the types declared do not contain any non-trivial types.
 
 \begin{definition}
   Two types $\tau$ and $\sigma$ are \emph{non-overlapping downwards} iff. $\forall\rho. \rho \sub \tau$ and $\rho \sub \sigma \Rightarrow \rho$ is uninhabited.
@@ -242,10 +240,11 @@ the intersection of both types is equivalent to $(\Singleton{0} \join \Singleton
 \subsection{Contravariant Predicates}
 
 Contravariant predicates, on the other hand, allow resolution 'upwards', i.e. instances for supertypes can be resolved from instances for subtypes.
-Here, we have to enforce globally that there is no common supertype (except the trivial type $\top$) for which an instance can be resolved from two distinct instances.
-It is unproblematic to resolve a contravariant predicate for $\top$ because (typically) there are no covalues $c : \top$, i.e. we cannot define a destructor or continuation that 'destroys' a value of type $\top$.
+Here, we have to enforce globally that there is no common non-trivial supertype for which an instance can be resolved from two distinct instances.
+We can say that any contravariant instance for type $\tau$ allows resolution for a sublattice which is a \emph{upward closed set} of $\tau$. 
+The lattice type $\top$ can be often be seen as trivial in this context because typically there are no covalues $c : \top$, i.e. we cannot define a destructor or continuation that 'destroys' a value of type $\top$.
 
-That means the types that we declare instances for have to be \emph{non-overlapping upwards}.
+That means the types that we declare instances for have to be \emph{non-overlapping upwards} or the two upper sets of the types declared do not contain any non-trivial types.
 
 \begin{definition}
   Two types $\tau$ and $\sigma$ are \emph{non-overlapping upwards} iff. $\forall\rho. \tau \sub \rho$ and $\sigma \sub \rho \Rightarrow \rho$ is couninhabited.
@@ -259,6 +258,7 @@ In more sophisticated type systems, it may not even be possible to find a non-tr
 \subsection{Invariant Predicates}
 
 Invariant predicates allow resolution neither 'upwards' nor 'downwards', thus no such restriction is required for them.
+In other words, the set of types for which an invariant instance can be resolved for a type $\tau$ is just a singleton-set.
 We only need to enforce that there is no instance for an equivalent type declared.
 
 
@@ -282,7 +282,7 @@ Refinements for covariant predicates behave like extensions for contravariant pr
 \begin{center}
   \begin{tabular}{| c | c c |}
   \hline
-        & Covariant instance & Satisfies \\
+        & Covariant instance & Satisfies (Lower set) \\
   \hline
    Data & $\Showable(\Bool)$      & $\Showable(\mathbb{T}), \Showable(\mathbb{F}), \Showable(\bot)$ \\
         & $\Showable(\mathbb{T})$ & $\Showable(\bot)$ \\
@@ -304,7 +304,7 @@ Refinements for covariant predicates behave like extensions for contravariant pr
 \begin{center}
   \begin{tabular}{| c | c c |}
   \hline
-        & Contravariant instance & Satisfies \\
+        & Contravariant instance & Satisfies (Upper set) \\
   \hline
    Data & $\Defaultable(\Bool)$ & \\
         & $\Defaultable(\mathbb{T})$ & $\Defaultable(\Bool)$ \\
