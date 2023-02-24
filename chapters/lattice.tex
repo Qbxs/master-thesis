@@ -3,25 +3,6 @@
 
 We introduce a simple language with a few nominal types to describe a type system with subtyping.
 
-\section{Terms}
-\label{sec:terms}
-
-Our language (fig. \ref{fig:term-syntax}) consists of numeric, boolean and String literals, as well as the constructs of the lambda calculus:
-variables, functions introduced by lambda-abstractions and function applications.
-
-\begin{figure}[ht]
-  \begin{flalign*}
-    e := & \; x \; | \; y \; | \; z \; | \; \dots                                        & \textit{Variables} \\
-         & \; \mathit{true} \; | \; \mathit{false}                                       & \textit{Boolean Literals} \\
-         & \; 0 \; | \; 1 \; | \; 2 \; | \; \dots                                        & \textit{Numeric Literals} \\
-         & \; \mathit{"foo"} \; | \; \mathit{"bar"} \; | \; \mathit{"baz"} \; | \; \dots & \textit{String Literals} \\
-         & \; \lambda x.e                                                                & \textit{Lambda abstractions} \\
-         & \; e_1e_2                                                                     & \textit{Function applications}
-  \end{flalign*}
-  \caption{The syntax of terms}
-  \label{fig:term-syntax}
-\end{figure}
-
 \section{Types}
 \label{sec:types}
 
@@ -39,7 +20,7 @@ Types constructed by the $\join$ and $\meet$ operators stand for the union and i
                    & \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots  & \textit{Singleton types}          \\
                    & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types}            \\
                    & \; \tau \to \sigma                                                       & \textit{Function types}           \\
-    % remove recursive types
+    % remove recursive types?
                    & \; \mu\alpha.\tau                                                        & \textit{Recursive types}          \\
                    & \; \alpha                                                                & \textit{Recursive type variables}
   \end{flalign*}
@@ -239,10 +220,6 @@ Intersection types and the $\top$ type on the other hand  can only occur in inou
 The motivation for this can be given as follows: Consider a function that accepts two types as inputs and may return two types as output.
 Since the function is assumed to be total any input needs to be of both types (i.e. of the intersection of both types) and the output can be either type (i.e. the union of both types).
 
-Therefore, we introduce \emph{polar types} in fig. \ref{fig:polar-type-syntax} as a means to distinguish positive types (for outputs) and negative types (for inputs).
-Since functions are covariant in their output and contravariant in their input, the polarity of types in the input position is flipped.
-Nominal types can occur both in positive and negative positions.
-
 \begin{figure}
   \begin{flalign*}
     \tau^+ := & \; \Bool \; | \; \Nat \; | \; \Int \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
@@ -252,4 +229,27 @@ Nominal types can occur both in positive and negative positions.
   \end{flalign*}
   \caption{The syntax of polar types}
   \label{fig:polar-type-syntax}
+\end{figure}
+
+Therefore, we introduce \emph{polar types} in fig. \ref{fig:polar-type-syntax} as a means to distinguish positive types (for outputs) and negative types (for inputs).
+Since functions are covariant in their output and contravariant in their input, the polarity of types in the input position is flipped.
+Nominal types can occur both in positive and negative positions.
+
+\section{Terms}
+\label{sec:terms}
+
+Our language (fig. \ref{fig:term-syntax}) consists of numeric, boolean and String literals corresponding to the nominal types introduced above, as well as the constructs of the lambda calculus:
+variables, functions introduced by lambda-abstractions and function applications.
+
+\begin{figure}[ht]
+  \begin{flalign*}
+    e := & \; x \; | \; y \; | \; z \; | \; \dots                                        & \textit{Variables} \\
+         & \; \mathit{true} \; | \; \mathit{false}                                       & \textit{Boolean Literals} \\
+         & \; 0 \; | \; 1 \; | \; 2 \; | \; \dots                                        & \textit{Numeric Literals} \\
+         & \; \mathit{"foo"} \; | \; \mathit{"bar"} \; | \; \mathit{"baz"} \; | \; \dots & \textit{String Literals} \\
+         & \; \lambda x.e                                                                & \textit{Lambda abstractions} \\
+         & \; e_1e_2                                                                     & \textit{Function applications}
+  \end{flalign*}
+  \caption{The syntax of terms}
+  \label{fig:term-syntax}
 \end{figure}
