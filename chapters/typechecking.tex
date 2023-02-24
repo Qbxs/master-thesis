@@ -4,16 +4,16 @@
 
 Using the resolution rules for qualified types in chaprter \ref{ch:qualified-types}, we present typing rules for the presented language extended with type classes.
 
-\section{Type Annotations}
+\section{Type Class Methods}
 
-In order to simplify instance resolution, we use type annotations for type class method calls.
-That means, that we instantiate a suitable type when invoking a type class method.
-Resolution still takes place, so the annotated type does not have to much the type of any instance.
-$$
-\mathbf{show} \; [\Nat] \; 42
-$$
+Type class resolution only takes place when a type class method is applied at some point in a program to be typechecked.
 
-In a context with e.g. $\Showable(\Int)$ a suitable instance will be resolved for the invocation.
+E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved for the invocation of the type class method $\showTerm(42, \mathit{id}) : \Nat$.
+
+We make continuations explicit by passing them as arguments to the method.
+Not only makes this typechecking more straight-forward, it is in fact neccessary because of two reasons:
+For contravariant type classes, only the continuation can give us information for type class resolution.
+For invariant type classes, we need both a producer and a consumer or continuation to enact as upper and lower bounds for type class resolution.
 
 \section{Typing Rules}
 
@@ -64,20 +64,15 @@ In a context with e.g. $\Showable(\Int)$ a suitable instance will be resolved fo
 The resolution rules for type class witnesses in section \ref{sec:witnesses} provide us with means to implement type checking for type class methods.
 For every call to a type class method resolution either fails or provides a dictionary, i.e. a witness, for the type class constraint.
 
-For simplicity, we annotate calls of type class methods with types.
-These types will be used to resolve a suitable instance.
-Omitting type annotations, poses some additional challenges as discussed in further work.
-
 What makes this kind of typing derivation special is that it not only decomposes judgements upwards,
 but fills in the hole displayed by the type class constraint downwards by resolving a fitting witness.
 This resolved hole stands for the concrete witness that will be passed to the type class method for evaluation.
 
 Type checking for type class method calls (fig. \ref{fig:showable-example}):
-$w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution and $\tau$ is the annotated type.
+$w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution and $\tau$ is the type of the producer argument.
 $k$ is the continuation that is passed to the type class method.
 
-Generally we generate constraints between the types introduced in the class declaration of the method and the unification variables generated for its arguments.
-In this case $\mathbf{show}$ is implemented in continuation passing style, so apart from the argument to be shown $x$, there is continutation $k$ which consumes the $\String$ output.
+In this case $\showTerm$ is implemented in continuation passing style, so apart from the argument to be shown $x$, there is continutation $k$ which consumes the $\String$ output.
 The argument $w$ is implicit and stands for the inferred witness of the type class.
 At compilation it will be filled with a resolved instance, so that the evaluation of the method is well defined.
 
@@ -87,9 +82,9 @@ At compilation it will be filled with a resolved instance, so that the evaluatio
     \AxiomC{$\ctx x : \tau$}
     \AxiomC{$\ctx k : \String \to \sigma$}
     \RightLabel{\textsc{T-Class}$^+$}
-    \TrinaryInfC{$\ctx \showTerm [\tau] w \; x \; k : \sigma$}
+    \TrinaryInfC{$\ctx \showTerm(w, x, k) : \sigma$}
     \DisplayProof
-    \caption{Derivation for $\showTerm w \; x \; k : \sigma$}
+    \caption{Derivation for $\showTerm(w, x, k) : \sigma$}
     \label{fig:showable-example}
 \end{figure}
 
@@ -102,9 +97,9 @@ In this case, the type class constraint is applied to the argument type of the c
     \AxiomC{$\ctx x : \String$}
     \AxiomC{$\ctx k : \tau \to \sigma$}
     \RightLabel{\textsc{T-Class}$^-$}
-    \TrinaryInfC{$\ctx \readTerm [\tau] w \; x \; k : \sigma$}
+    \TrinaryInfC{$\ctx \readTerm(w, x, k) : \sigma$}
     \DisplayProof
-    \caption{Derivation for $\readTerm w \; x \; k : \sigma$}
+    \caption{Derivation for $\readTerm(w, x, k) : \sigma$}
     \label{fig:readable-example}
 \end{figure}
 
@@ -124,6 +119,8 @@ In section (TODO) we discuss why generating fresh unification variables at this 
     \caption{Typing rule for covariant type classes}
     \label{fig:cov-typing}
 \end{figure}
+
+%DELETE:
 
 Outlined below is the algorithm used to infer a principle(?) type for any given term without the presence of type classes.
 We will then examine, which alterations need to be done in order to achieve the same with the addition of type class constraints.
