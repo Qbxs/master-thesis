@@ -107,14 +107,31 @@ In this case, the type class constraint is applied to the argument type of the c
 \begin{figure}[ht]
     \centering
     \AxiomC{$\ctx w : \Phi(\tau)$}
-    \AxiomC{$\ctx x_1 : \tau_1$}
-    \AxiomC{$\ctx x_n : \tau_n$}
+    \AxiomC{$\ctx x : \tau$}
+    \AxiomC{$P(\mathbf{m}_\Phi) = \alpha$}
+    \AxiomC{$\ctx k : \alpha \to \sigma$}
     \RightLabel{\textsc{T-Class}$^+$}
-    \TrinaryInfC{$\ctx \mathbf{m} [\tau] w \; x_1 \dots x_n : \sigma$}
+    \QuaternaryInfC{$\ctx \mathbf{m}_\Phi(w, x, k) : \sigma$}
     \DisplayProof
     \caption{Typing rule for covariant type classes}
     \label{fig:cov-typing}
 \end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \AxiomC{$\ctx w : \Phi(\tau)$}
+    \AxiomC{$\ctx x : \alpha$}
+    \AxiomC{$P(\mathbf{m}_\Phi) = \alpha$}
+    \AxiomC{$\ctx k : \tau \to \sigma$}
+    \RightLabel{\textsc{T-Class}$^-$}
+    \QuaternaryInfC{$\ctx \mathbf{m}_\Phi(w, x, k) : \sigma$}
+    \DisplayProof
+    \caption{Typing rule for covariant type classes}
+    \label{fig:contrav-typing}
+\end{figure}
+
+Generally, when encountering a type class method $\mathbf{m}_\Phi$, we type check it with the type given by the class declaration in the program $P(\mathbf{m}_\Phi)$ while substituting the argument type for the type variable in the declaration.
+Based on the substitution, we perform type class resolution and place in a witness for the type class constraint.
 
 %DELETE:
 
