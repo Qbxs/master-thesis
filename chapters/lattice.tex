@@ -1,7 +1,10 @@
 \chapter{The Lattice of Types}
 \label{ch:lattice}
 
-We introduce a simple language with a few nominal types to describe a type system with subtyping.
+A partially ordered set $(L , \leq)$ is called a lattice if it is both a join- and a meet-semilattice, i.e. each two-element subset $\{a,b\}\subseteq L$ has a join (i.e. least upper bound, denoted by $a \join b$) and dually a meet (i.e. greatest lower bound, denoted by $a \meet b$).
+A lattice of types is a type universe $\mathcal{U}$ of types and a subtyping relation $\sub$ playing the role of a partial order.
+It is, furthermore, a bounded lattice due to the types $\top$ and $\bot$ which satisfy $\bot \sub \tau$ and $\tau \sub \top$ for all types $\tau$ in $\mathcal{U}$.
+In the following, we introduce a simple language with a few nominal types to describe a type system with subtyping.
 
 \section{Types}
 \label{sec:types}
