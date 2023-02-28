@@ -56,6 +56,18 @@ For invariant type classes, we need both a producer and a consumer or continuati
         \RightLabel{\textsc{T-Sub}}
         \BinaryInfC{$\ctx e : \tau$}
         \DisplayProof
+
+        {\vskip.2in}
+
+        \AxiomC{$\ctx \overline{e_i : \tau_i}$}
+        \RightLabel{\textsc{T-Record}}
+        \UnaryInfC{$ \ctx \{ \overline{\ell_i = e_i} \} : \{ \overline{\ell_i : \tau_i} \}$}
+        \DisplayProof
+        {\hskip.2in}
+        \AxiomC{$ \ctx e : \{ \ell : \tau \}$}
+        \RightLabel{\textsc{T-Select}}
+        \UnaryInfC{$ \ctx e.\ell : \tau$}
+        \DisplayProof
     \end{center}
     \caption{Typing Rules}
     \label{fig:typing-rules}

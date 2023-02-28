@@ -8,6 +8,10 @@ We introduce a simple language with a few nominal types to describe a type syste
 
 We use the following syntax of types (fig. \ref{fig:type-syntax}) with the simple types of natural numbers $\Nat$, of integers $\Int$ and the type of booleans $\Bool$.
 Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which each are only inhabited by the term in their index, e.g. $1 : \Singleton{1}$.
+We extend the syntax of types with extensible record types. \cite{leijen2005extensible}
+Extensible records are a form of codata as they are defined via thair destructors or field labels.
+Because they are extensible, they are in an interesting subtyping relation, i.e. we can add fields which make a record more specific but still a subtype of another one.
+E.g. the record type $\{ x : \Singleton{1}, y : \Nat \}$ is a subtype of the type $\{ y : \Nat \}$ as it simply represents the same type with one addtional field $x$. \\
 Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$.
 $\top$ stands for the greatest type which is a supertype of all other types.
 Dually, $\bot$ is the smallest type which is a subtype of all other types.
@@ -20,6 +24,7 @@ Types constructed by the $\join$ and $\meet$ operators stand for the union and i
                    & \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots  & \textit{Singleton types}          \\
                    & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types}            \\
                    & \; \tau \to \sigma                                                       & \textit{Function types}           \\
+                   & \; \{ \ell_i : \tau_i \}                                                 & \textit{Record types}
     % remove recursive types?
                    & \; \mu\alpha.\tau                                                        & \textit{Recursive types}          \\
                    & \; \alpha                                                                & \textit{Recursive type variables}
@@ -134,6 +139,13 @@ Functions are contravariant in their input type, thus flipping the subtyping rel
     \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
   \end{prooftree}
 
+  \begin{prooftree}
+    \AxiomC{$\forall j. \tau_j \sub \sigma_j$}
+    \AxiomC{$\{ \overline{\ell_j} \} \subseteq \{ \overline{\ell_i} \}$}
+    \RightLabel{\textsc{Extend}}
+    \BinaryInfC{$\{ \overline{\ell_i : \tau_i} \} \sub \{ \overline{\ell_j : \sigma_j} \}$}
+  \end{prooftree}
+
   % recursive types
   \begin{center}
     \AxiomC{}
@@ -149,6 +161,21 @@ Functions are contravariant in their input type, thus flipping the subtyping rel
 
   \caption{Subtyping rules}
   \label{fig:subtyping}
+\end{figure}
+
+As an example, we can show that an extended record of type $\{ \mathit{x} : \Nat, \mathit{y} : \Singleton{0} \}$  is a subtype of the simpler record type $\{ \mathit{x} : \Int \}$. (fig. \ref{fig:subtyping-example})
+\begin{figure}
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{NatPrim}}
+    \UnaryInfC{$\Nat \sub \Int$}
+    \AxiomC{$\{ \mathit{x} \} \subseteq \{ \mathit{x}, \mathit{y} \}$}
+    \RightLabel{\textsc{Extend}}
+    \BinaryInfC{$\{ \mathit{x} : \Nat, \mathit{y} : \Singleton{0} \} \sub \{ \mathit{x} : \Int \}$}
+    \DisplayProof
+  \end{center}
+  \caption{Subtyping rules}
+  \label{fig:subtyping-example}
 \end{figure}
 
 Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules. (fig. \ref{fig:subtyping-derived})
@@ -225,7 +252,7 @@ Since the function is assumed to be total any input needs to be of both types (i
     \tau^+ := & \; \Bool \; | \; \Nat \; | \; \Int \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
               & \; \bot \; | \; \tau_1^+ \join \tau_2^+ \; | \; \tau_1^- \to \tau_2^+ \; | \; \mu\alpha.\tau^+ \; | \; \alpha                   \\
     \tau^- := & \; \Bool \; | \; \Nat \; | \; \Int \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
-              & \; \top \; | \; \tau_1^- \meet \tau_2^- \; | \; \tau_1^+ \to \tau_2^- \; | \; \mu\alpha.\tau^- \; | \; \alpha                                                                         
+              & \; \top \; | \; \tau_1^- \meet \tau_2^- \; | \; \tau_1^+ \to \tau_2^- \; | \; \mu\alpha.\tau^- \; | \; \alpha
   \end{flalign*}
   \caption{The syntax of polar types}
   \label{fig:polar-type-syntax}
@@ -240,14 +267,16 @@ Nominal types can occur both in positive and negative positions.
 
 Our language (fig. \ref{fig:term-syntax}) consists of numeric, boolean and String literals corresponding to the nominal types introduced above, as well as the constructs of the lambda calculus:
 variables, functions introduced by lambda-abstractions and function applications.
+The syntax of terms is extended by record definitions and field selections.
 
 \begin{figure}[ht]
   \begin{flalign*}
-    e := & \; x \; | \; y \; | \; z \; | \; \dots                                        & \textit{Variables} \\
-         & \; \mathit{true} \; | \; \mathit{false}                                       & \textit{Boolean Literals} \\
-         & \; 0 \; | \; 1 \; | \; 2 \; | \; \dots                                        & \textit{Numeric Literals} \\
-         & \; \mathit{"foo"} \; | \; \mathit{"bar"} \; | \; \mathit{"baz"} \; | \; \dots & \textit{String Literals} \\
-         & \; \lambda x.e                                                                & \textit{Lambda abstractions} \\
+    e := & \; x \; | \; y \; | \; z \; | \; \dots                                        & \textit{Variables}                   \\
+         & \; \mathit{true} \; | \; \mathit{false}                                       & \textit{Boolean Literals}            \\
+         & \; 0 \; | \; 1 \; | \; 2 \; | \; \dots                                        & \textit{Numeric Literals}            \\
+         & \; \mathit{"foo"} \; | \; \mathit{"bar"} \; | \; \mathit{"baz"} \; | \; \dots & \textit{String Literals}             \\
+         & \; \{ \ell_i = e_1, \dots \} \; | \; e.\ell_i                                 & \textit{Record definition/selection} \\
+         & \; \lambda x.e                                                                & \textit{Lambda abstractions}         \\
          & \; e_1e_2                                                                     & \textit{Function applications}
   \end{flalign*}
   \caption{The syntax of terms}

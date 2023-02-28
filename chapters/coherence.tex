@@ -250,10 +250,9 @@ That means the types that we declare instances for have to be \emph{non-overlapp
   Two types $\tau$ and $\sigma$ are \emph{non-overlapping upwards} iff. $\forall\rho. \tau \sub \rho$ and $\sigma \sub \rho \Rightarrow \rho$ is couninhabited.
 \end{definition}
 
-If $\top$ is couninhabited, this condition is equivalent to $\tau \join \sigma = \top$.
-Enforcing this in our type system would be very restrictive.
-In more sophisticated type systems, it may not even be possible to find a non-trivial type $\tau^{-1} \neq \top$, such that $\tau \join \tau^{-1} = \top$.
-
+This condition is equivalent to the union $\tau \join \sigma$ being couninhabited.
+That means it should be impossible to define a consumer for this union. % Taking polar types into account, this would only be possible if we can simplify the union
+In our type system, $\top$ is couninhabited because...
 
 \subsection{Invariant Predicates}
 
