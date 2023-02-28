@@ -43,7 +43,8 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
   \BinaryInfC{$\ctx \Phi^<(\tau)$}
 \end{prooftree}
 
-With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules:
+With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules. (fig. \ref{fig:derived-covariant-rules})
+In the lattice of types, the types that satisfy a covariant predicate form a downwards closed set.
 
 \begin{figure}[ht]
   \begin{center}
@@ -148,6 +149,7 @@ If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can b
 
 Contravariant predicates describe properties about the lower bounds of types.
 That means they are inherited by all supertypes of a type that they satisfy.
+In the lattice of types, the types that satisfy a contravariant predicate form a n upwards closed set.
 E.g. if a type is defaultable, i.e. we can define a default value of that type, then all of its supertypes are defaulttable as well because we can simply 'reuse' the default value for all supertypes.
 
 \begin{definition}

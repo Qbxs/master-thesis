@@ -131,7 +131,8 @@ instance natTreeSummable : Summable NatTree {
 
 % Outline the duo language
 Several checks have been implemented to ensure type class coherence in \emph{duo}:
-We disallow any orphan instances by requiring an instance declaration to be placed in the same module as the data or class declaration.
+For modularity, we use the common approach to disallow orphan instances. \cite{Kilpatrick2019-cy}
+That means, an instance declaration is required to be placed in the same module as the data or class declaration.
 When declaring an instance, we check for all instances of the same type class in scope whether the overlap with the type the instance is being declared for is empty.
 
 
