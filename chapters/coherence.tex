@@ -12,13 +12,13 @@ The superscript $^-$, conversely, constraints the variable to only occur in outp
 If there is no such superscript, the type class is declared as invariant.
 
 \begin{figure}[ht]
-    \centering
-    \begin{flalign*}
-        & \class{\Showable}{\alpha^+} :            \\
-        & \; \; \mathit{show} : \alpha \to \String
-    \end{flalign*}
-    \caption{Class declaration for type class $\Showable$}
-    \label{fig:class-showable}
+  \centering
+  \begin{flalign*}
+     & \class{\Showable}{\alpha^+} :            \\
+     & \; \; \mathit{show} : \alpha \to \String
+  \end{flalign*}
+  \caption{Class declaration for type class $\Showable$}
+  \label{fig:class-showable}
 \end{figure}
 
 Instance declarations are dependent on type class declarations.
@@ -27,16 +27,16 @@ We define a type for which the instance should be declared (in this case $\Nat$)
 We then need to define an implementation of the declared type class method.
 
 \begin{figure}[ht]
-    \centering
-    \begin{flalign*}
-        & \instance{\Showable}{\Nat} :                                                         \\
-        & \; \; \mathit{show} : \Nat \to \String                                               \\
-        & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
-        & \; \; \; \; Z \Rightarrow \mathit{"Z"}                                               \\
-        & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
-    \end{flalign*}
-    \caption{Instance declaration for $\Showable(\Nat)$}
-    \label{fig:instance-showable}
+  \centering
+  \begin{flalign*}
+     & \instance{\Showable}{\Nat} :                                                         \\
+     & \; \; \mathit{show} : \Nat \to \String                                               \\
+     & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
+     & \; \; \; \; Z \Rightarrow \mathit{"Z"}                                               \\
+     & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+  \end{flalign*}
+  \caption{Instance declaration for $\Showable(\Nat)$}
+  \label{fig:instance-showable}
 \end{figure}
 
 In our examples there is only one method declared per type class but in practise this can be an arbitrary number.
@@ -48,28 +48,28 @@ Consider the following instance declarations (fig. \ref{fig:showable-nat}):
 
 
 \begin{figure}[ht]
-    \centering
-    \begin{subfigure}{0.4\textwidth}
-        \begin{flalign*}
-             & \instance{\Showable}{\Nat} :                                                         \\
-             & \; \; \mathit{show} : \Nat \to \String                                               \\
-             & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
-             & \; \; \; \; Z \Rightarrow \mathit{"Z"}                                               \\
-             & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
-        \end{flalign*}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \begin{flalign*}
-             & \instance{\Showable}{\Nat} :                                                         \\
-             & \; \; \mathit{show} : \Nat \to \String                                               \\
-             & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
-             & \; \; \; \; Z \Rightarrow \mathit{"0"}                                               \\
-             & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
-        \end{flalign*}
-    \end{subfigure}
-    \caption{Incoherent instance declarations for $\Showable(\Nat)$}
-    \label{fig:showable-nat}
+  \centering
+  \begin{subfigure}{0.4\textwidth}
+    \begin{flalign*}
+       & \instance{\Showable}{\Nat} :                                                         \\
+       & \; \; \mathit{show} : \Nat \to \String                                               \\
+       & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
+       & \; \; \; \; Z \Rightarrow \mathit{"Z"}                                               \\
+       & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+    \end{flalign*}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.4\textwidth}
+    \begin{flalign*}
+       & \instance{\Showable}{\Nat} :                                                         \\
+       & \; \; \mathit{show} : \Nat \to \String                                               \\
+       & \; \; \mathit{show} := \lambda x. \caseof{x}                                         \\
+       & \; \; \; \; Z \Rightarrow \mathit{"0"}                                               \\
+       & \; \; \; \; S(n) \Rightarrow \mathit{append} \; \mathit{"S"} \; (\mathit{show} \; n)
+    \end{flalign*}
+  \end{subfigure}
+  \caption{Incoherent instance declarations for $\Showable(\Nat)$}
+  \label{fig:showable-nat}
 \end{figure}
 
 If there is more than one instance declaration in the same environment for the same type class and type,
@@ -171,10 +171,10 @@ To ensure type class coherence, we have to take conclusions of the subtyping rel
 That means we have to consider the derivable instances of type class based of sub- or supertypes.
 This imposes some restrictions not present in type systems based on type equalities.
 
-  For Hindley-Milner type systems we want to avoid \emph{overlapping instances}, i.e. instances for types that can be unified. \cite{peytonjones1997type}
-  Syntactically, types are overlapping if one can be substituted for the other or they can be unified.
-  E.g. $\mathit{List} \; \alpha$ and $\mathit{List} \; \Nat$ are overlapping with the substitution $\sigma(\alpha) \to \Nat$.
-  In Haskell specifically, it is very easy to check an overlap, albeit more restrictive: We only need to syntactically check whether two types share the same head constructor ($\mathit{List}$ in the example above).
+For Hindley-Milner type systems we want to avoid \emph{overlapping instances}, i.e. instances for types that can be unified. \cite{peytonjones1997type}
+Syntactically, types are overlapping if one can be substituted for the other or they can be unified.
+E.g. $\mathit{List} \; \alpha$ and $\mathit{List} \; \Nat$ are overlapping with the substitution $\sigma(\alpha) \to \Nat$.
+In Haskell specifically, it is very easy to check an overlap, albeit more restrictive: We only need to syntactically check whether two types share the same head constructor ($\mathit{List}$ in the example above).
 
 In the context of subtyping, overlaps of types have to be expressed differently because we no longer use unification for type inference but biunification.
 In order to check for an overlap of types, we have to create the intersection of those types and check whether it is empty.
@@ -195,10 +195,10 @@ Using the append operator exposed by the Monoid typeclass, therefore may lead to
 In the simple arithmetic expression $(a \oplus b) \oplus c$ $\oplus$ can have two different meanings based on the inferred types of $a,b$ and $c$.
 Since type inferrence with subtyping is generally not quite obvious it may seem
 
-  It may seem that we could choose the most specific instance. This, however, might have unexpected results.
-  E.g. if we have $\mathit{NonEmptyList} \; \alpha \sub \mathit{List} \; \alpha$, we may not know during compilation whether $\mathit{NonEmptyList} \; \alpha $ or $\mathit{List} \; \alpha$ is being picked.
-  ~Generally to infer the most specific type seems very hard. In this example filtering a $\mathit{NonEmptyList}$ may or may not return an empty list and we may just have to assume that it is possibly empty.
-  This may lead to hard to track behaviour when using overlapping instances.
+It may seem that we could choose the most specific instance. This, however, might have unexpected results.
+E.g. if we have $\mathit{NonEmptyList} \; \alpha \sub \mathit{List} \; \alpha$, we may not know during compilation whether $\mathit{NonEmptyList} \; \alpha $ or $\mathit{List} \; \alpha$ is being picked.
+~Generally to infer the most specific type seems very hard. In this example filtering a $\mathit{NonEmptyList}$ may or may not return an empty list and we may just have to assume that it is possibly empty.
+This may lead to hard to track behaviour when using overlapping instances.
 
 A simple example for undecidable most specific instances can be better given with record types.
 If we need to resolve an instance for $C \{x : Int\}$ and we already have instances for $C \{x : Int, y : Int\}$ and $C \{x : Int, z : Int\}$ neither instance is more specific than the other.
@@ -220,7 +220,7 @@ Thus, we need to enforce that there is at no point more than one instance in sco
 \subsection{Covariant Predicates}
 
 Covariant predicates allow resolution 'downwards', i.e. instances for subtypes can be resolved from instances for supertypes.
-We can say that any covariant instance for type $\tau$ allows resolution for a sublattice which is a \emph{downward closed set} of $\tau$. 
+We can say that any covariant instance for type $\tau$ allows resolution for a sublattice which is a \emph{downward closed set} of $\tau$.
 
 We therefore need to ensure globally that there is no common non-trivial subtype for which an instance can be resolved from two distinct instances.
 That means the types that we declare instances for have to be \emph{non-overlapping downwards} or the two lower sets of the types declared do not contain any non-trivial types.
@@ -241,7 +241,7 @@ the intersection of both types is equivalent to $(\Singleton{0} \join \Singleton
 
 Contravariant predicates, on the other hand, allow resolution 'upwards', i.e. instances for supertypes can be resolved from instances for subtypes.
 Here, we have to enforce globally that there is no common non-trivial supertype for which an instance can be resolved from two distinct instances.
-We can say that any contravariant instance for type $\tau$ allows resolution for a sublattice which is a \emph{upward closed set} of $\tau$. 
+We can say that any contravariant instance for type $\tau$ allows resolution for a sublattice which is a \emph{upward closed set} of $\tau$.
 The lattice type $\top$ can be often be seen as trivial in this context because typically there are no covalues $c : \top$, i.e. we cannot define a destructor or continuation that 'destroys' a value of type $\top$.
 
 That means the types that we declare instances for have to be \emph{non-overlapping upwards} or the two upper sets of the types declared do not contain any non-trivial types.
@@ -277,55 +277,55 @@ Refinements for covariant predicates behave like extensions for contravariant pr
 
 \begin{landscape}
 
-\begin{figure}[ht]
-\begin{center}
-  \begin{tabular}{| c | c c |}
-  \hline
-        & Covariant instance & Satisfies (Lower set) \\
-  \hline
-   Data & $\Showable(\Bool)$      & $\Showable(\mathbb{T}), \Showable(\mathbb{F}), \Showable(\bot)$ \\
-        & $\Showable(\mathbb{T})$ & $\Showable(\bot)$ \\
-        & $\Showable(\mathbb{F})$ & $\Showable(\bot)$ \\
-        & $\Showable(\bot)$       &                   \\
-   \hline
-   Compatible & \multicolumn{2}{c|}{$\{\Showable(\Bool)\}, \{ \Showable(\mathbb{T}) \}, \{ \Showable(\mathbb{F}) \}, \{ \Showable(\mathbb{T}), \Showable(\mathbb{F}) \}, \{\Showable(\bot)\} $}  \\
-   \hline 
-   Codata & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ & \\
-          & $\Showable(\{ fst : \Singleton{0} \})$                      & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}$ \\
-          & $\Showable(\{ snd : \Singleton{1} \})$                      & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ \\
-          & $\Showable(\{ \})$                                          & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}), \Showable(\{ fst : \Singleton{0} \}), \Showable(\{ snd : \Singleton{1} \})$ \\
-   \hline
-   Compatible & \multicolumn{2}{c|}{$\{\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})\}, \{\Showable(\{ fst : \Singleton{0} \})\}, \{\Showable(\{ snd : \Singleton{1} \})\}, \{\Showable(\{ \})\}$}  \\
-   \hline 
-  \end{tabular}
-\end{center}
+  \begin{figure}[ht]
+    \begin{center}
+      \begin{tabular}{| c | c c |}
+        \hline
+                   & Covariant instance                                                                                                                                                                             & Satisfies (Lower set)                                                                                                                   \\
+        \hline
+        Data       & $\Showable(\Bool)$                                                                                                                                                                             & $\Showable(\mathbb{T}), \Showable(\mathbb{F}), \Showable(\bot)$                                                                         \\
+                   & $\Showable(\mathbb{T})$                                                                                                                                                                        & $\Showable(\bot)$                                                                                                                       \\
+                   & $\Showable(\mathbb{F})$                                                                                                                                                                        & $\Showable(\bot)$                                                                                                                       \\
+                   & $\Showable(\bot)$                                                                                                                                                                              &                                                                                                                                         \\
+        \hline
+        Compatible & \multicolumn{2}{c|}{$\{\Showable(\Bool)\}, \{ \Showable(\mathbb{T}) \}, \{ \Showable(\mathbb{F}) \}, \{ \Showable(\mathbb{T}), \Showable(\mathbb{F}) \}, \{\Showable(\bot)\} $}                                                                                                                                                          \\
+        \hline
+        Codata     & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$                                                                                                                                    &                                                                                                                                         \\
+                   & $\Showable(\{ fst : \Singleton{0} \})$                                                                                                                                                         & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}$                                                                              \\
+                   & $\Showable(\{ snd : \Singleton{1} \})$                                                                                                                                                         & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$                                                                             \\
+                   & $\Showable(\{ \})$                                                                                                                                                                             & $\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \}), \Showable(\{ fst : \Singleton{0} \}), \Showable(\{ snd : \Singleton{1} \})$ \\
+        \hline
+        Compatible & \multicolumn{2}{c|}{$\{\Showable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})\}, \{\Showable(\{ fst : \Singleton{0} \})\}, \{\Showable(\{ snd : \Singleton{1} \})\}, \{\Showable(\{ \})\}$}                                                                                                                                           \\
+        \hline
+      \end{tabular}
+    \end{center}
 
-\begin{center}
-  \begin{tabular}{| c | c c |}
-  \hline
-        & Contravariant instance & Satisfies (Upper set) \\
-  \hline
-   Data & $\Defaultable(\Bool)$ & \\
-        & $\Defaultable(\mathbb{T})$ & $\Defaultable(\Bool)$ \\
-        & $\Defaultable(\mathbb{F})$ & $\Defaultable(\Bool)$ \\
-        & $\Defaultable(\bot)$ & $\Defaultable(\Bool), \Defaultable(\mathbb{T}), \Defaultable(\mathbb{F})$ \\
-   \hline
-   Compatible & \multicolumn{2}{c|}{$\{\Defaultable(\Bool)\}, \{ \Defaultable(\mathbb{T}) \}, \{ \Defaultable(\mathbb{F}) \}, \{\Defaultable(\bot)\} $}  \\
-   \hline 
-   Codata & $\Defaultable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$ & $\Defaultable(\{ fst : \Singleton{0} \}), \Defaultable(\{ snd : \Singleton{1} \}), \Defaultable(\{ \})$ \\
-          & $\Defaultable(\{ fst : \Singleton{0} \})$ & $\Defaultable(\{ \})$ \\
-          & $\Defaultable(\{ snd : \Singleton{1} \})$ & $\Defaultable(\{ \})$ \\
-          & $\Defaultable(\{ \})$ & \\
-   \hline
-   Compatible & \multicolumn{2}{c|}{$\{\Defaultable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})\}, \{\Defaultable(\{ fst : \Singleton{0} \})\}, \{\Defaultable(\{ snd : \Singleton{1} \})\}$} \\
-              & \multicolumn{2}{c|}{$\{\Defaultable(\{ fst : \Singleton{0} \}), \Defaultable(\{ snd : \Singleton{1} \})\}, \{\Defaultable(\{ \})\}$}  \\
-   \hline 
-  \end{tabular}
-\end{center}
-\caption{Satsifiability for co- and contravariant predicates for data and codata. \\ Reflexivity of satisfiability is implicit. }
-\label{fig:satisfiability-example}
+    \begin{center}
+      \begin{tabular}{| c | c c |}
+        \hline
+                   & Contravariant instance                                                                                                                                                            & Satisfies (Upper set)                                                                                   \\
+        \hline
+        Data       & $\Defaultable(\Bool)$                                                                                                                                                             &                                                                                                         \\
+                   & $\Defaultable(\mathbb{T})$                                                                                                                                                        & $\Defaultable(\Bool)$                                                                                   \\
+                   & $\Defaultable(\mathbb{F})$                                                                                                                                                        & $\Defaultable(\Bool)$                                                                                   \\
+                   & $\Defaultable(\bot)$                                                                                                                                                              & $\Defaultable(\Bool), \Defaultable(\mathbb{T}), \Defaultable(\mathbb{F})$                               \\
+        \hline
+        Compatible & \multicolumn{2}{c|}{$\{\Defaultable(\Bool)\}, \{ \Defaultable(\mathbb{T}) \}, \{ \Defaultable(\mathbb{F}) \}, \{\Defaultable(\bot)\} $}                                                                                                                                                     \\
+        \hline
+        Codata     & $\Defaultable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})$                                                                                                                    & $\Defaultable(\{ fst : \Singleton{0} \}), \Defaultable(\{ snd : \Singleton{1} \}), \Defaultable(\{ \})$ \\
+                   & $\Defaultable(\{ fst : \Singleton{0} \})$                                                                                                                                         & $\Defaultable(\{ \})$                                                                                   \\
+                   & $\Defaultable(\{ snd : \Singleton{1} \})$                                                                                                                                         & $\Defaultable(\{ \})$                                                                                   \\
+                   & $\Defaultable(\{ \})$                                                                                                                                                             &                                                                                                         \\
+        \hline
+        Compatible & \multicolumn{2}{c|}{$\{\Defaultable(\{ fst : \Singleton{0}, snd : \Singleton{1} \})\}, \{\Defaultable(\{ fst : \Singleton{0} \})\}, \{\Defaultable(\{ snd : \Singleton{1} \})\}$}                                                                                                           \\
+                   & \multicolumn{2}{c|}{$\{\Defaultable(\{ fst : \Singleton{0} \}), \Defaultable(\{ snd : \Singleton{1} \})\}, \{\Defaultable(\{ \})\}$}                                                                                                                                                        \\
+        \hline
+      \end{tabular}
+    \end{center}
+    \caption{Satsifiability for co- and contravariant predicates for data and codata. \\ Reflexivity of satisfiability is implicit. }
+    \label{fig:satisfiability-example}
 
-\end{figure}
+  \end{figure}
 
 \end{landscape}
 

@@ -1,7 +1,7 @@
 \chapter{Qualified Types}
 \label{ch:qualified-types}
 
-We generalise the notion of type classes as \emph{qualified tpyes}. \cite{jones2003qualified}
+We generalise the notion of type classes as \emph{qualified types}. \cite{jones2003qualified}
 When types instantiate a type class, we say that they satisfy a predicate which is given by the type class declaration.
 E.g. if a type $\tau$ instantiates the type class $\mathit{Show}$, we can derive the judgement $\mathit{Showable}(\tau)$.
 
@@ -11,7 +11,7 @@ E.g. if a type $\tau$ instantiates the type class $\mathit{Show}$, we can derive
 Formally, we can define predicates over types as follows:
 
 \begin{definition} Predicates\\
-  Given a universe of types $\Unit$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\Unit)$.
+  Given a universe of types $\mathcal{U}$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\mathcal{U})$.
 \end{definition}
 
 We are only interested in predicates that are preserved over the subtyping lattice.
@@ -44,7 +44,7 @@ Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific pre
 \end{prooftree}
 
 With \textsc{CoV} and the subtyping rules in fig. \ref{fig:subtyping} we can derive several useful rules. (fig. \ref{fig:derived-covariant-rules})
-In the lattice of types, the types that satisfy a covariant predicate form a downwards closed set.
+In the lattice of types, the types that satisfy a covariant predicate form a \emph{downwards closed set}.
 
 \begin{figure}[ht]
   \begin{center}
@@ -149,7 +149,7 @@ If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can b
 
 Contravariant predicates describe properties about the lower bounds of types.
 That means they are inherited by all supertypes of a type that they satisfy.
-In the lattice of types, the types that satisfy a contravariant predicate form a n upwards closed set.
+In the lattice of types, the types that satisfy a contravariant predicate form an \emph{upwards closed set}.
 E.g. if a type is defaultable, i.e. we can define a default value of that type, then all of its supertypes are defaulttable as well because we can simply 'reuse' the default value for all supertypes.
 
 \begin{definition}
@@ -265,7 +265,7 @@ With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can
 \end{figure}
 
 A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
-The \textsc{ContraV} again rule seems intuitive for this:
+The \textsc{ContraV} rule, again, seems intuitive for this:
 % fix:
 If $e : \tau$ is a default value for $\tau$ and $\sigma \sub \tau$, then $e : \sigma$ can be used as a default value for $\sigma$ as well.
 
