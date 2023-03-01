@@ -6,52 +6,52 @@
 We introduce the type class $\mathit{Summable}$ of types which can be summed up or folded into a natural number.
 
 \begin{flalign*}
-& \mathbf{class} \; \mathit{Summable}(+a)\{ \\
-& \;\;\; \mathbf{sum} : a  \to \Nat \\
-& \}
+     & \mathbf{class} \; \mathit{Summable}(+a)\{ \\
+     & \;\;\; \mathbf{sum} : a  \to \Nat         \\
+     & \}
 \end{flalign*}
 
 We can implement this type class for pairs of natural  numbers by simply adding up the components.
 
 \begin{flalign*}
-& \mathbf{instance} \; \mathit{Summable} \; \Nat \{ \\
-& \;\;\; \mathbf{sum} := \mathbf{id} \\
-& \}
+     & \mathbf{instance} \; \mathit{Summable} \; \Nat \{ \\
+     & \;\;\; \mathbf{sum} := \mathbf{id}                \\
+     & \}
 \end{flalign*}
 
 Given a definition for non-empty lists, we can also use an instance recursively to sum up its elements:
 
 
 \begin{flalign*}
-& \mathbf{data} \; \mathit{NonEmpty} \{ \\
-& \;\;\; \mathit{Singleton}(\Nat) \\
-& \;\;\; \mathit{Cons}(\Nat, \mathit{NonEmpty})\\
-& \}
+     & \mathbf{data} \; \mathit{NonEmpty} \{         \\
+     & \;\;\; \mathit{Singleton}(\Nat)               \\
+     & \;\;\; \mathit{Cons}(\Nat, \mathit{NonEmpty}) \\
+     & \}
 \end{flalign*}
 
 \begin{flalign*}
-& \mathbf{instance} \; \mathit{Summable} \; \mathit{NonEmpty} \{ \\
-& \;\;\; \mathbf{sum} := \lambda l. \mathbf{case} \; l \; of \\
-& \;\;\;\;\; \mathit{Singleton}(n) \Rightarrow n \\
-& \;\;\;\;\; \mathit{Cons}(n, ns) \Rightarrow n + (\mathbf{sum}[\mathit{NonEmpty}] \; ns) \\
-& \}
+     & \mathbf{instance} \; \mathit{Summable} \; \mathit{NonEmpty} \{                          \\
+     & \;\;\; \mathbf{sum} := \lambda l. \mathbf{case} \; l \; of                              \\
+     & \;\;\;\;\; \mathit{Singleton}(n) \Rightarrow n                                          \\
+     & \;\;\;\;\; \mathit{Cons}(n, ns) \Rightarrow n + (\mathbf{sum}[\mathit{NonEmpty}] \; ns) \\
+     & \}
 \end{flalign*}
 
 Similarily, we can define a $\mathit{Summable}$ instance for leaf-oriented trees.
 
 \begin{flalign*}
-& \mathbf{data} \; \mathit{NatTree} \{ \\
-& \;\;\; \mathit{Leaf}(\Nat) \\
-& \;\;\; \mathit{Branch}(\mathit{NatTree}, \mathit{NatTree})\\
-& \}
+     & \mathbf{data} \; \mathit{NatTree} \{                       \\
+     & \;\;\; \mathit{Leaf}(\Nat)                                 \\
+     & \;\;\; \mathit{Branch}(\mathit{NatTree}, \mathit{NatTree}) \\
+     & \}
 \end{flalign*}
 
 \begin{flalign*}
-& \mathbf{instance} \; \mathit{Summable} \; \mathit{NatTree} \{ \\
-& \;\;\; \mathbf{sum} := \lambda t. \mathbf{case} \; t \; of \\
-& \;\;\;\;\; \mathit{Leaf}(n) \Rightarrow n \\
-& \;\;\;\;\; \mathit{Branch}(l, r) \Rightarrow (\mathbf{sum}[\mathit{NatTree}] \; l) + (\mathbf{sum}[\mathit{NatTree}] \; r) \\
-& \}
+     & \mathbf{instance} \; \mathit{Summable} \; \mathit{NatTree} \{                                                              \\
+     & \;\;\; \mathbf{sum} := \lambda t. \mathbf{case} \; t \; of                                                                 \\
+     & \;\;\;\;\; \mathit{Leaf}(n) \Rightarrow n                                                                                  \\
+     & \;\;\;\;\; \mathit{Branch}(l, r) \Rightarrow (\mathbf{sum}[\mathit{NatTree}] \; l) + (\mathbf{sum}[\mathit{NatTree}] \; r) \\
+     & \}
 \end{flalign*}
 
 \todo{add examples for usage of type class methods}
@@ -133,7 +133,8 @@ instance natTreeSummable : Summable NatTree {
 
 % Outline the duo language
 Several checks have been implemented to ensure type class coherence in \emph{duo}:
-We disallow any orphan instances by requiring an instance declaration to be placed in the same module as the data or class declaration.
+For modularity, we use the common approach to disallow orphan instances. \cite{Kilpatrick2019-cy}
+That means, an instance declaration is required to be placed in the same module as the data or class declaration.
 When declaring an instance, we check for all instances of the same type class in scope whether the overlap with the type the instance is being declared for is empty.
 
 

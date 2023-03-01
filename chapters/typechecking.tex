@@ -2,13 +2,13 @@
 \label{ch:type-system}
 % explain type inference with algebraic subtyping/bounds/bisubstitutions
 
-Using the resolution rules for qualified types in chaprter \ref{ch:qualified-types}, we present typing rules for the presented language extended with type classes.
+Using the resolution rules for qualified types in chapter \ref{ch:qualified-types}, we present typing rules for the presented language extended with type classes.
 
 \section{Type Class Methods}
 
 Type class resolution only takes place when a type class method is applied at some point in a program to be typechecked.
 
-E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved for the invocation of the type class method $\showTerm(42, \mathit{id}) : \Nat$.
+E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved for the invocation of the type class method $\showTerm \; 42 : \Nat$.
 
 We make continuations explicit by passing them as arguments to the method.
 Not only makes this typechecking more straight-forward, it is in fact neccessary because of two reasons:
@@ -56,6 +56,18 @@ For invariant type classes, we need both a producer and a consumer or continuati
         \RightLabel{\textsc{T-Sub}}
         \BinaryInfC{$\ctx e : \tau$}
         \DisplayProof
+
+        {\vskip.2in}
+
+        \AxiomC{$\ctx \overline{e_i : \tau_i}$}
+        \RightLabel{\textsc{T-Record}}
+        \UnaryInfC{$ \ctx \{ \overline{\ell_i = e_i} \} : \{ \overline{\ell_i : \tau_i} \}$}
+        \DisplayProof
+        {\hskip.2in}
+        \AxiomC{$ \ctx e : \{ \ell : \tau \}$}
+        \RightLabel{\textsc{T-Select}}
+        \UnaryInfC{$ \ctx e.\ell : \tau$}
+        \DisplayProof
     \end{center}
     \caption{Typing Rules}
     \label{fig:typing-rules}
@@ -70,9 +82,7 @@ This resolved hole stands for the concrete witness that will be passed to the ty
 
 Type checking for type class method calls (fig. \ref{fig:showable-example}):
 $w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution and $\tau$ is the type of the producer argument.
-$k$ is the continuation that is passed to the type class method.
 
-In this case $\showTerm$ is implemented in continuation passing style, so apart from the argument to be shown $x$, there is continutation $k$ which consumes the $\String$ output.
 The argument $w$ is implicit and stands for the inferred witness of the type class.
 At compilation it will be filled with a resolved instance, so that the evaluation of the method is well defined.
 
@@ -80,11 +90,10 @@ At compilation it will be filled with a resolved instance, so that the evaluatio
     \centering
     \AxiomC{$\ctx w : \Showable(\tau)$}
     \AxiomC{$\ctx x : \tau$}
-    \AxiomC{$\ctx k : \String \to \sigma$}
     \RightLabel{\textsc{T-Class}$^+$}
-    \TrinaryInfC{$\ctx \showTerm(w, x, k) : \sigma$}
+    \BinaryInfC{$\ctx \showTerm[w] x : \String$}
     \DisplayProof
-    \caption{Derivation for $\showTerm(w, x, k) : \sigma$}
+    \caption{Derivation for $\showTerm[w] \; x : \String$}
     \label{fig:showable-example}
 \end{figure}
 
@@ -95,11 +104,11 @@ In this case, the type class constraint is applied to the argument type of the c
     \centering
     \AxiomC{$\ctx w : \Readable(\tau)$}
     \AxiomC{$\ctx x : \String$}
-    \AxiomC{$\ctx k : \tau \to \sigma$}
+    \AxiomC{$\ctx k : \tau$}
     \RightLabel{\textsc{T-Class}$^-$}
-    \TrinaryInfC{$\ctx \readTerm(w, x, k) : \sigma$}
+    \TrinaryInfC{$\ctx \readTerm[w]\; x : \tau$}
     \DisplayProof
-    \caption{Derivation for $\readTerm(w, x, k) : \sigma$}
+    \caption{Derivation for $\readTerm[w]\; x : \tau$}
     \label{fig:readable-example}
 \end{figure}
 
@@ -109,9 +118,8 @@ In this case, the type class constraint is applied to the argument type of the c
     \AxiomC{$\ctx w : \Phi(\tau)$}
     \AxiomC{$\ctx x : \tau$}
     \AxiomC{$P(\mathbf{m}_\Phi) = \alpha$}
-    \AxiomC{$\ctx k : \alpha \to \sigma$}
     \RightLabel{\textsc{T-Class}$^+$}
-    \QuaternaryInfC{$\ctx \mathbf{m}_\Phi(w, x, k) : \sigma$}
+    \TrinaryInfC{$\ctx \mathbf{m}_\Phi[w]\; x : \alpha$}
     \DisplayProof
     \caption{Typing rule for covariant type classes}
     \label{fig:cov-typing}
@@ -122,9 +130,8 @@ In this case, the type class constraint is applied to the argument type of the c
     \AxiomC{$\ctx w : \Phi(\tau)$}
     \AxiomC{$\ctx x : \alpha$}
     \AxiomC{$P(\mathbf{m}_\Phi) = \alpha$}
-    \AxiomC{$\ctx k : \tau \to \sigma$}
     \RightLabel{\textsc{T-Class}$^-$}
-    \QuaternaryInfC{$\ctx \mathbf{m}_\Phi(w, x, k) : \sigma$}
+    \TrinaryInfC{$\ctx \mathbf{m}_\Phi[w]\; x : \tau$}
     \DisplayProof
     \caption{Typing rule for contravariant type classes}
     \label{fig:contrav-typing}
@@ -331,8 +338,3 @@ Based on the substitution, we perform type class resolution and place in a witne
 % 'Type automata can be converted to standard NFAs, by labelling each transition with the polarity of the state from which it originates, and converting H(q) to a set of transitions (also labelled with polarity) to a new accepting state $q_\infinity$' \cite{dolanMLsub}.
 
 % We can then determinise and minimise the automaton, thus 
-
-\subsection{Rest}
-We should always check in an instance declaration whether this constraint globally holds. \\
-To guarantee modularity we also have to check this for module imports, but since even the import of functions using different instances for the same type can lead to incoherences, we have to rule out any declaration of orphan instances.
-\cite{Kilpatrick2019-cy}.
