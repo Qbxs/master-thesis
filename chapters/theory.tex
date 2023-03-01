@@ -302,7 +302,7 @@ Invariant predicates describe properties about the lower and upper bounds of typ
 \begin{definition}
   An \emph{invariant type class predicate} $\Phi$ is a predicate preserved by the subtyping \emph{and} flipped subtyping relation, i.e. it adheres to the following rule:
 \end{definition}
-% TODO: syntax for invariant predicates (superscript)
+\todo{syntax for invariant predicates (superscript)}
 
 \begin{prooftree}
   \alwaysNoLine
@@ -322,6 +322,7 @@ A typical example for invariant predicates is $\Monoid$, satisfied by any type f
 \subsection{Predicate Implications}
 \label{sec:predicate-implications}
 
+\todo{possibly unnecessary section}
 Predicates may be constrained, i.e. they depend on other predicates.
 $\Phi(\tau) \Rightarrow \Psi(\tau)$ means $\Psi$ is constrained by $\Phi$.
 Thus, if $\Psi(\tau)$ is satisfied, then the constraint $\Phi(\tau)$ is satisfied as well.
@@ -520,7 +521,8 @@ The witness rules in fig. \ref{fig:subtyping-witnesses} are an expansion of the 
   \label{fig:subtyping-witnesses}
 \end{figure}
 
-We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses. % ???
+We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
+\todo{add rules for records}
 
 \begin{figure}[ht]
   \[

@@ -12,6 +12,7 @@ Furthermore, for subtyping we consider the lattice types constructed by $\top, \
 $\top$ stands for the greatest type which is a supertype of all other types.
 Dually, $\bot$ is the smallest type which is a subtype of all other types.
 Types constructed by the $\join$ and $\meet$ operators stand for the union and intersection types, respectively.
+\todo{clarify recursive types. needed?}
 
 \begin{figure}[ht]
   \begin{flalign*}
@@ -20,14 +21,14 @@ Types constructed by the $\join$ and $\meet$ operators stand for the union and i
                    & \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots  & \textit{Singleton types}          \\
                    & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types}            \\
                    & \; \tau \to \sigma                                                       & \textit{Function types}           \\
-    % remove recursive types?
+                   % remove recursive types?
                    & \; \mu\alpha.\tau                                                        & \textit{Recursive types}          \\
                    & \; \alpha                                                                & \textit{Recursive type variables}
   \end{flalign*}
   \caption{The syntax of types}
   \label{fig:type-syntax}
 \end{figure}
-
+                
 \subsection{Subtyping Rules}
 \label{sec:subtyping-rules}
 
@@ -234,6 +235,7 @@ Since the function is assumed to be total any input needs to be of both types (i
 Therefore, we introduce \emph{polar types} in fig. \ref{fig:polar-type-syntax} as a means to distinguish positive types (for outputs) and negative types (for inputs).
 Since functions are covariant in their output and contravariant in their input, the polarity of types in the input position is flipped.
 Nominal types can occur both in positive and negative positions.
+\todo{clarify role of polar types}
 
 \section{Terms}
 \label{sec:terms}
