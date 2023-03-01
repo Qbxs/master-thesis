@@ -1,3 +1,22 @@
+@article{10.1145/3409006,
+  author     = {Parreaux, Lionel},
+  title      = {The Simple Essence of Algebraic Subtyping: Principal Type Inference with Subtyping Made Easy (Functional Pearl)},
+  year       = {2020},
+  issue_date = {August 2020},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {4},
+  number     = {ICFP},
+  url        = {https://doi.org/10.1145/3409006},
+  doi        = {10.1145/3409006},
+  abstract   = {MLsub extends traditional Hindley-Milner type inference with subtyping while preserving compact principal types, an exciting new development. However, its specification in terms of biunification is difficult to understand, relying on the new concepts of bisubstitution and polar types, and making use of advanced notions from abstract algebra. In this paper, we show that these are in fact not essential to understanding the mechanisms at play in MLsub. We propose an alternative algorithm called Simple-sub, which can be implemented efficiently in under 500 lines of code (including parsing, simplification, and pretty-printing), looks more familiar, and is easier to understand. We present an experimental evaluation of Simple-sub against MLsub on a million randomly-generated well-scoped expressions, showing that the two systems agree. The mutable automaton-based implementation of MLsub is quite far from its algebraic specification, leaving a lot of space for errors; in fact, our evaluation uncovered several bugs in it. We sketch more straightforward soundness and completeness arguments for Simple-sub, based on a syntactic specification of the type system. This paper is meant to be light in formalism, rich in insights, and easy to consume for prospective designers of new type systems and programming languages. In particular, no abstract algebra is inflicted on readers.},
+  journal    = {Proc. ACM Program. Lang.},
+  month      = {aug},
+  articleno  = {124},
+  numpages   = {28},
+  keywords   = {type inference, subtyping, principal types}
+}
+
 @inproceedings{binder22refinement,
   author    = {Binder, David and Skupin, Ingo and Läwen, David and Ostermann, Klaus},
   title     = {Structural Refinement Types},
@@ -17,7 +36,6 @@
   journal = {Sigplan Notices - SIGPLAN},
   doi     = {10.1145/2034574.2034788}
 }
-
 @article{curien2000duality,
   title     = {The duality of computation},
   author    = {Curien, Pierre-Louis and Herbelin, Hugo},
@@ -28,6 +46,7 @@
   year      = {2000},
   publisher = {ACM New York, NY, USA}
 }
+
 @book{dolan2017subtyping,
   author    = {Dolan, Stephen},
   title     = {Algebraic Subtyping: Distinguished Dissertation 2017},
@@ -37,6 +56,8 @@
   address   = {Swindon, GBR},
   abstract  = {Type inference gives programmers the benefit of static, compile-time type checking without the cost of manually specifying types, and has long been a standard feature of functional programming languages. However, it has proven difficult to integrate type inference with subtyping, since the unification engine at the core of classical type inference accepts only equations, not subtyping constraints. This thesis presents a type system combining ML-style parametric polymorphism and subtyping, with type inference, principal types, and decidable type subsumption. Type inference is based on biunification, an analogue of unification that works with subtyping constraints. Making this possible are several contributions, beginning with the notion of an extensible type system, in which an open world of types is assumed, so that no typeable program becomes untypeable by the addition of new types to the language. While previous formulations of subtyping fail to be extensible, this thesis shows that adopting a more algebraic approach can remedy this. Using such an approach, this thesis develops the theory of biunification, shows how it is used to infer types, and shows how it can be efficiently implemented, exploiting deep connections between the algebra of regular languages and polymorphic subtyping.}
 }
+
+      
 
 @inproceedings{dolanMLsub,
   author    = {Dolan, Stephen and Mycroft, Alan},
@@ -56,7 +77,6 @@
   series    = {POPL '17}
 }
 
-      
 
 @article{downen2017phd,
   title     = {Sequent Calculus: A Logic and a Language for Computation and Duality},
@@ -64,7 +84,6 @@
   year      = {2017},
   publisher = {University of Oregon}
 }
-
 
 @article{downen2018tutorial,
   title     = {A tutorial on computational classical logic and the sequent calculus},
@@ -121,17 +140,17 @@
   year         = 2002
 }
 
-@book{jones2003qualified,
-  title={Qualified Types: Theory and Practice},
-  author={Jones, M.P.},
-  isbn={9780521543262},
-  lccn={lc94028540},
-  series={Distinguished Dissertations in Computer Science},
-  url={https://books.google.de/books?id=43JKbm523AwC},
-  year={2003},
-  publisher={Cambridge University Press}
-}
 
+@book{jones2003qualified,
+  title     = {Qualified Types: Theory and Practice},
+  author    = {Jones, M.P.},
+  isbn      = {9780521543262},
+  lccn      = {lc94028540},
+  series    = {Distinguished Dissertations in Computer Science},
+  url       = {https://books.google.de/books?id=43JKbm523AwC},
+  year      = {2003},
+  publisher = {Cambridge University Press}
+}
 
 @phdthesis{Kilpatrick2019-cy,
   title     = {Non-reformist reform for Haskell Modularity},
