@@ -546,7 +546,7 @@ We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given w
   \]
   \caption{Witnesses for union \& intersection types}
   \label{fig:cd-proj/in}
-\end{figure}
+\end{figure}\todo{figure 4.7 can probably be removed}
 
 $triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
 $in_{1/2}$ correspond to the construction (injection) of an union type from either the first type $\tau$ or the second type $\sigma$ of the union $\tau \join \sigma$.
@@ -935,7 +935,7 @@ We can trivially translate the types of $\Nat$ and $\Int$ into corresponding set
 The singleton types can be interpreted as $\Singleton{0} \rightsquigarrow \{0\}$, $\Singleton{1} \rightsquigarrow \{1\}$, \dots
 Adding lattice types $\bot \rightsquigarrow \emptyset$ and $\top \rightsquigarrow \{ S | \forall M. M \subseteq S \}$,  we also have correspondents to union and intersection types with the union and intersection of sets.
 
-Given inclusive subtyping, it we may be motivated to introduces some other rules.
+Given inclusive subtyping, we may be motivated to introduce some additional rules.
 E.g. given $\Showable(\Bool)$ and $\Showable(\Nat)$, it may seem tempting to derive $\Showable(\Bool \join \Nat)$,
 so that the term $\lambda b. \showTerm(\ifthenelseTerm b \; b \; 42)$ is typeable.
 Introducing union types can only be done with some restrictions:
@@ -954,7 +954,7 @@ Introducing union types can only be done with some restrictions:
 The \textsc{Join} rule can not be derived with the subtyping rules because $\tau \join \sigma$ is neither a subtype of $\tau$ nor of $\sigma$.
 In fact, only the opposite holds.
 However, there is a motivation for it:
-With the definition of covariant predicates the premises express that for all terms of type $\tau$ and $\sigma$ the characteristic property holds.
+% With the definition of covariant predicates the premises express that for all terms of type $\tau$ and $\sigma$ the characteristic property holds.
 Since every term of type $\tau \join \sigma$ is a term of type $\tau$ or $\sigma$, $\Phi(\tau \join \sigma)$ holds.
 
 \begin{prooftree}
@@ -966,7 +966,7 @@ Since every term of type $\tau \join \sigma$ is a term of type $\tau$ or $\sigma
   \BinaryInfC{$\ctx \Phi^<(\tau\join\sigma)$}
 \end{prooftree}
 
-Dually, introducing intersection types can also only be done with some restrictions:
+Dually, introducing a rule for covariant predicates on intersection types can also only be done with some restrictions:
 
 \begin{prooftree}
   \AxiomC{$\ctx \Phi^>(\tau)$}
@@ -979,11 +979,11 @@ Dually, introducing intersection types can also only be done with some restricti
   \BinaryInfC{$\ctx \Phi^>(\sigma \meet \rho)$}
 \end{prooftree}
 
-The \textsc{Meet} rule can not be derived with the subtyping rules because $\tau \meet \sigma$ is neither a supertype of $\tau$ nor of $\sigma$.
-With the definition of contravariant predicates the premises express that for some witnesses of $\tau$ and $\sigma$ the characteristic property holds.
+However, the \textsc{Meet} rule can not be derived with the subtyping rules because $\tau \meet \sigma$ is neither a supertype of $\tau$ nor of $\sigma$.
+% With the definition of contravariant predicates the premises express that for some witnesses of $\tau$ and $\sigma$ the characteristic property holds.
 But even though this rule is dual to the \textsc{Join}-rule above, we cannot motivate it.
 If some witness of $\tau \meet \sigma$ is a witness of both $\tau$ and $\sigma$, $\Phi(\tau \meet \sigma)$ holds.
-However, there is no guarantee that a term of type $\tau$ or of type $\sigma$ is also of type $\tau \meet \sigma$, e.g. if $\tau \meet \join = \bot$.
+However, there is no guarantee that a term of type $\tau$ or of type $\sigma$ is also of type $\tau \meet \sigma$, e.g. if $\tau \meet \sigma = \bot$.
 % this rule is bogus:
 % if \tau and \sigma are disjoint there is no possible witness in \tau \meet \sigma...
 
@@ -1005,8 +1005,8 @@ $o(\mathbf{true}, 1)$ has to be defined in some way, but since it is ambiguous w
 
 
 The rules \textsc{Join}$^<$ and \textsc{Meet}$^>$ as mentioned before cannot be derived from the subtyping rules alone.
-It may seem intuitive that given $Show \; \tau$ and $Show \; \sigma$ we also have $Show \; \tau \; \join \; \sigma$.
-Dually we could also be able to resolve $Read \; \tau \; \meet \; \sigma$ from $Read \; \tau$ and $Read \; \sigma$.
+It may seem intuitive that given $\Showable(\tau)$ and $\Showable(\sigma)$ we also have $\Showable(\tau \join \sigma)$.
+Dually, we could also be able to resolve $\Readable(\tau \meet \sigma)$ from $\Readable(\tau)$ and $\Readable(\sigma)$.
 
 However these rules cannot be implemented generally.
 Consider type classes with methods in which the bound type variable occurs more than once (unlike in $Show$ and $Read$).
@@ -1060,25 +1060,26 @@ Therefore, these non-derivable rules cannot be used for type class resolution.
 % explain problems for intersection in contravariant type classes
 
 
-There is a problem when we want to implement the union type.
+% There is a problem when we want to implement the union type.
 
-Consider again the \texttt{Show} typeclass. It is intuitive to see how we can construct the \texttt{show} method for the union of two types, given that it is defined for both respecetively.
-However, looking at the \texttt{Eq} typeclass, we can not generally deduce an instance of the join of two types.
-If we solely know how to compare terms of type $\tau$ with each other and how to compare terms of type $\sigma$ with each other,
-we do not know how to compare a term of type $\tau$ with a term of type $\sigma$, even though the derived instance tells we should be able to do so.
+% Consider again the \texttt{Show} typeclass. It is intuitive to see how we can construct the \texttt{show} method for the union of two types, given that it is defined for both respecetively.
+% However, looking at the \texttt{Eq} typeclass, we can not generally deduce an instance of the join of two types.
+% If we solely know how to compare terms of type $\tau$ with each other and how to compare terms of type $\sigma$ with each other,
+% we do not know how to compare a term of type $\tau$ with a term of type $\sigma$, even though the derived instance tells we should be able to do so.
 
-\begin{gather}
-  \nonumber show_{a\join b} \; x := {\bf if} \; typeOf \; x == a \; {\bf then} \; show_a \; x \; {\bf else} \; show_b \; x
-\end{gather}
+% \begin{gather}
+%   \nonumber show_{a\join b} \; x := {\bf if} \; typeOf \; x == a \; {\bf then} \; show_a \; x \; {\bf else} \; show_b \; x
+% \end{gather}
 
-We might be able to just return \texttt{False} as a default value in such cases but even default values can be ambiguous.
-Consider now the \texttt{Ord} type class. Given \texttt{Ord a} and \texttt{Ord b} we may say that in \texttt{Ord a $\join$ b} every $a$ is ordered before $b$.
-But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
+% We might be able to just return \texttt{False} as a default value in such cases but even default values can be ambiguous.
+% Consider now the \texttt{Ord} type class. Given \texttt{Ord a} and \texttt{Ord b} we may say that in \texttt{Ord a $\join$ b} every $a$ is ordered before $b$.
+% But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
 
 
 \section{Representations of Type Class Witnesses} % not quite correct
 \label{sec:representations}
 
+\todo{maybe move somewhere else}
 For an implementation, we need some representation of witnesses which is going to be used for the execution of programs using type class methods.
 Since type classes hide the concrete implementation of their methods, we need a means to extract this concrete implementation when needed.
 There are essentialy two ways to implement type class overloading in practise: Intensional type analysis which dispatches a type representation at runtime and dictionary passing which treats witnesses as records or dictionaries which can be resolved at compile time.

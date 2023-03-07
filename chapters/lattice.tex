@@ -1,10 +1,10 @@
 \chapter{The Lattice of Types}
 \label{ch:lattice}
 
-A partially ordered set $(L , \leq)$ is called a lattice if it is both a join- and a meet-semilattice, i.e. each two-element subset $\{a,b\}\subseteq L$ has a join (i.e. least upper bound, denoted by $a \join b$) and dually a meet (i.e. greatest lower bound, denoted by $a \meet b$).
+A partially ordered set $(L , \leq)$ is called a lattice if it is both a join- and a meet-semilattice, i.e. each two-element subset $\{a,b\}\subseteq L$ has a join (i.e. a least upper bound, denoted by $a \join b$) and dually a meet (i.e. a greatest lower bound, denoted by $a \meet b$).
 A lattice of types is a type universe $\mathcal{U}$ of types and a subtyping relation $\sub$ playing the role of a partial order.
 It is, furthermore, a bounded lattice due to the types $\top$ and $\bot$ which satisfy $\bot \sub \tau$ and $\tau \sub \top$ for all types $\tau$ in $\mathcal{U}$.
-In the following, we introduce a simple language with a few nominal types to describe a type system with subtyping.
+In the following, we introduce a simple language with various nominal types to describe a type system with subtyping.
 
 \section{Types}
 \label{sec:types}
@@ -13,13 +13,13 @@ We use the following syntax of types (fig. \ref{fig:type-syntax}) with the simpl
 Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which each are only inhabited by the term in their index, e.g. $1 : \Singleton{1}$.
 We extend the syntax of types with extensible record types. \cite{leijen2005extensible}
 Extensible records are a form of codata as they are defined via thair destructors or field labels.
-Because they are extensible, they are in an interesting subtyping relation, i.e. we can add fields which make a record more specific but still a subtype of another one.
+Because they are extensible, they are in an interesting subtyping relation. By adding fields a record becomes more specific and is therefore a subtype of a record which only contains a subset of these fields.
 E.g. the record type $\{ x : \Singleton{1}, y : \Nat \}$ is a subtype of the type $\{ y : \Nat \}$ as it simply represents the same type with one addtional field $x$. \\
 Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$.
 $\top$ stands for the greatest type which is a supertype of all other types.
 Dually, $\bot$ is the smallest type which is a subtype of all other types.
 Types constructed by the $\join$ and $\meet$ operators stand for the union and intersection types, respectively.
-\todo{clarify recursive types. needed?}
+\todo{clarify recursive types and type schemes}
 
 \begin{figure}[ht]
   \begin{flalign*}
@@ -246,9 +246,9 @@ Using the \textsc{Trans} rule and the introduction rules, we can derive correspo
 \label{sec:polarity}
 
 
-If we want to use lattice types for type inference (like in section \ref{sec:type-inference}), we have to consider where lattice types can occur.
-Generally, union types and the $\bot$ type can only occur in output positions and describe upper bounds.
-Intersection types and the $\top$ type on the other hand  can only occur in inout positions and describe lower bounds. \cite{dolan2017subtyping}
+With union types representing lower and intersection types representing upper bounds, we have to consider where lattice types can occur.
+Generally, union types and the $\bot$ type can only occur in output positions.
+Intersection types and the $\top$ type on the other hand  can only occur in input positions. \cite{dolan2017subtyping}
 The motivation for this can be given as follows: Consider a function that accepts two types as inputs and may return two types as output.
 Since the function is assumed to be total any input needs to be of both types (i.e. of the intersection of both types) and the output can be either type (i.e. the union of both types).
 
@@ -271,7 +271,7 @@ Nominal types can occur both in positive and negative positions.
 \section{Terms}
 \label{sec:terms}
 
-Our language (fig. \ref{fig:term-syntax}) consists of numeric, boolean and String literals corresponding to the nominal types introduced above, as well as the constructs of the lambda calculus:
+Our term language (fig. \ref{fig:term-syntax}) consists of numeric, boolean and String literals corresponding to the nominal types introduced above, as well as the constructs of the lambda calculus:
 variables, functions introduced by lambda-abstractions and function applications.
 The syntax of terms is extended by record definitions and field selections.
 
