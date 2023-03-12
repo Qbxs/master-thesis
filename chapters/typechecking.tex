@@ -6,14 +6,14 @@ Using the resolution rules for qualified types in chapter \ref{ch:qualified-type
 
 \section{Type Class Methods}
 
-Type class resolution only takes place when a type class method is applied at some point in a program to be typechecked.
+Instance resolution only takes place when a type class method is applied at some point in a program to be typechecked.
 
-E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved for the invocation of the type class method $\showTerm \; 42 : \Nat$.
+E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved for the invocation of the type class method in the application $\showTerm \; 42 : \Nat$.
 
-We make continuations explicit by passing them as arguments to the method.
-Not only makes this typechecking more straight-forward, it is in fact neccessary because of two reasons:
-For contravariant type classes, only the continuation can give us information for type class resolution.
-For invariant type classes, we need both a producer and a consumer or continuation to enact as upper and lower bounds for type class resolution.
+% We make continuations explicit by passing them as arguments to the method.
+% Not only makes this typechecking more straight-forward, it is in fact neccessary because of two reasons:
+% For contravariant type classes, only the continuation can give us information for type class resolution.
+% For invariant type classes, we need both a producer and a consumer or continuation to enact as upper and lower bounds for type class resolution.
 
 \section{Typing Rules}
 
