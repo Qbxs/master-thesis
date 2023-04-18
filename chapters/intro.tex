@@ -21,30 +21,27 @@ the advantages and shortcomings of combining all three together is still unknown
 It is particularily interesting to see how type classes (or more generally predicates on types) are inherited or transfered via the subtyping relation.
 If $\Nat$ is a subtype of $\Int$ and we know that $\Int$ is a showable type, does it follow that $\Nat$ is showable as well?
 If so, does this hold for all type classes or predicates?
-Can we perhaps combine multiple instances to derive at a composed instance for e.g. a union type?
-\todo{add concrete example for motivation; rework folloing part}
+Can we perhaps combine multiple instances to derive a composed instance for e.g. a union type?
+\todo{add concrete example for motivation}
 
-% this section likely needs a big overhaul
-In many functional programming languages such as Haskell, type classes are a powerful tool to generalize functions over different data types.
+The functional programming languages Haskell made type classes as a means of abstraction popular.
+In it, type classes are a powerful tool to generalize functions over different data types.
 This allows us e.g. to use the \mintinline{Haskell}|+| operator both on \mintinline{Haskell}|Int| and \mintinline{Haskell}|Float| types.
 Another approach to overloading functions is subtyping, i.e. if a value of a certain type is expected we can also supply a value of a more specific type that is subsumed by the general type.
 For example, since the type of natural numbers \mintinline{text}|Nat| is a subtype of the integers \mintinline{text}|Int|, we can supply a value of type \mintinline{text}|Nat| for any function that expects an \mintinline{text}|Int|.
 
 Although these approaches do not serve exactly the same purpose it is uncommon to find both concepts in the same language.
 In this work, I am going to show how it is possible to implement type classes in a language that supports subtyping.
-There are unique challenges when bringing both together because instances for certain types are going to be ambiguous and impose additional challenges for the problem of type class coherence.
+There are unique challenges when bringing both together because instances for certain types are going to be ambiguous and impose additional challenges for the problem of type class coherence, the central reasoning principle behind type classes.
 
-The Haskell type \mintinline{Haskell}|Either a b| very roughly corresponds to the lattice type \mintinline{text}|a \/ b|  in the sense that both types unify two simpler types.
-Given a type class \mintinline{Haskell}|C :: * -> *| and instances \mintinline{Haskell}|C a| and \mintinline{Haskell}|C b| the instance \mintinline{Haskell}|C (Either a b)| has to be defined by hand which can be easily done by pattern-matching and using the given instances.
-However, instances for lattice types are neither explicit nor straightforward:
-Since \mintinline{text}|a \/ b| does not have a uniquely-determined(?) constructor we might just implicitly derive \mintinline{text}|C (a \/ b)| from the given instances.
-However, this would make instances undecidable if we later on decide to implement an explicit instance of \mintinline{text}|C (a \/ b)|.
+In order to preserve the substitution principle typical for subtyping, type class instances should not simply be applicable by substitution but blend into upper and lower bounds typically used for type inference with subtyping.
+That means that we may be able to use the instance of a supertype to resolve an instance for one of its subtypes or vice versa.
+E.g. consider the type class $\Showable$ of showable types.
+By declaring an instance for $\Showable(\Int)$ for integers, we already know how to show any term of type $\Nat$ as $\Nat$ is a subtype of $\Int$.
+There are even type classes which behave dually, like $\Readable$, where we can declare an instance for a subtype and can resolve an instance for any of its supertypes.
 
-Together with subtyping we may be able to overload type classes even more.
-Consider
-\begin{minted}{text}
-    Show(if b then 42 : Nat else "Hello World" : String)
-\end{minted}
-This term of type \mintinline{text}{Nat \/ String} appears to be well typed iff we can resolve the type class instances for \mintinline{text}{Show Nat} and \mintinline{text}{Show String}.
+Being able to resolve instances rather liberally, however, makes ensuring type class coherence the more challenging.
+That means we have to still be somewhat limited in what instances may be derivable from each other as not to derive ambiguous instances too easily, which ultimately make the semantics of our programs ambiguous.\
 
-In the following we will explore how type classes interact with these and other lattice types.
+In the following, I am going to introduce three principles of polymorphic type systems, outline the theoretic foundation of type classes as predicates on types with regards to subtyping and finally discuss the implications for type class coherence.
+In the end, we will examine simple programs which make use of this notion of type classes.
