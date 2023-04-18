@@ -1,6 +1,8 @@
 \chapter{Implementation}
 \label{ch:implementation}
 
+In the following, we want to show how the presented type classes can be used in practise.
+
 \section{Example}
 
 We introduce the type class $\mathit{Summable}$ of types which can be summed up or folded into a natural number.
@@ -11,13 +13,16 @@ We introduce the type class $\mathit{Summable}$ of types which can be summed up 
      & \}
 \end{flalign*}
 
-We can implement this type class for pairs of natural  numbers by simply adding up the components.
+We can implement this type class for the nominal type of integers $\Int$ by just returning the argument.
 
 \begin{flalign*}
-     & \mathbf{instance} \; \mathit{Summable} \; \Nat \{ \\
-     & \;\;\; \mathbf{sum} := \mathbf{id}                \\
+     & \mathbf{instance} \; \mathit{Summable} \; \Int \{ \\
+     & \;\;\; \mathbf{sum} := \mathbf{id}               \\
      & \}
 \end{flalign*}
+
+Since the class is covariant, we can also use it for more specific types, i.e. types that are subtypes of $\Int$.
+For example, the type class method invocation in $\mathbf{sum} \; (1 : \Nat)$ can be done via the instance declared for $\Int$.
 
 Given a definition for non-empty lists, we can also use an instance recursively to sum up its elements:
 
