@@ -92,7 +92,7 @@ Therefore, we want to define a criterion which globally guarantees that no such 
 Using witnesses we may formalize type class coherence:
 
 \begin{definition}
-  Type class resolution is coherent if and only if for any pair of witnesses $i,j : \Phi(\tau)$ that witness the same predicate application we have $i \opeq j$.
+  Type class resolution is coherent if and only if for any pair of witnesses $i,j : \Phi(\tau)$ that witness the same predicate application we have $i \opeq j$, i.e. $i$ and $j$ exhibit the same behavior.
 \end{definition}
 
 In our  system, we can define operational equality $\opeq$ simply as two witnesses of a predicate application containing the same leaf, i.e. the same instance.
@@ -182,7 +182,7 @@ In order to check for an overlap of types, we have to create the intersection of
 E.g. given $\instance \Phi a$ and $sub \sub a$ and $a \sub sup$, we can neither have $\instance \Phi{sub}$ , nor $\instance \Phi{sup}$,
 as $\Phi(sup)$ would imply $\Phi(a)$ and $\Phi(a)$ would imply $\Phi(sup)$.
 
-In the following, I want to give a motivation on why this would be problematic.
+In the following, we give a motivation on why this would be problematic.
 Consider we have $\Nat \sub \Int$.
 We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
 For integers on the other hand, we might prefer to choose addition as operator and 0 as neutral element, so we can expand to monoid to a group.
@@ -192,8 +192,8 @@ even if only want to deal with integers.
 Using the append operator exposed by the Monoid typeclass, therefore may lead to unexpected behavior.
 % Note for a good example, we need a good notion of type inference for this case, which is currently not implemented.
 
-In the simple arithmetic expression $(a \oplus b) \oplus c$ $\oplus$ can have two different meanings based on the inferred types of $a,b$ and $c$.
-Since type inferrence with subtyping is generally not quite obvious it may seem
+In the simple arithmetic expression $(a \oplus b) \oplus c$ the operator $\oplus$ can have two different meanings based on the inferred types of $a,b$ and $c$.
+Since type inferrence with subtyping is generally not quite obvious.
 
 It may seem that we could choose the most specific instance. This, however, might have unexpected results.
 E.g. if we have $\mathit{NonEmptyList} \; \alpha \sub \mathit{List} \; \alpha$, we may not know during compilation whether $\mathit{NonEmptyList} \; \alpha $ or $\mathit{List} \; \alpha$ is being picked.
@@ -201,7 +201,7 @@ E.g. if we have $\mathit{NonEmptyList} \; \alpha \sub \mathit{List} \; \alpha$, 
 This may lead to hard to track behaviour when using overlapping instances.
 
 A simple example for undecidable most specific instances can be better given with record types.
-If we need to resolve an instance for $C \{x : Int\}$ and we already have instances for $C \{x : Int, y : Int\}$ and $C \{x : Int, z : Int\}$ neither instance is more specific than the other.
+If we need to resolve an instance for $\Phi \{x : Int\}$ and we already have instances for $\Phi \{x : Int, y : Int\}$ and $\Phi \{x : Int, z : Int\}$ neither instance is more specific than the other.
 
 
 A means to ensure type class coherence could be the following:
@@ -223,7 +223,7 @@ Covariant predicates allow resolution 'downwards', i.e. instances for subtypes c
 We can say that any covariant instance for type $\tau$ allows resolution for a sublattice which is a \emph{downward closed set} of $\tau$.
 
 We therefore need to ensure globally that there is no common non-trivial subtype for which an instance can be resolved from two distinct instances.
-That means the types that we declare instances for have to be \emph{non-overlapping downwards} or the two lower sets of the types declared do not contain any non-trivial types.
+That means the types that we declare instances for have to be \emph{non-overlapping downwards} or the two lower sets of the types declared do not contain any non-trivial types. \todo{what does that mean? uninhabited?}
 
 \begin{definition}
   Two types $\tau$ and $\sigma$ are \emph{non-overlapping downwards} iff. $\forall\rho. \rho \sub \tau$ and $\rho \sub \sigma \Rightarrow \rho$ is uninhabited.
@@ -232,9 +232,8 @@ That means the types that we declare instances for have to be \emph{non-overlapp
 This condition is equivalent to the intersection type $\tau \meet \sigma$ being empty, which means that it has to be \emph{uninhabited}, i.e. there exist no values of that type.
 In our type universe, there is no expression $e : \bot$, meaning $\bot$ is uninhabited.
 Hence, deriving $\Phi(\bot)$ does not lead to any ambiguity and preserves type class coherence.
-Algorithmically, this can be enforced using type automata which will be presented in the chapter \ref{ch:type-system}.
 
-Given any covariant type class $\Phi^<$ and instances for $\Phi^<(\Singleton{0} \join \Singleton{1})$ and $\Phi^<(\Singleton{1} \join \Singleton{2})$,
+For example, given any covariant type class $\Phi^<$ and instances for $\Phi^<(\Singleton{0} \join \Singleton{1})$ and $\Phi^<(\Singleton{1} \join \Singleton{2})$,
 the intersection of both types is equivalent to $(\Singleton{0} \join \Singleton{1}) \meet \Singleton{1} \join \Singleton{2} = \Singleton{1} \neq \bot$, so type class coherence would be violated because the instance for $\Singleton{1}$ is ambiguous.
 
 \subsection{Contravariant Predicates}
@@ -252,7 +251,7 @@ That means the types that we declare instances for have to be \emph{non-overlapp
 
 This condition is equivalent to the union $\tau \join \sigma$ being couninhabited.
 That means it should be impossible to define a consumer for this union. % Taking polar types into account, this would only be possible if we can simplify the union
-In our type system, $\top$ is couninhabited because...
+In our type system, $\top$ is couninhabited because... \todo{is it?}
 
 \subsection{Invariant Predicates}
 
@@ -334,7 +333,7 @@ That means for each type class we can either define an instance for the whole un
 
 When looking at more sophisticated type universes however, there are some types that are seemingly unrelated but still complicate things when we want to ensure coherence.
 E.g. if we have instances $\Showable(\Bool)$ and $\Showable(\Nat)$, it is obvious that their intersection is empty  because $\Bool \meet \Nat = \bot$.
-Thus declaring these instances in the same scope cannot cause the resoltution of incoherent instances.
+Thus declaring these instances in the same scope cannot cause the resolution of incoherent instances.
 
 The story is different, however, when we look at contravariant predicates.
 Given $\Defaultable(\Bool)$ and $\Defaultable(\Nat)$, the union $\Bool \join \Nat$ generally is not equivalent to $\top$. % Even if it were there may be problems...
@@ -347,33 +346,41 @@ In this case, it is more useful to fail during resolution when ambiguous instanc
 
 There are two cases where we can have two distinct instances declared at the same time without violating type class coherence:
 On the one hand we can declare non-overlapping instances for covariant type classes of data, i.e. $\Showable(\mathbb{T})$ and $\Showable(\mathbb{F})$ which both let us only resolve the constraint $\Showable(\bot)$, which is unproblematic as $\bot$ uninhabited.
-On the other hand we can declare non-overlapping instances for contravariant type classes of codata, i.e. $\Defaultable(\{fst : \Singleton{0}\})$ and $\Defaultable(\{snd : \Singleton{1}\})$ which both let us only resolve the constraint $\Defaultable(\top)$ (which is equivalent to $\Defaultable(\{\})$), which is unproblematic as $\top$ couninhabited.
+On the other hand we can declare non-overlapping instances for contravariant type classes of codata, i.e. $\Defaultable(\{fst : \Singleton{0}\})$ and $\Defaultable(\{snd : \Singleton{1}\})$ which both let us only resolve the constraint $\Defaultable(\top)$ (which is equivalent to $\Defaultable(\{\})$), which is unproblematic as $\top$ is  couninhabited.
 The record containing all fields in this universe is couninhabited because there are no field selectors which play the role of destructors for records.
 
 
 \section{Coherence for Sublattices}
 
+A lattice can be subdivided into smaller sublattices.
+If we only consider type class resolution within a sublattice, it suffices to show that instances within this sublattice are coherent.
+
 The lattice of types can be subdivided into sublattices.
 Thus, we may define coherence for sublattices in isolation.
 Using the notion of upward and downward closed sets in relation to sublattices, we have to identify uninhabited and couninhabited types and check for overlaps of downward or upward closed sets.
-If we have, for example, a contravariant instance for a record type $\{ \ell_2 : \tau_2, \ell_3 : \tau_3 \}$, looking at the lattice, we can identify its upset as shown in fig. \ref{fig:upsets}.
-Knowing the upset and the couninhabited $\{\}$, we can identify compatible and incompatible instances in the sublattice.
-In this case, any instance for records that do not contain $\ell_2$ or $\ell_3$ are compatible with this instance.
 
-\begin{figure}
+For a covariant instance of type $\{ fst : \Singleton{0} \}$ we are looking for its downward closed set as shown in fig. \ref{fig:downset}.
+Since no type in this sublattice is uninhabited, any other instance in this sublattice would be incoherent.
+
+\begin{figure}[ht]
   \centering
   \begin{tikzcd}
-    & {\color{blue}\{ \}} \arrow[ld] \arrow[rd]                     &                                      \\
+    & \{ \} \arrow[ld] \arrow[rd]                     &                                      \\
     {\color{blue}\{ fst : \Singleton{0} \}} \arrow[rd] &                                                 & \{ snd : \Singleton{1} \} \arrow[ld] \\
-    & \{ fst : \Singleton{0}, snd : \Singleton{1} \}  &
+    & {\color{blue}\{ fst : \Singleton{0}, snd : \Singleton{1} \}}  &
   \end{tikzcd}
-  \caption{Sublattice of record types. In {\color{blue}blue}: Upward closed set of $\{ fst : \Singleton{1} \}$}
-  \label{fig:upset}
+  \caption{Sublattice of record types. In {\color{blue}blue}: Downward closed set of $\{ fst : \Singleton{0} \}$}
+  \label{fig:downset}
 \end{figure}
 
-\begin{figure}
+
+For a contravariant instance for a record type $\{ \ell_2 : \tau_2, \ell_3 : \tau_3 \}$, looking at the lattice, we can identify its upset as shown in fig. \ref{fig:upsets}.
+Knowing the upset and assuming $\{\}$ to be couninhabited, we can identify compatible and incompatible instances in the sublattice.
+In this case, any instance for records that do not contain $\ell_2$ or $\ell_3$ are compatible with this instance.
+
+\begin{figure}[ht]
   \centering
-  \begin{tikzcd}
+  \begin{tikzcd}[scale cd=0.83]
     &                                                      & {\color{blue}\{\}} \arrow[lld] \arrow[ld] \arrow[d] \arrow[rrd]   &       &                                     \\
     \{ \ell_1 : \tau_1 \} \arrow[d] \arrow[rrd]           & {\color{blue}\{ \ell_2 : \tau_2 \}} \arrow[d] \arrow[ld]           & {\color{blue}\{ \ell_3 : \tau_3 \}} \arrow[d] \arrow[ld]          & \dots & \{ \ell_n : \tau_n \} \arrow[llddd] \\
     {\{ \ell_1 : \tau_1, \ell_2 : \tau_2 \}} \arrow[rrdd] & {\color{blue}\{ \ell_2 : \tau_2, \ell_3 : \tau_3 \}} \arrow[rdd] & {\{ \ell_1 : \tau_1, \ell_3 : \tau_3 \}} \arrow[dd] & \dots &                                     \\

@@ -6,20 +6,20 @@
 \label{ch:summary}
 
 We have shown that not only is it possible to combine qualified types with subtyping, but also that this approach preserves important properties of both concepts.
-Covariant predicates are implied for more precise subtypes, contravariant predicates are implied for broader supertypes, while invariant predicates can only be used for semantically equal types.
+Covariant predicates are implied for more precise subtypes, contravariant predicates are implied for broader supertypes, while invariant predicates can only be used for semantically equivalent types.
 Liskov substitution is preserved by resolution for sub- and supertypes and type class coherence has to take these implications into account.
 
 In practise, it may be challenging, however, to enforce a criterion for coherent instances without being overly restrictive.
-Depending on the type system it can also be difficult (or even impossible) to decide whether any given type is inhabited or coinhabited.
+Depending on the type system it can also be difficult (or even impossible) to decide whether any given type is inhabited or coinhabited which is central in our definition of type class coherence.
 
-It remains open, however, how generic programming works in conjunction with this approach.
+It remains open, however, how generic \todo{what?} programming works in conjunction with this approach.
 Further work hast to be done in correctly combining the biunification algorithm of subtyping constraints and the minimisation in type automata with type class constraints.
 
 
 \section{Outlook and Further Work}
 % Further work: Type simplification with type class constraints, type inference, applications for different subtyping systems
 
-If we want to implement type inference for a type system with subtyping and type classes, there are some more challenges.
+If we want to implement type inference for a type system with subtyping and type classes, there are some further challenges.
 While we can just impose additional type class constraints during biunification, it remains open how to to simplify types with type class constraints.
 In SimpleSub \cite{10.1145/3409006} there are rules to simplify principal types.
 As an example, according to Parreaux, induistinguishable type variables can be unified.
@@ -27,5 +27,5 @@ E.g. the type of $\mathit{if-then-else}$ would be inferred as $\Bool \to \alpha 
 But what happens if one of the type variables is constrained by a type class, such as $\Showable(\alpha) \Rightarrow \Bool \to \alpha \to \beta \to \alpha \join \beta$?
 Would this type be equivalent to $\Showable(\alpha) \Rightarrow \Bool \to \alpha \to \alpha \to \alpha$?
 This seems unintuitive because we know constrain the third argument by a type class which previously was unrelated to any type class.
-
+\todo{talk about constraints in type automata}
 \clearpage

@@ -1,6 +1,8 @@
 \chapter{The Lattice of Types}
 \label{ch:lattice}
 
+To give a more specific notion of subtyping, we introduce a lattice of types.
+
 A partially ordered set $(L , \leq)$ is called a lattice if it is both a join- and a meet-semilattice, i.e. each two-element subset $\{a,b\}\subseteq L$ has a join (i.e. a least upper bound, denoted by $a \join b$) and dually a meet (i.e. a greatest lower bound, denoted by $a \meet b$).
 A lattice of types is a type universe $\mathcal{U}$ of types and a subtyping relation $\sub$ playing the role of a partial order.
 It is, furthermore, a bounded lattice due to the types $\top$ and $\bot$ which satisfy $\bot \sub \tau$ and $\tau \sub \top$ for all types $\tau$ in $\mathcal{U}$.
@@ -252,7 +254,7 @@ Intersection types and the $\top$ type on the other hand  can only occur in inpu
 The motivation for this can be given as follows: Consider a function that accepts two types as inputs and may return two types as output.
 Since the function is assumed to be total any input needs to be of both types (i.e. of the intersection of both types) and the output can be either type (i.e. the union of both types).
 
-\begin{figure}
+\begin{figure}[ht]
   \begin{flalign*}
     \tau^+ := & \; \Bool \; | \; \Nat \; | \; \Int \; | \; \String \; | \; \Singleton{0} \; | \; \Singleton{1} \; | \; \Singleton{2} \; | \dots \\
               & \; \bot \; | \; \tau_1^+ \join \tau_2^+ \; | \; \tau_1^- \to \tau_2^+ \; | \; \mu\alpha.\tau^+ \; | \; \alpha                   \\

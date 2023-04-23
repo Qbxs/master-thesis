@@ -14,7 +14,7 @@ Formally, we can define predicates over types as follows:
   Given a universe of types $\mathcal{U}$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\mathcal{U})$.
 \end{definition}
 
-We are only interested in predicates that are preserved over the subtyping lattice.
+We only consider predicates that are preserved over the subtyping lattice.
 I.e. predicates that depend only on the terms of a type.
 That means only predicates that are \emph{monotonous} are considered while other predicates about meta-information such as \emph{"has exactly two values"} are disregarded.
 We further differentiate between \emph{covariant}, \emph{contravariant} and \emph{invariant} predicates over types, because the resolution rules vary accordingly.
@@ -169,7 +169,7 @@ The rules for contravariant predicates are dual to those for covariant predicate
 The monotonicity of $\Phi^>$ motivates the following rule preserving the predicate for supertypes:
 From the definition of contravariant predicates it follows that $\phi$ holds for some term of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
 
-With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can again derive several useful rules:
+With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can again derive several useful rules. (fig. \ref{fig:contravariant-derived-rules})
 
 \begin{figure}[ht]
   \begin{center}
@@ -320,6 +320,7 @@ Invariant type class predicates can essentially only be derived from type equali
 Hence, there are no interesting derivable rules for them.
 
 A typical example for invariant predicates is $\Monoid$, satisfied by any type for which we can define a monoid, i.e. there is a total function combining two values of the type to a new one and a neutral element corresponding to this operation.
+A monoid is represented by an invariant type class because the function both consumes and produces terms of the type to be declared a monoid.
 
 \subsection{Predicate Implications}
 \label{sec:predicate-implications}
@@ -364,7 +365,7 @@ We can interpret the derivation in fig. \ref{fig:example-showable} as a proof fo
   \label{fig:example-showable}
 \end{figure}
 
-Using $\Gamma$ from above, we can derive $\Showable(\Singleton{1} \meet \Nat)$ (fig. \ref{fig:example-defaultable}).
+Using $\Gamma$ from above, we can derive $\Defaultable(\Int \join \Bool)$ (fig. \ref{fig:example-defaultable}).
 In natural language this proves that \emph{given a default value for $\Nat$, we also obtain a default value for the union of $\Int$ and $\Bool$}
 
 
@@ -526,27 +527,27 @@ The witness rules in fig. \ref{fig:subtyping-witnesses} are an expansion of the 
 We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
 \todo{add rules for records}
 
-\begin{figure}[ht]
-  \[
-    \begin{tikzcd}
-      & \tau \meet \sigma \arrow[lddd, "proj_1"'] \arrow[rddd, "proj_2"] & \\
-      & & \\
-      & & \\
-      \tau & & \sigma
-    \end{tikzcd}
-  \]
+% \begin{figure}[ht]
+%   \[
+%     \begin{tikzcd}
+%       & \tau \meet \sigma \arrow[lddd, "proj_1"'] \arrow[rddd, "proj_2"] & \\
+%       & & \\
+%       & & \\
+%       \tau & & \sigma
+%     \end{tikzcd}
+%   \]
 
-  \[
-    \begin{tikzcd}
-      \tau \arrow[rddd, "in_1"'] & & \sigma \arrow[lddd, "in_2"] \\
-      & & \\
-      & & \\
-      & \tau \join \sigma &
-    \end{tikzcd}
-  \]
-  \caption{Witnesses for union \& intersection types}
-  \label{fig:cd-proj/in}
-\end{figure}\todo{figure 4.7 can probably be removed}
+%   \[
+%     \begin{tikzcd}
+%       \tau \arrow[rddd, "in_1"'] & & \sigma \arrow[lddd, "in_2"] \\
+%       & & \\
+%       & & \\
+%       & \tau \join \sigma &
+%     \end{tikzcd}
+%   \]
+%   \caption{Witnesses for union \& intersection types}
+%   \label{fig:cd-proj/in}
+% \end{figure}\todo{figure 4.7 can probably be removed}
 
 $triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
 $in_{1/2}$ correspond to the construction (injection) of an union type from either the first type $\tau$ or the second type $\sigma$ of the union $\tau \join \sigma$.
@@ -601,6 +602,8 @@ Finally, in order to construct a witness for an invariant predicate judgement, w
   \RightLabel{\textsc{InV}}
   \TrinaryInfC{$\inv(w,m,n) : \Phi(\tau)$}
 \end{prooftree}
+
+Just like for predicates, we can use the given rules to derive additional rules for covariant (fig. \ref{fig:derived-covariant-witnesses}) and contravariant (fig. \ref{fig:derived-contravariant-witnesses}) witnesses.
 
 % macros
 \begin{figure}[ht]
@@ -694,7 +697,7 @@ Finally, in order to construct a witness for an invariant predicate judgement, w
     \DisplayProof
   \end{center}
 
-  \caption{Derivations for covariant witnesses}
+  \caption{Derived rules for covariant witnesses}
   \label{fig:derived-covariant-witnesses}
 \end{figure}
 
@@ -790,7 +793,7 @@ Finally, in order to construct a witness for an invariant predicate judgement, w
   \end{center}
 
   \caption{Derived rules for contravariant witnesses}
-  \label{fig:contravariant-witnesses}
+  \label{fig:derived-contravariant-witnesses}
 \end{figure}
 
 % We can obtain witnesses from and to the initial and terminal types $\bot$ and $\top$ with trivial morphism corresponding to the \textsc{Bot} and \textsc{Top} subtyping rules.
@@ -999,9 +1002,9 @@ However, there is no guarantee that a term of type $\tau$ or of type $\sigma$ is
 
 In the end however, we can only resolve these constraints if the predicate in question is monotonous on the witnesses of a type.
 Predicates that relate witnesses with each other such as $\Ordable$ are not trivially satisfied for the union of two types if they hold for both respectively.
-Consider an ordering of natural numbers $o_\Nat : \Ordable \Nat$ and an ordering of booleans $o_\Bool : \Ordable \Bool$.
+Consider an ordering of natural numbers $o_\Nat : \Ordable (\Nat)$ and an ordering of booleans $o_\Bool : \Ordable (\Bool)$.
 It is not ambiguous how to define the ordering $o : \Ordable (\Nat \join \Bool)$.
-$o(\mathbf{true}, 1)$ has to be defined in some way, but since it is ambiguous we cannot define it without violating type class coherence.
+$\mathbf{true} \leq 1$ has to be defined in some way, but since it is ambiguous we cannot define it without violating type class coherence.
 
 
 The rules \textsc{Join}$^<$ and \textsc{Meet}$^>$ as mentioned before cannot be derived from the subtyping rules alone.
@@ -1009,19 +1012,19 @@ It may seem intuitive that given $\Showable(\tau)$ and $\Showable(\sigma)$ we al
 Dually, we could also be able to resolve $\Readable(\tau \meet \sigma)$ from $\Readable(\tau)$ and $\Readable(\sigma)$.
 
 However these rules cannot be implemented generally.
-Consider type classes with methods in which the bound type variable occurs more than once (unlike in $Show$ and $Read$).
+Consider type classes with methods in which the bound type variable occurs more than once (unlike in $\Showable$ and $\Readable$).
 As an example where this rule cannot be implemented, let us look at the $Eq$ type class:
 
 \begin{gather}
-\nonumber {\bf class} \; Eq(a) \; where\\
+\nonumber {\bf class} \; \Eq(a) \; where\\
 \nonumber  eq : a \to a \to \Bool
 \end{gather}
 
-Given instances $Eq(\Nat)$ and $Eq(\Bool)$, we may expect to have $Eq(\Nat \join \Bool)$ but e.g. the term $eq \; 5 \; True$ cannot be trivially implemented based on known implementations for $eq$.
+Given instances $\Eq(\Nat)$ and $\Eq(\Bool)$, we may expect to have $\Eq(\Nat \join \Bool)$ but e.g. the term $5 == True$ cannot be trivially implemented based on known implementations for $==$.
 Based on the assumptions we already know how to compare terms of type $\Nat$ with each other and terms of type $\Bool$ with each other,
 however we have no information available on how to compare a term of type $\Bool$ with a term of type $\Nat$.
 In this example, it would be easy to provide $false$ as a default value but constructing default values is going to be complicated for more sophisticated type classes.
-In fact the $Ord$ type class already would be problematic using default values.
+In fact the $\Ordable$ type class already would be problematic using default values.
 
 Therefore, these non-derivable rules cannot be used for type class resolution.
 
@@ -1076,114 +1079,3 @@ Therefore, these non-derivable rules cannot be used for type class resolution.
 % But given the commutativity of $\join$, this would violate type class coherence because $a \join b = b \join a$ but \texttt{Ord a $\join$ b} $\neq$ \texttt{Ord b $\join$ a}.
 
 
-\section{Representations of Type Class Witnesses} % not quite correct
-\label{sec:representations}
-
-\todo{maybe move somewhere else}
-For an implementation, we need some representation of witnesses which is going to be used for the execution of programs using type class methods.
-Since type classes hide the concrete implementation of their methods, we need a means to extract this concrete implementation when needed.
-There are essentialy two ways to implement type class overloading in practise: Intensional type analysis which dispatches a type representation at runtime and dictionary passing which treats witnesses as records or dictionaries which can be resolved at compile time.
-
-\subsection{Intensional type analysis}
-\label{sec:intensional-analysis}
-
-Instead of passing around dictionaries, we can also resolve the relevant instance at runtime dispatching on the term's type.
-This requires our language to tag term with some representation of their type at runtime.
-In the before mentioned case, the definition of \mintinline{Haskell}{show} could look something like this:
-
-\begin{minted}{Haskell}
-  show t x = case t of
-    Bool -> boolShow x
-    Int -> intShow x
-\end{minted}
-
-In the context of subtyping we would not require type equality but for \mintinline{Haskell}{t} to be a subtype of some type for which an instance is defined.
-This also renders intensional type analysis more difficult:
-We can not simply match on a type (or its encoded representation \cite{weirich2000}) because we have to essentially solve the problem of subtyping between the type at hand and (at worst case) for each type for which an instance declaration is in scope.
-So, intensional type analysis may introduce a dramatic overhead in the presence of subtyping.
-
-This overhead seems natural when we want to implement a dynamically type checked language.
-However, type class resolution should already guarantee us static type safety, so additionally using type tags for dynamic type checking or type analysis seems superfluous.
-The only case for which intensional type analysis appears superior is for the case of union and intersection types.
-
-
-\subsection{Dictionary Passing}
-\label{sec:dictionaryPassing}
-
-One typical way of implementing type classes is using \emph{dicitonary passing style}.
-To examine this, we look at type classes in Haskell.
-We use an isomorphism between type classes and records:
-E.g. the type class \mintinline{Haskell}{Eq} defined as
-
-\begin{minted}{Haskell}
-  class Eq a where
-    eq :: a -> a -> Bool
-    neq :: a -> a -> Bool
-\end{minted}
-
-can be translated to a record type that preserves the structure of the class:
-
-\begin{minted}{Haskell}
-  data DictEq a =
-    DictEq { eq :: a -> a -> Bool,
-             neq :: a -> a -> Bool }
-\end{minted}
-
-Instances as witnesses of type classes can be translated accordingly to values of dictionaries.
-E.g.
-
-\begin{minted}{Haskell}
-  instance Eq Int where
-    eq = intEq
-    neq = not . intEq  
-\end{minted}
-
-can be translated to a value of type \mintinline{Haskell}{DictEq Int}:
-
-\begin{minted}{Haskell}
-  intEqDict = DictEq { eq = intEq,
-                       neq = not . intEq }
-\end{minted}
-
-Here, the instances of a type class are carried in a dictionary that has to be passed as an additional argument to method calls.
-For example the term
-
-\begin{minted}{Haskell}
-  show 5
-\end{minted}
-
-would be compiled to
-
-\begin{minted}{Haskell}
-  show showIntDict 5
-\end{minted}
-
-where \mintinline{Haskell}{showIntDict} is a dictionary that provides the relevant defintion of \mintinline{Haskell}{show :: Int -> String} for the instance of \mintinline{Haskell}{Show Int}.
-This allows us to "compile away" the overhead that type classes introduce to the surface language because type inference can fill in the correct dictionary that is ought to be used.
-
-Generic constrained functions like
-
-\begin{minted}{Haskell}
-  emphasize :: (Show a) => a -> String
-  emphasize x = show x ++ "!"
-\end{minted}
-
-would simply pass around the dictionary and be compiled to something like:
-
-\begin{minted}{Haskell}
-  emphasize :: ShowDict a -> a -> String
-  emphasize dict x = show dict x ++ "!"
-\end{minted}
-
-\cite{kiselyov}
-
-There is a drawback however, in the presence of subtyping it may not always be clear which dictionary is going to be needed for instance resolution.
-Consider the term:
-
-\begin{minted}{text}
-  show (if b then 42 :: Int else "Hello" :: String)
-\end{minted}
-
-The inferred type of this expression should be \mintinline{text}{Int \/ String}.
-What we need here are essentially two dictionaries: One for \mintinline{text}{Int} and one for \mintinline{text}{String} because it is undecidable at compile time which dictionary is going to be used at runtime.
-% Would it not be possible to just construct a new dictionary consisting of both variants?

@@ -5,7 +5,7 @@ Polymorphism is a general concept in programming languages to abstract code and 
 In order to generalize functions over different data types, there have been several proposals in different kinds of programming languages:
 These can be summarised in three categories: parametric polymorphism, subtyping and ad-hoc polymorphism.
 Each of these have a reasoning principle associated with them.
-In this chapter, we are going to examine the different forms of polymorphism in Java and Haskell and how mixing them may affect our ability to reason about them.
+In this chapter, we are going to examine the different forms of polymorphism by example in Java and Haskell and how mixing them may affect our ability to reason about them.
 
 \section{Parametric polymorphism}\label{sec:parmetric-polymorphism}
 
@@ -25,9 +25,9 @@ Its type enables us only to simply return the argument, because without knowing 
 Similarily, for a function $\mathbf{g} : \forall \alpha. \alpha \to \alpha \to \alpha$ there can be at most two implementations:
 One that returns the first and one that returns the second argument.
 
-More interesting, perhaps, is the usage of parametric data structures such as lists.
+More interesting, \todo{reformulate} perhaps, is the usage of parametric data structures such as lists.
 Given a function of type $\forall \alpha \beta. (\alpha \to \beta) \to \mathit{List}(\alpha) \to \mathit{List}(\beta)$, we expect this function to be the $\mathit{map}$ function which simply applies a supplied function to each element of a list and returns the transformed list.
-Based on the type we can be sure that the supplied function $f$ is applied exactly once to each element of the list, as this is the only way to transform an element of type $\alpha$ to type $\beta$ while applying the function more than once is impossible as there is no suitable argument type left.
+Based on the type we can be sure that the supplied function $f$ is applied at most once to each element of the list, as this is the only way to transform an element of type $\alpha$ to type $\beta$ while applying the function more than once is impossible as there is no suitable argument type left.
 The only other possibilities are dropping or rearranging elements of the list but these are not typically expected here and in our type system it is impossible to refine the type of a function so much that it can only be implemented as $\mathit{map}$.
 
 Many such \emph{theorems for free} can be derived using parametric polymorphism, as Wadler has shown. \cite{wadlertheorems}
@@ -47,7 +47,7 @@ This is typically expressed as a \emph{"is-a"} relationship, i.e. terms of one t
 
 In object-oriented programming languages such as Java this hierarchy is given in the form of sub- and superclasses.
 We can express the relationship between super- and subclasses, or more generally super- and subtypes,
-in the form that all properties of the superclass is also exhibited in the subclass. \cite{subtyping}
+in the form that all properties of the superclass are also exhibited by the subclass. \cite{subtyping}
 
 In the case of object-oriented languages this means that, if the class $\mathit{SubC}$ is a subclass of $\mathit{SuperC}$,
 then any method defined in $\mathit{SuperC}$ is also going to be defined for objects of $\mathit{SubC}$.
@@ -105,28 +105,30 @@ In essence, given subtyping types are no longer disjoint but can be mixed togeth
 E.g. every natural number is also an integer and therefore the type $\Nat$ of natural numbers is a subtype of $\Int$.
 
 If we omit subtyping, we have to give explicit coercion functions (e.g. $\mathbf{coerce} : \Nat \to \Int$) whenever the expected type is more general than the given type.
-Subtyping allows us to pass such more specific arguments in a more natural way and makes coercions implicit.
+Subtyping allows us to pass such more specific arguments in a more natural way and makes these coercions implicit.
 
 \section{Ad-hoc polymorphism}
 \label{sec:ad-hoc-polymorphism}
 % overloading vs type classes
 % paper by wadler
 
-In some - mostly imperative - languages it is possible to simply overload functions (e.g. we may define arithmetic operations such as $+$ both on integers and on float values, the correct implementation is then picked based on the argument type).
+In some - mostly imperative - languages it is possible to simply overload functions, e.g. we may define arithmetic operations such as $+$ both on integers and on float values, the correct implementation is then picked based on the argument type.
 This is useful because semantically these distinct implementations represent the same operation, even though a distinct implementation is needed due to implementation details of integer and floating point numbers.
 However, this approach to ad-hoc polymorphism is often not visible to the programmer as there is usually no way to express this in the type system of these languages.
-Whether or not an operator is overloaded is a hidden implementation detail. % cite...
+Whether or not an operator is overloaded is typically not visible to the programmer and therefore it is difficult to reason about ad-hoc polymorphism. % cite...
 
-If our type system doesn't allow ad-hoc polymorphism it may seem neccessary to write verbose code for basic functions with respect to every concrete type it should be used for.
+If a language does not support ad-hoc polymorphism, it may seem neccessary to write verbose code for basic functions with respect to every concrete type it should be used for.
 An intuitive example for this (that is also the motivation for type classes in the original proposal) are the arithmetic operators mentioned above.
 We simply cannot define $(+) : \Int \to \Int \to \Int$ and then also $(+) : \mathit{Float} \to \mathit{Float} \to \mathit{Float}$ in a different implementation.
 But these types have nonetheless something in common.
-Namely, they both stand for \emph{numerical} values, that hence support the usual arithmetic operations, like addition, multiplication, division and so on.
+Namely, they both describe \emph{numerical} values, that hence support the usual arithmetic operations, like addition, multiplication, division and so on.
 
 The idea of type classes is to generalise attributes of types given by appropriate functions.
-Type classes express the concept of ad-hoc polymorphism in the type system in a sensible way.
-Type class constraints can furthermore be annotated in the type system.
-They refine a range of types which hold a specified property, i.e. implement a specific type class instance.
+Type classes express the concept of ad-hoc polymorphism in the type system in a more comprehensive way:
+We can overload type class methods by declaring insances for type classees for specific types.
+When using these type class methods somewhere in a program, a suitable instance will be resolved.
+When the concrete type for a type class method in a function is polymorphic, it will be constrained by the type class.
+Type class constraints refine a range of types which hold a specified property, i.e. implement a specific type class instance.
 For example, the type class \mintinline{Haskell}|Num| in Haskell expects that we can implement a number of numerical functions for a type $\tau$ if it is ought to be a member of the \mintinline{Haskell}|Num| type class.
 
 Typically, type classes are specified using \emph{class declarations} that define the methods that have to be defined for types in that type class.
@@ -163,7 +165,7 @@ E.g. in Haskell sets are implemented as binary search trees relying on an orderi
 If this ordering is not uniquely determined, insert and delete operations may break as well which would make the library unusable. \cite{Kilpatrick2019-cy}
 
 % ???
-In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs.
+In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs. \todo{questionable standalone phrase}
 
 
 \section{Relation between different forms of Subtyping}\label{sec:relations}
@@ -208,7 +210,7 @@ Generally, Reynolds \cite{reynolds_coherence} describes the problem of coherence
 \end{quote}
 
 When talking about type classes or predicates on types we have to enforce that if $\Phi(\tau)$ holds for some predicate $\Phi$ on some type $\tau$,
-then all evidence for this judgement has to be equivalent in the sense of using different evidence does not change the behavior of the program.
+then all evidence for this judgement has to be equivalent in the sense that using different evidence does not change the behavior of the program.
 
 For type classes, this means that no two instances should be able to be resolved for the application of a type class constraint on the same type.
 A rather obvious example would be to define two different instances for the same type.
@@ -222,10 +224,10 @@ As part of the standard prelude we find both \mintinline{Haskell}{instance Show 
 (with \mintinline{Haskell}{String} being a type synonym for \mintinline{Haskell}{[Char]}).
 The $\mathit{Show}$ instance for Strings differs from the more general instance for lists.
 Even though there arises an ambiguity, the language extension \emph{Overlapping Instances} enforces higher precedence for the $Show$ instance of Strings.
-Therefore, the instance for lists will not be resolved for lists of $Chars$, i.e. $Strings$.
+Therefore, the instance for lists will not be resolved for lists of $Chars$, i.e. $Strings$. \todo{this is not correct, check showList}
 
 Incoherent programs should generally not be typeable.
-One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this short program which simply reads a string to a data type and then converts it back to string without specifying which data type is being used:
+One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this short program which simply reads a String to a data type and then converts it back to a String without specifying which data type is being used:
 
 \begin{minted}{Haskell}
     f :: String -> String
@@ -248,20 +250,24 @@ Usually this is done because the subclass relies on an implementation of the sup
 E.g. the type class \mintinline{Haskell}{Eq} in Haskell is a superclass of \mintinline{Haskell}{Ord}, written \mintinline{Haskell}{Eq a => Ord a}.
 This means that for each type that we want to define an ordering for already needs to have equality defined on.
 
-For example, given an instance for \mintinline{Haskell}{Ord (Maybe a)} we can then derive that an instance for \mintinline{Haskell}{Eq a} has to exist.
-As shown in the diagram, we can take different paths to do so but type class coherence guarantees that no matter which path we choose to resolve the instance, we will always find \emph{the same} instance.
+For example, as presented analogously by Kmett \cite{kmett2015}, given an instance for \mintinline{Haskell}{Ord (Maybe a)} we can then derive that an instance for \mintinline{Haskell}{Eq a} has to exist.
+As shown in the diagram in fig. \ref{fig:commuting-resolution}, we can take different paths to do so but type class coherence guarantees that no matter which path we choose to resolve the instance, we will always find \emph{the same} instance.
 In Haskell98 type class coherence guarantees that all such diagrams commute.
 So even if there may be different ways to resolve type class constraints, all of them preserve the same semantics.
 
-\begin{tikzcd}
-  &  & \text{\mintinline{Haskell}|Ord (Maybe a)|} \arrow[llddd, "{\text{\footnotesize\mintinline{Haskell}|class Eq a => Ord a|}}"'] \arrow[rrddd, "{\text{\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|}}"] &  &                            \\
-  &  &                                &  &                            \\
-  &  &                                &  &                            \\
-  \text{\mintinline{Haskell}|Eq (Maybe a)|} \arrow[rrddd, "{\text{\footnotesize\mintinline{Haskell}|instance Eq a => Eq (Maybe a)|}}"'] &  &   &  & \text{\mintinline{Haskell}|Ord a|} \arrow[llddd, "{\text{\footnotesize \mintinline{Haskell}|class Eq a => Ord a|}}"] \\
-  &  &                                &  &                            \\
-  &  &                                &  &                            \\
-  &  & \text{\mintinline{Haskell}|Eq a|}                  &  &
-\end{tikzcd}
+\begin{figure}[ht]
+  \begin{tikzcd}[scale cd=0.85]
+    &  & \text{\mintinline{Haskell}|Ord (Maybe a)|} \arrow[llddd, "{\text{\footnotesize\mintinline{Haskell}|class Eq a => Ord a|}}"'] \arrow[rrddd, "{\text{\footnotesize\mintinline{Haskell}|instance Ord a => Ord (Maybe a)|}}"] &  &                            \\
+    &  &                                &  &                            \\
+    &  &                                &  &                            \\
+    \text{\mintinline{Haskell}|Eq (Maybe a)|} \arrow[rrddd, "{\text{\footnotesize\mintinline{Haskell}|instance Eq a => Eq (Maybe a)|}}"'] &  &   &  & \text{\mintinline{Haskell}|Ord a|} \arrow[llddd, "{\text{\footnotesize \mintinline{Haskell}|class Eq a => Ord a|}}"] \\
+    &  &                                &  &                            \\
+    &  &                                &  &                            \\
+    &  & \text{\mintinline{Haskell}|Eq a|}                  &  &
+  \end{tikzcd}
+  \caption{Commuting type class resolution of \mintinline{Haskell}{Ord (Maybe a)}}
+  \label{fig:commuting-resolution}
+\end{figure}
 
 Even though there are multiple ways to derive an instance for \mintinline{Haskell}|Eq a| from an instance of \mintinline{Haskell}|Ord (Maybe a)|, the derived instance has to be uniquely determined.
 Since the diagram commutes, there has to be exactly one instance for \mintinline{Haskell}|Eq a|.

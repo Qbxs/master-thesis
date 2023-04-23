@@ -5,21 +5,21 @@
 \chapter{Introduction}\label{ch:intro}
 
 Abstraction is a powerful method to generalize code for different use cases.
-It can help in hiding implementation details, facilitates the reusage of code and makes it easier to reason about programs.
+It can help hiding implementation details, facilitates the reusage of code and makes it easier to reason about programs in a more general manner.
 
 Abstraction over types has been done in various ways to face different challenges.
 Parametric polymorphism can generalize programs that ignore the implementation or representation of their arguments and result,
-subtyping allows to use a more specific type when a more loose one is expected
+subtyping allows us to use a more specific type when a more loose one is expected
 and type classes allow us to implement traits of types individually while still exhibiting a common type constraint for them.
-All these forms of polymorphism have a reasoning principle attached to them which allows us to make certain predictions about their behavior.
-In order to guarantee this reasoning to be sound, certain constraints have to be enforced when implementing these forms of polymorphism in a language.
+All these forms of polymorphism have a reasoning principle attached to them which allows us to make certain predictions about their behavior and ensures their correctness.
+In order to guarantee this reasoning to be sound, certain constraints have to be enforced when implementing these forms of polymorphism in a programming language.
 
 While paramtric polymorphism has already been succesfully combined with subtyping as algebraic subtyping \cite{dolan2017subtyping}
-and type class (as a form of ad-hoc polymorphism) are a proven feature programming languages such as Haskell \cite{wadlerblott} which is based on the parametric polymorphic Hindley-Milner type system,
+and type classes, as a form of ad-hoc polymorphism, are a proven feature in programming languages such as Haskell \cite{wadlerblott} which is based on the parametric polymorphic Hindley-Milner type system,
 the advantages and shortcomings of combining all three together is still unknown.
 
-It is particularily interesting to see how type classes (or more generally predicates on types) are inherited or transfered via the subtyping relation.
-If $\Nat$ is a subtype of $\Int$ and we know that $\Int$ is a showable type, does it follow that $\Nat$ is showable as well?
+It is particularily interesting to see how type classes, or more generally predicates on types, are inherited or transfered via the subtyping relation.
+If the type of natural numbers $\Nat$ is a subtype of the integers $\Int$ and we know that $\Int$ is a showable type, does it follow that $\Nat$ is showable as well?
 If so, does this hold for all type classes or predicates?
 Can we perhaps combine multiple instances to derive a composed instance for e.g. a union type?
 \todo{add concrete example for motivation}

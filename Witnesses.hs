@@ -38,13 +38,15 @@ reconstruct (Meet w1 w2) =
     let (Subtype t s) = reconstruct w1
         (Subtype r v) = reconstruct w2
     in  if t /= r
-            then error ("Different subtypes: " <> show t <> " and " <> show r)
+            then error $
+                   "Different subtypes: " <> show t <> " and " <> show r
             else Subtype t (Inter s v)
 reconstruct (Join w1 w2) =
     let (Subtype t s) = reconstruct w1
         (Subtype r v) = reconstruct w2
     in  if s /= v
-            then error ("Different supertypes: " <> show s <> " and " <> show v)
+            then error $
+                   "Different supertypes: " <> show s <> " and " <> show v
             else Subtype (Union t r) s
 reconstruct (Func w1 w2) =
     let (Subtype t' t) = reconstruct w1
@@ -84,11 +86,14 @@ data VarState = VarState
     } deriving Show
 
 runSolverM :: SolverM a -> Either String SolverState
-runSolverM s = snd <$> runExcept (runStateT s (SolverState M.empty (M.singleton (MkUniVar "u0") (VarState [] []))))
+runSolverM s = snd <$> runExcept
+                 (runStateT s (SolverState M.empty
+                                 (M.singleton (MkUniVar "u0") (VarState [] []))))
 
 -- | Generate subtyping witnesses for subtyping constraints.
 generateWitnesses :: [Constraint] -> Either String (Map Constraint Witness)
-generateWitnesses cs = ss_cache <$> runSolverM (solve (toDelayed <$> cs) >> runReaderT substitute S.empty)
+generateWitnesses cs = ss_cache <$> runSolverM
+                         (solve (toDelayed <$> cs) >> runReaderT substitute S.empty)
 
 -- | A Subtyping witness.
 -- Encodes the way a subtyping constraint is being solved.
@@ -165,7 +170,9 @@ substitute = do
       modify $ \(SolverState cache' vars)
               -> SolverState (M.adjust (const w) c cache') vars
   where
-    go :: Map Constraint Witness -> Witness -> ReaderT (Set DelayedConstraint) SolverM Witness
+    go :: Map Constraint Witness
+       -> Witness
+       -> ReaderT (Set DelayedConstraint) SolverM Witness
     go _ (Refl ty) = pure (Refl ty)
     go _ (FromTop ty) = pure (FromTop ty)
     go _ (ToBot ty) = pure (ToBot ty)
@@ -182,8 +189,10 @@ substitute = do
     go _ (UniVarL uv ub) = pure (UniVarL uv ub)
     go _ (UniVarR uv lb) = pure (UniVarR uv lb)
     go m (SubVar c) = case M.lookup (fromDelayed c) m of
-         Nothing -> throwError $ "Cannot find constraint: " <> show c <> " in env: " <> ppShow m
-         Just (SubVar c') -> throwError "Tried to subtitute a variable with another variable"
+         Nothing -> throwError $
+                      "Cannot find constraint: " <> show c <> " in env: " <> ppShow m
+         Just (SubVar c') -> throwError
+                               "Tried to subtitute a variable with another variable"
          Just w -> asks (S.member c) >>= \case
             True -> pure $ Fix (fromDelayed c)
             False -> local (S.insert c) (go m w)
@@ -243,10 +252,12 @@ inCache c =  gets $ M.member c . ss_cache
 
 -- | Add solved constraint to cache and known witnesses.
 addToCache :: Constraint -> Witness -> SolverM ()
-addToCache c w = modify $ \(SolverState cache vars) -> SolverState (M.insert c w cache) vars
+addToCache c w = modify $ \(SolverState cache vars) ->
+                            SolverState (M.insert c w cache) vars
 
 modifyBounds :: (VarState -> VarState) -> UniVar -> SolverM ()
-modifyBounds f uv = modify (\(SolverState cache vars) -> SolverState cache (M.adjust f uv vars))
+modifyBounds f uv = modify (\(SolverState cache vars) ->
+                              SolverState cache (M.adjust f uv vars))
 
 -- | Get the variable state from the state for a univar.
 getBounds :: UniVar -> SolverM VarState
@@ -256,16 +267,20 @@ getBounds uv = do
     Nothing -> throwError $ "Tried to retrieve bounds for variable:" ++ unUniVar uv
     Just vs -> return vs
 
--- | Add type to lower bounds of a univar and generate new constraints based on the upper bounds.
-addLowerBounds :: UniVar -> Typ -> Map RecVar Typ -> Map RecVar Typ -> SolverM [DelayedConstraint]
+-- | Add type to lower bounds of a univar and generate new constraints
+-- based on the upper bounds.
+addLowerBounds :: UniVar -> Typ -> Map RecVar Typ -> Map RecVar Typ
+               -> SolverM [DelayedConstraint]
 addLowerBounds uv ty m m' = do
   modifyBounds (\(VarState ubs lbs) -> VarState ubs (ty:lbs)) uv
   bounds <- getBounds uv
   let ubs = vs_upperbounds bounds
   return [Delayed ty m ub m' | ub <- ubs]
 
--- | Add type to upper bounds of a univar and generate new constraints based on the lower bounds.
-addUpperBounds :: UniVar -> Typ -> Map RecVar Typ -> Map RecVar Typ -> SolverM [DelayedConstraint]
+-- | Add type to upper bounds of a univar and generate new constraints
+-- based on the lower bounds.
+addUpperBounds :: UniVar -> Typ -> Map RecVar Typ -> Map RecVar Typ
+               -> SolverM [DelayedConstraint]
 addUpperBounds uv ty m m' = do
   modifyBounds (\(VarState ubs lbs) -> VarState (ty:ubs) lbs) uv
   bounds <- getBounds uv
