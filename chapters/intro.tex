@@ -22,7 +22,16 @@ It is particularily interesting to see how type classes, or more generally predi
 If the type of natural numbers $\Nat$ is a subtype of the integers $\Int$ and we know that $\Int$ is a showable type, does it follow that $\Nat$ is showable as well?
 If so, does this hold for all type classes or predicates?
 Can we perhaps combine multiple instances to derive a composed instance for e.g. a union type?
-\todo{add concrete example for motivation}
+
+For this consider the following example:
+$$
+\mathbf{evenOrFalse} := \lambda n. \mathbf{ifthenelse} \; (\mathbf{even} \; n) \; n \; \mathbf{false}
+$$
+This function takes a number, checks if it is even and if so returns it, else it returns the boolean value $\mathbf{false}$.
+It is easy to see that the inferred type for this function would be $\Nat \to \Nat \join \Bool$.
+Now using the type class $\Showable$ representing showable types via the method $\mathbf{show}$, we might even be able to resolve an instance for $\Showable(\Nat \join \Bool)$ from instances
+for $\Showable(\Nat)$ and $\Showable(\Bool)$, which would be needed for e.g. the term $\mathbf{show} \; (\mathbf{evenOrFalse} \; n)$.
+Even though at first glance this resolution seems sound, we will find out that according resolution rules, in general, cannot be declared while maintaining soundness.
 
 The functional programming languages Haskell made type classes as a means of abstraction popular.
 In it, type classes are a powerful tool to generalize functions over different data types.
@@ -43,5 +52,7 @@ There are even type classes which behave dually, like $\Readable$, where we can 
 Being able to resolve instances rather liberally, however, makes ensuring type class coherence the more challenging.
 That means we have to still be somewhat limited in what instances may be derivable from each other as not to derive ambiguous instances too easily, which ultimately make the semantics of our programs ambiguous.\
 
-In the following, I am going to introduce three principles of polymorphic type systems, outline the theoretic foundation of type classes as predicates on types with regards to subtyping and finally discuss the implications for type class coherence.
+In the following, we are going to introduce three principles of polymorphic type systems, outline the theoretic foundation of type classes as predicates on types with regards to subtyping and finally discuss the implications for type class coherence.
 In the end, we will examine simple programs which make use of this notion of type classes.
+
+\todo{perhaps organize this section better}
