@@ -174,42 +174,42 @@ This imposes some restrictions not present in type systems based on type equalit
 For Hindley-Milner type systems we want to avoid \emph{overlapping instances}, i.e. instances for types that can be unified. \cite{peytonjones1997type}
 Syntactically, types are overlapping if one can be substituted for the other or they can be unified.
 E.g. $\mathit{List} \; \alpha$ and $\mathit{List} \; \Nat$ are overlapping with the substitution $\sigma(\alpha) \to \Nat$.
-In Haskell specifically, it is very easy to check an overlap, albeit more restrictive: We only need to syntactically check whether two types share the same head constructor ($\mathit{List}$ in the example above).
+In Haskell specifically, it is very easy to check an overlap, albeit more restrictive: We only need to syntactically check whether two types share the same head constructor ($\mathit{List}$ in the example above) and if so continue with their type arguments.
 
-In the context of subtyping, overlaps of types have to be expressed differently because we no longer use unification for type inference but biunification.
-In order to check for an overlap of types, we have to create the intersection of those types and check whether it is empty.
+% \todo{section no  longer up to date from here on, find better means to define/reject most specific}
+% In the context of subtyping, overlaps of types have to be expressed differently because we no longer use unification for type inference but biunification.
+% In order to check for an overlap of types, we have to create the intersection of those types and check whether it is empty.
 
-E.g. given $\instance \Phi a$ and $sub \sub a$ and $a \sub sup$, we can neither have $\instance \Phi{sub}$ , nor $\instance \Phi{sup}$,
-as $\Phi(sup)$ would imply $\Phi(a)$ and $\Phi(a)$ would imply $\Phi(sup)$.
+% E.g. given $\instance \Phi a$ and $sub \sub a$ and $a \sub sup$, we can neither have $\instance \Phi{sub}$ , nor $\instance \Phi{sup}$,
+% as $\Phi(sup)$ would imply $\Phi(a)$ and $\Phi(a)$ would imply $\Phi(sup)$.
 
-In the following, we give a motivation on why this would be problematic.
-Consider we have $\Nat \sub \Int$.
-We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
-For integers on the other hand, we might prefer to choose addition as operator and 0 as neutral element, so we can expand to monoid to a group.
+% In the following, we give a motivation on why this would be problematic.
+% Consider we have $\Nat \sub \Int$.
+% We can implement Monoid instances for both types. For natural numbers we choose multiplication as operator and accordingly 1 as neutral element.
+% For integers on the other hand, we might prefer to choose addition as operator and 0 as neutral element, so we can expand to monoid to a group.
 
-Building programs on top of these instances is going to get tedious as it will often occur that the more specific \texttt{Nat} type will be inferred,
-even if only want to deal with integers.
-Using the append operator exposed by the Monoid typeclass, therefore may lead to unexpected behavior.
-% Note for a good example, we need a good notion of type inference for this case, which is currently not implemented.
+% Building programs on top of these instances is going to get tedious as it will often occur that the more specific \texttt{Nat} type will be inferred,
+% even if only want to deal with integers.
+% Using the append operator exposed by the Monoid typeclass, therefore may lead to unexpected behavior.
+% % Note for a good example, we need a good notion of type inference for this case, which is currently not implemented.
 
-In the simple arithmetic expression $(a \oplus b) \oplus c$ the operator $\oplus$ can have two different meanings based on the inferred types of $a,b$ and $c$.
-Since type inferrence with subtyping is generally not quite obvious.
+% In the simple arithmetic expression $(a \oplus b) \oplus c$ the operator $\oplus$ can have two different meanings based on the inferred types of $a,b$ and $c$.
+% Since type inferrence with subtyping is generally not quite obvious.
 
 It may seem that we could choose the most specific instance. This, however, might have unexpected results.
 E.g. if we have $\mathit{NonEmptyList} \; \alpha \sub \mathit{List} \; \alpha$, we may not know during compilation whether $\mathit{NonEmptyList} \; \alpha $ or $\mathit{List} \; \alpha$ is being picked.
 ~Generally to infer the most specific type seems very hard. In this example filtering a $\mathit{NonEmptyList}$ may or may not return an empty list and we may just have to assume that it is possibly empty.
 This may lead to hard to track behaviour when using overlapping instances.
 
-A simple example for undecidable most specific instances can be better given with record types.
-If we need to resolve an instance for $\Phi \{x : Int\}$ and we already have instances for $\Phi \{x : Int, y : Int\}$ and $\Phi \{x : Int, z : Int\}$ neither instance is more specific than the other.
+For subtyping alone, deciding which instance is more specific is already not possible if we consider overlapping types.
+E.g. if we need to resolve an instance for $\Phi (\{x : Int\})$ and we already have instances for $\Phi (\{x : Int, y : Int\})$ and $\Phi (\{x : Int, z : Int\})$ neither instance is more specific than the other.
 
 
-A means to ensure type class coherence could be the following:
-Since for any pair of types $\tau$ and $\sigma$ that have a common subtype $\rho$ with $\rho \sub \tau$ and $\rho \sub \sigma$ having different witnesses for $\Phi(\tau)$ and $\Phi(\sigma)$ would lead to different witnesses for $\Phi(\rho)$,
-we have to ensure that $\tau \meet \sigma$ is equivalent to the empty type $\bot$.
-We can do so by constructing the intersection of the type automata for $\tau$ and $\sigma$ and checking whether this automaton accepts the empty language.
+% A means to ensure type class coherence could be the following:
+% Since for any pair of types $\tau$ and $\sigma$ that have a common subtype $\rho$ with $\rho \sub \tau$ and $\rho \sub \sigma$ having different witnesses for $\Phi(\tau)$ and $\Phi(\sigma)$ would lead to different witnesses for $\Phi(\rho)$,
+% we have to ensure that an instance $\tau \meet \sigma$ is equivalent to the empty type $\bot$.
+% We can do so by constructing the intersection of the type automata for $\tau$ and $\sigma$ and checking whether this automaton accepts the empty language.
 
-% NEED TO REWORK THE PREVIOUS PARAGRAPHES
 
 \section{Criteria for Type Class Coherence}
 
@@ -230,7 +230,7 @@ Covariant predicates allow resolution 'downwards', i.e. instances for subtypes c
 We can say that any covariant instance for type $\tau$ allows resolution for a sublattice which is a \emph{downward closed set} of $\tau$.
 
 We therefore need to ensure globally that there is no common non-trivial subtype for which an instance can be resolved from two distinct instances.
-That means the types that we declare instances for have to be \emph{non-overlapping downwards} or the two lower sets of the types declared do not contain any non-trivial types. \todo{what does that mean? uninhabited?}
+That means the types that we declare instances for have to be \emph{non-overlapping downwards}.
 
 \begin{definition}
   Two types $\tau$ and $\sigma$ are \emph{non-overlapping downwards} iff. $\forall\rho. \rho \sub \tau$ and $\rho \sub \sigma \Rightarrow \rho$ is uninhabited.

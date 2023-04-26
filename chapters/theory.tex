@@ -20,6 +20,16 @@ That means only predicates that are \emph{monotonous} are considered while other
 We further differentiate between \emph{covariant}, \emph{contravariant} and \emph{invariant} predicates over types, because the resolution rules vary accordingly.
 
 Let $\Gamma$ be the context of facts, i.e. known types that satisfy specific predicates.
+We define rules for a calculus representing the derivation of predicate judgements on types.
+
+Firstly, we introduce an axiom.
+A type $\tau$ satisfies the predicate $\Phi$ if it is in the context $\Gamma$.
+
+\begin{prooftree}
+  \AxiomC{}
+  \RightLabel{\textsc{Axiom}}
+  \UnaryInfC{$\Gamma, \Phi(\tau) \vdash \Phi(\tau)$}
+\end{prooftree}
 
 \subsection{Covariant Predicates}
 \label{sec:covariant-predicates}
@@ -154,7 +164,7 @@ If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can b
 Contravariant predicates describe properties about the lower bounds of types.
 That means they are inherited by all supertypes of a type that they satisfy.
 In the lattice of types, the types that satisfy a contravariant predicate form an \emph{upwards closed set}.
-E.g. if a type is defaultable, i.e. we can define a default value of that type, then all of its supertypes are defaultable as well because we can simply 'reuse' the default value for all supertypes.
+This is encapsulated by the following rule for contravariant predicates:
 
 
 \begin{prooftree}
@@ -265,9 +275,8 @@ With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can
 \end{figure}
 
 A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
-The \textsc{ContraV} rule, again, seems intuitive for this: \todo{repeat from above}
-% fix:
-If $e : \tau$ is a default value for $\tau$ and $\sigma \sub \tau$, then $e : \sigma$ can be used as a default value for $\sigma$ as well.
+The \textsc{ContraV} rule, again, seems intuitive for this:
+If $e : \tau$ is a default value for $\tau$ and $\tau \sub \sigma$, then $e : \sigma$ can be used as a default value for $\sigma$ as well.
 
 
 % \begin{center}
@@ -286,16 +295,6 @@ If $e : \tau$ is a default value for $\tau$ and $\sigma \sub \tau$, then $e : \s
 %   \DisplayProof
 % \end{center}
 
-We omit the $^<$ and $^>$ superscripts if the variance of predicates does not matter.
-Using this notation we can simplify axioms and the rule for constraints.
-The rule for axioms is trivial: We can resolve known facts directly from the context.
-
-\begin{prooftree}
-  \AxiomC{}
-  \RightLabel{\textsc{Axiom}}
-  \UnaryInfC{$\Gamma, \Phi(\tau) \vdash \Phi(\tau)$}
-\end{prooftree}
-
 \subsection{Invariant Predicates}
 \label{sec:invariant-predicates}
 
@@ -304,7 +303,6 @@ Invariant predicates describe properties about the lower \emph{and} upper bounds
 \begin{definition}
   An \emph{invariant type class predicate} $\Phi$ is a predicate preserved by the subtyping \emph{and} flipped subtyping relation, i.e. it adheres to the following rule:
 \end{definition}
-\todo{syntax for invariant predicates (superscript)}
 
 \begin{prooftree}
   \alwaysNoLine
@@ -320,13 +318,11 @@ Invariant type class predicates can essentially only be derived from type equali
 Hence, there are no interesting derivable rules for them.
 
 A typical example for invariant predicates is $\Monoid$, satisfied by any type for which we can define a monoid, i.e. there is a total function combining two values of the type to a new one and a neutral element corresponding to this operation.
-A monoid is represented by an invariant type class because the function both consumes and produces terms of the type to be declared a monoid.
-\todo{give more theoretical explanation}
+A monoid is represented by an invariant type class because the function both consumes and produces terms of the type to be declared a monoid which make it both an upper and lower bound.
 
 \subsection{Predicate Implications}
 \label{sec:predicate-implications}
 
-\todo{possibly unnecessary section}
 Predicates may be constrained, i.e. they depend on other predicates.
 $\Phi(\tau) \Rightarrow \Psi(\tau)$ means $\Psi$ is constrained by $\Phi$.
 Thus, if $\Psi(\tau)$ is satisfied, then the constraint $\Phi(\tau)$ is satisfied as well.
@@ -423,9 +419,7 @@ that is not only able to prove that a type satisfies a predicate but also constr
 
 Constructing witnesses directly corresponds to type class resolution if we interpret type classes as predicates on types.
 Multiple witnesses can be derived for the same judgement but in order to preserve type class coherence they have to satsify some form of equivalence, as we will discuss later.
-We again differentiate co-, contra-  and invariant type classes in order to transport type classes over the subtyping relation.
-
-The witness rules in fig. \ref{fig:subtyping-witnesses} are an expansion of the subtyping rules in section \ref{sec:subtyping-rules}.
+We again differentiate co-, contra-  and invariant type classes in order to transport type classes over the subtyping lattice.
 
 \begin{figure}[ht]
   % refl
@@ -532,12 +526,17 @@ The witness rules in fig. \ref{fig:subtyping-witnesses} are an expansion of the 
   \label{fig:subtyping-witnesses}
 \end{figure}
 
-$triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
+The witness rules in fig. \ref{fig:subtyping-witnesses} are an expansion of the subtyping rules in section \ref{sec:subtyping-rules}.
+From a subtyping witness we are able to reconstruct the derivation, a witness is therefore an encoding of a proof that two types are in a subtyping relation.
+The witness $\natPrim$ witnesses the primitve subtyping relation betwenn natural numbers and integers.
+The $\refl_\tau$ witness stands for the reflexivity of the subtyping relation and is annotated by the type $\tau$ in question.
+The $\comp$ operator composes two witnesses and stands for the reflexivity of the subtyping relation.
+$\topW_\tau$ and $\botW_\tau$ represent a type $\tau$ being a sub- or supertype of $\top$ and $\bot$.
 $in_{1/2}$ correspond to the construction (injection) of an union type from either the first type $\tau$ or the second type $\sigma$ of the union $\tau \join \sigma$.
 $proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet \sigma$ to one of its constituent types $\tau$ or $\sigma$.
-$\mathit{extend}$
-We can interpret these morphisms as the supertype relation.
-\todo{in-depth description of witness constructions (reconstruct)}
+$\funcW$ witnesses the subtyping relation between function types given a contravariant witness between the argument types and a covariant  witness between the output types.
+$\mathit{extend}$ witnesses the subtyping relation between records based on witnesses for the common fields and the labels by which the record is extended with.
+Finally, $\unfoldR$ and $\unfoldL$ witness that an unfolded recursive type is in the same subtyping relation as its folded counterpart.
 
 If there exists some instance declaration of type class $\Psi$ for a type $\tau$, we can directly resolve $\Psi(\tau)$.
 
@@ -556,7 +555,7 @@ Given that $\Phi(\tau) \Rightarrow \Psi(\tau)$ we can use that evidence $s$ to c
   \BinaryInfC{$s(w) : \Phi(\tau)$}
 \end{prooftree}
 
-We give witness derivation rules corresponding to \textsc{CoV}, \textsc{ContraV} and \textsc{InV}.
+Additionally to subtyping witnesses, we introduce witness rules corresponding to the rules for predicates on types \textsc{CoV}, \textsc{ContraV} and \textsc{InV}.
 In order to construct a witness for a covariant predicate judgement, we need evidence for the judgement about a supertype and evidence that the type is in fact a supertype.
 
 \begin{prooftree}

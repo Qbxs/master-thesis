@@ -11,9 +11,9 @@ There are essentialy two ways to implement type class overloading in practise: I
 \subsection{Intensional type analysis}
 \label{sec:intensional-analysis}
 
-Instead of passing around dictionaries, we can also resolve the relevant instance at runtime dispatching on the term's type.
-This requires our language to tag term with some representation of their type at runtime.
-In the before mentioned case, the definition of \mintinline{Haskell}{show} could look something like this:
+Instead of passing around dictionaries, we can also resolve the relevant instance at runtime by dispatching on the term's type.
+This requires our language to tag terms with some representation of their type at runtime.
+For the \mintinline{Haskell}{Show} type class the definition of \mintinline{Haskell}{show} could look like this:
 
 \begin{minted}{Haskell}
   show t x = case t of
@@ -34,7 +34,7 @@ The only case for which intensional type analysis appears superior is for the ca
 \subsection{Dictionary Passing}
 \label{sec:dictionaryPassing}
 
-One typical way of implementing type classes is using \emph{dicitonary passing style}.
+One typical way of implementing type classes is using \emph{dicitonary passing style}. \cite{kiselyov}
 To examine this, we look at type classes in Haskell.
 We use an isomorphism between type classes and records:
 E.g. the type class \mintinline{Haskell}{Eq} defined as
@@ -99,18 +99,19 @@ would simply pass around the dictionary and be compiled to something like:
   emphasize dict x = show dict x ++ "!"
 \end{minted}
 
-\cite{kiselyov}
-
-There is a drawback however, in the presence of subtyping it may not always be clear which dictionary is going to be needed for instance resolution.
-Consider the term:
+If we were to consider composed instances for e.g. union types, as in the following term:
 
 \begin{minted}{text}
   show (if b then 42 :: Int else "Hello" :: String)
 \end{minted}
 
-The inferred type of this expression should be \mintinline{text}{Int \/ String}. \todo{at this point in the thesis we know that this cannot occur}
-What we need here are essentially two dictionaries: One for \mintinline{text}{Int} and one for \mintinline{text}{String} because it is undecidable at compile time which dictionary is going to be used at runtime.
-% Would it not be possible to just construct a new dictionary consisting of both variants?
+The inferred type of this expression should be \mintinline{text}{Int \/ String}.
+To represent this, we would need two dictionaries: One for \mintinline{text}{Int} and one for \mintinline{text}{String} because it is undecidable at compile time which dictionary is going to be used at runtime.
+However, since our resolution rules do not permit this, passing a single dictionary will suffice.
+
+With subtyping, these dictionaries have to preserve subtyping properties.
+That means, if $\tau \sub \sigma$ and we have a dictionary $\mathit{Dict}(\sigma)$, then $\mathit{Dict}(\tau) \sub \mathit{Dict}(\sigma)$.
+\todo{how does it work with subtyping?}
 
 
 \section{Example}
@@ -259,7 +260,7 @@ When declaring an instance, we check for all instances of the same type class in
 \todo{unfinished section, maybe remove}
 Refinement types can be viewed as a specialisation of nominal types.
 Using them, we can impose additional constraints on types and therefore obtain a more precise typing judgement. \cite{springer} %FIXME wrong citation
-In \emph{duo} refinement types are declared very similarily as nominal types:
+In \emph{duo} refinement types are declared very similarily to nominal types:
 
 \begin{lstlisting}[style=duostyle, label=code:duo-refinement-declaration, captionpos=b, caption={Refinement type of peano numbers in \emph{duo}}]
 

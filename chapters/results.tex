@@ -5,23 +5,28 @@
 \chapter{Summary}
 \label{ch:summary}
 
-We have shown that not only is it possible to combine qualified types with subtyping, but also that this approach preserves important properties of both concepts.
+We have shown that not only is it possible to combine the theory of qualified types and hence type classes with subtyping, but also that this approach preserves important properties of both concepts.
 Covariant predicates are implied for more precise subtypes, contravariant predicates are implied for broader supertypes, while invariant predicates can only be used for semantically equivalent types.
-Liskov substitution is preserved by resolution for sub- and supertypes and type class coherence has to take these implications into account.
+Liskov substitution is preserved by resolution for sub- and supertypes and type class coherence takes these implications into account.
+
+Not all expectations could be achieved.
+E.g. composing instances to an instance for union types is not sound.
+However, this keeps the implementation via dictionary passing simple as we do not have to pass multiple dictionaries for a single contraint.
 
 In practise, it may be challenging, however, to enforce a criterion for coherent instances without being overly restrictive.
 Depending on the type system it can also be difficult (or even impossible) to decide whether any given type is inhabited or coinhabited which is central in our definition of type class coherence.
 Therefore, it appears more feasible to not try to guarantee coherence by restricting instance declratations in the namespace of a program but to more loosely allow the declaration of overlapping instances and simply to reject programs which make use of incoherent instances.
 
-It remains open, however, how generic \todo{what?} programming works in conjunction with this approach.
-Further work hast to be done in correctly combining the biunification algorithm of subtyping constraints and the minimisation in type automata with type class constraints.
+It remains open, however, how type inference and specifically type simplification works.
+Further work hast to be done in correctly combining the biunification algorithm of subtyping constraints and incorporation of type class constraints into an existing type simplification alogorithm.
 
 
 \section{Outlook and Further Work}
 % Further work: Type simplification with type class constraints, type inference, applications for different subtyping systems
 
 If we want to implement type inference for a type system with subtyping and type classes, there are some further challenges.
-While we can just impose additional type class constraints during biunification, it remains open how to to simplify types with type class constraints.
+While we can just impose additional type class constraints during biunification, it remains open how to simplify types with type class constraints.
+Type simplification is crucial when using type inference in a type system supporting subtyping because the inferred types usually tend to be unnecessarily complex and hard to read.
 Usually this is done as context reduction \cite{jones2003qualified} but with subtyping it may be more complex.
 
 E.g. in \emph{SimpleSub} \cite{10.1145/3409006} there are rules to simplify inferred types.
@@ -32,5 +37,6 @@ Would this type be equivalent to $\Showable(\alpha) \Rightarrow \Bool \to \alpha
 This seems unintuitive because we now constrain the third argument by a type class which previously was unrelated to any type class.
 
 Another more general approach to type simplification has been presented by \cite{dolan2017subtyping}.
-This approach makes use of representations of types as automata which can then be determinised and minimised with the usual algorithms for finite automta. \todo{talk about constraints in type automata}
+This approach makes use of representations of types as automata which can then be determinised and minimised with the usual algorithms for finite automta.
+We may be able to insert type class constraints into these automata and adjust the minimisation algorithm accordingly.
 \clearpage

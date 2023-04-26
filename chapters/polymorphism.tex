@@ -164,8 +164,7 @@ Incoherent instances can lead to unexpected behaviors in programs.
 E.g. in Haskell sets are implemented as binary search trees relying on an ordering specified by the $Ord$ type class.
 If this ordering is not uniquely determined, insert and delete operations may break as well which would make the library unusable. \cite{Kilpatrick2019-cy}
 
-% ???
-In the end, this enables us to use elaborate concepts such as functors and monads to reason about programs. \todo{questionable standalone phrase}
+Finally, the power of type classes is not limited to traditional overloading of functions but it is an essential requirement for an elegant implementation of typical concepts in functional programming such as monoids, functors and monads.
 
 
 \section{Relation between different forms of Subtyping}\label{sec:relations}
@@ -182,7 +181,7 @@ E.g. the \mintinline{Haskell}{Fractional} type class is a subclass of the type c
 Similarily, using subtyping we can define a type $\mathit{Fractional}$ as the union of all types that are instances of \mintinline{Haskell}{Fractional} representing all fractional numbers and make it a subtype of $\mathit{Number}$ represented as the union of all types that stand for numbers.
 
 A way to model type classes solely with subtyping can be to define the overloaded type class methods directly.
-So instead of a type class method \todo{maybe use $\Phi_C$ instead of $C$}$f : \forall \alpha. C \alpha \Rightarrow \tau[\alpha]$ and instance $C \alpha_1, \dots, C \alpha_n$,
+So instead of a type class method $f : \forall \alpha. \Phi_C(\alpha) \Rightarrow \tau[\alpha]$ and instance $\Phi_C(\alpha_1), \dots, \Phi_C(\alpha_n)$,
 we could directly define $f$ using union types for covariant type classes as $f : \forall \alpha_1,\dots,\alpha_n. \tau[\alpha_1 \join \dots \join \alpha_n]$.
 Dually we could do the same using intersection types for contravariant type classes.
 The obvious drawback would be that such functions are non-modular, i.e. they can only be defined at one point in the program.
@@ -219,26 +218,26 @@ For example one instance of \mintinline{Haskell}{Ord Int}, one with ascending an
 The ambiguity arises as soon as we make use of these instances and it is no longer clear which one should be picked for evaluation.
 Data structures relying on coherent instances such as the module \mintinline{Haskell}{Data.Set} in Haskell may even exhibit faulty behavior if different implementations are being used. \cite{Kilpatrick2019-cy}
 
-More surprisingly type class coherence is already violated for overlapping instances.
-As part of the standard prelude we find both \mintinline{Haskell}{instance Show a => Show [a]} and \mintinline{Haskell}{instance Show String}
-(with \mintinline{Haskell}{String} being a type synonym for \mintinline{Haskell}{[Char]}).
-The $\mathit{Show}$ instance for Strings differs from the more general instance for lists.
-Even though there arises an ambiguity, the language extension \emph{Overlapping Instances} enforces higher precedence for the $Show$ instance of Strings.
-Therefore, the instance for lists will not be resolved for lists of $Chars$, i.e. $Strings$. \todo{this is not correct, check showList}
+% More surprisingly type class coherence is already violated for overlapping instances.
+% As part of the standard prelude we find both \mintinline{Haskell}{instance Show a => Show [a]} and \mintinline{Haskell}{instance Show String}
+% (with \mintinline{Haskell}{String} being a type synonym for \mintinline{Haskell}{[Char]}).
+% The $\mathit{Show}$ instance for Strings differs from the more general instance for lists.
+% Even though there arises an ambiguity, the language extension \emph{Overlapping Instances} enforces higher precedence for the $Show$ instance of Strings.
+% Therefore, the instance for lists will not be resolved for lists of $Chars$, i.e. $Strings$. \todo{this is not correct, check showList}
 
-Incoherent programs should generally not be typeable.
-One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this short program which simply reads a String to a data type and then converts it back to a String without specifying which data type is being used:
+% Incoherent programs should generally not be typeable.
+% One example, also mentioned in the Haskell 98 report \cite{Haskell98} is this short program which simply reads a String to a data type and then converts it back to a String without specifying which data type is being used:
 
-\begin{minted}{Haskell}
-    f :: String -> String
-    f str = let x = read str in show x
-\end{minted}
+% \begin{minted}{Haskell}
+%     f :: String -> String
+%     f str = let x = read str in show x
+% \end{minted}
 
-There may be multiple types that satisfy the type class constraints.
-The specific implementation of \mintinline{Haskell}{show :: forall a. (Show a) => a -> String} and \mintinline{Haskell}{read :: forall a. (Read a) => String -> a} is therefore unknown.
+% There may be multiple types that satisfy the type class constraints.
+% The specific implementation of \mintinline{Haskell}{show :: forall a. (Show a) => a -> String} and \mintinline{Haskell}{read :: forall a. (Read a) => String -> a} is therefore unknown.
 
-In the Haskell98 standard, type class coherence is guaranteed by the syntactical equivalence of resolved instances.
-For each Haskell type there may be at most one instance defined for each type class.
+% In the Haskell98 standard, type class coherence is guaranteed by the syntactical equivalence of resolved instances.
+% For each Haskell type there may be at most one instance defined for each type class.
 
 
 \subsection{Superclasses}
