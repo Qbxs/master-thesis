@@ -10,6 +10,8 @@ Instance resolution only takes place when a type class method is applied at some
 
 E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved for the invocation of the type class method in the application $\showTerm \; 42 : \Nat$.
 
+\todo{more specific}
+
 % We make continuations explicit by passing them as arguments to the method.
 % Not only makes this typechecking more straight-forward, it is in fact neccessary because of two reasons:
 % For contravariant type classes, only the continuation can give us information for type class resolution.

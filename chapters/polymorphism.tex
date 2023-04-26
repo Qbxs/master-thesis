@@ -25,7 +25,7 @@ Its type enables us only to simply return the argument, because without knowing 
 Similarily, for a function $\mathbf{g} : \forall \alpha. \alpha \to \alpha \to \alpha$ there can be at most two implementations:
 One that returns the first and one that returns the second argument.
 
-More interesting, \todo{reformulate} perhaps, is the usage of parametric data structures such as lists.
+More noteworthy, perhaps, is the usage of parametric data structures such as lists.
 Given a function of type $\forall \alpha \beta. (\alpha \to \beta) \to \mathit{List}(\alpha) \to \mathit{List}(\beta)$, we expect this function to be the $\mathit{map}$ function which simply applies a supplied function to each element of a list and returns the transformed list.
 Based on the type we can be sure that the supplied function $f$ is applied at most once to each element of the list, as this is the only way to transform an element of type $\alpha$ to type $\beta$ while applying the function more than once is impossible as there is no suitable argument type left.
 The only other possibilities are dropping or rearranging elements of the list but these are not typically expected here and in our type system it is impossible to refine the type of a function so much that it can only be implemented as $\mathit{map}$.
@@ -272,16 +272,19 @@ So even if there may be different ways to resolve type class constraints, all of
 Even though there are multiple ways to derive an instance for \mintinline{Haskell}|Eq a| from an instance of \mintinline{Haskell}|Ord (Maybe a)|, the derived instance has to be uniquely determined.
 Since the diagram commutes, there has to be exactly one instance for \mintinline{Haskell}|Eq a|.
 
-\subsection{How to ensure coherence}
+\subsection{Ensuring Type Class Coherence}
 
-There are several ways to ensure type class coherence.
-The easiest one can also be found in Haskell98.
-Here, overlapping or otherwise ambiguous instances are simply not allowed to be declared in the same namespace. \todo{more specific}
-% The report only states: 'A type may not be declared as an instance of a particular class more than once in the program.'
+Any programming language implementing type classes to ensure soundness has to ensure that ambiguous type class resolution can not occur.
+This can either be achieved by not permitting overlapping instances to be declared in the same environment or by aborting type class resolution by throwing an error whenever different instances can be resolved for the same constraint.
 
-Another possibility somewhat alike ML-modules are named instances.
-They have the advantage that we can explicitly use instances and therefore it is allowed to have overlapping instances in scope.
+The Haskell98 standard \cite{Haskell98} uses a mixture of both approaches:
+It states that a type may not be declared as an instance of a particular class more than once in a program.
+Overlapping instances can be declared in the same scope, however, using them for resolution will result in a type inference error.
+
+Another possibility to circumvent the issue of ambiguous instance resolution are named instances.
+Somewhat alike structus implementing modules in \emph{Standard ML}, they provide a means to make instances explicit.
+They have the advantage that we can explicitly use instances and therefore it is unproblematic to have overlapping instances in scope because the programmer takes over the responsibility to choose the desired implementation.
 The drawback however, is that we lose true overloading because that way we always \emph{have to} name instances explicitly to avoid name clashes.
 
-The latest proposal are instance chains which make the order in which instances are resolved explicit, thus avoiding the ambuigity. \cite{morris2010instance}
-These are supported in Haskell to some degree with the \mintinline{Haskell}{Overlaps} pragma.
+The latest proposal are instance chains which make the order in which instances are resolved explicit, thus avoiding any ambuigity for resolution. \cite{morris2010instance}
+A weaker version of them is implemeted in Haskell via the \mintinline{Haskell}{Overlaps} pragma which gives certain instances precedence over others for resolution.

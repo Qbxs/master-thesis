@@ -18,6 +18,16 @@ While paramtric polymorphism has already been succesfully combined with subtypin
 and type classes, as a form of ad-hoc polymorphism, are a proven feature in programming languages such as Haskell \cite{wadlerblott} which is based on the parametric polymorphic Hindley-Milner type system,
 the advantages and shortcomings of combining all three together is still unknown.
 
+The functional programming languages Haskell made type classes as a means of abstraction popular.
+In it, type classes are a powerful tool to generalize functions over different data types.
+This allows us e.g. to use the \mintinline{Haskell}|+| operator both on \mintinline{Haskell}|Int| and \mintinline{Haskell}|Float| types.
+Another approach to overloading functions is subtyping, i.e. if a value of a certain type is expected we can also supply a value of a more specific type that is subsumed by the general type.
+For example, since the type of natural numbers \mintinline{text}|Nat| is a subtype of the integers \mintinline{text}|Int|, we can supply a value of type \mintinline{text}|Nat| for any function that expects an \mintinline{text}|Int|.
+
+Although these approaches do not serve exactly the same purpose it is uncommon to find both concepts in the same language.
+In this work, I am going to show how it is possible to implement type classes in a language that supports subtyping.
+There are unique challenges when bringing both together because instances for certain types are going to be ambiguous and impose additional challenges for the problem of type class coherence, the central reasoning principle behind type classes.
+
 It is particularily interesting to see how type classes, or more generally predicates on types, are inherited or transfered via the subtyping relation.
 If the type of natural numbers $\Nat$ is a subtype of the integers $\Int$ and we know that $\Int$ is a showable type, does it follow that $\Nat$ is showable as well?
 If so, does this hold for all type classes or predicates?
@@ -33,26 +43,15 @@ Now using the type class $\Showable$ representing showable types via the method 
 for $\Showable(\Nat)$ and $\Showable(\Bool)$, which would be needed for e.g. the term $\mathbf{show} \; (\mathbf{evenOrFalse} \; n)$.
 Even though at first glance this resolution seems sound, we will find out that according resolution rules, in general, cannot be declared while maintaining soundness.
 
-The functional programming languages Haskell made type classes as a means of abstraction popular.
-In it, type classes are a powerful tool to generalize functions over different data types.
-This allows us e.g. to use the \mintinline{Haskell}|+| operator both on \mintinline{Haskell}|Int| and \mintinline{Haskell}|Float| types.
-Another approach to overloading functions is subtyping, i.e. if a value of a certain type is expected we can also supply a value of a more specific type that is subsumed by the general type.
-For example, since the type of natural numbers \mintinline{text}|Nat| is a subtype of the integers \mintinline{text}|Int|, we can supply a value of type \mintinline{text}|Nat| for any function that expects an \mintinline{text}|Int|.
-
-Although these approaches do not serve exactly the same purpose it is uncommon to find both concepts in the same language.
-In this work, I am going to show how it is possible to implement type classes in a language that supports subtyping.
-There are unique challenges when bringing both together because instances for certain types are going to be ambiguous and impose additional challenges for the problem of type class coherence, the central reasoning principle behind type classes.
-
-In order to preserve the substitution principle typical for subtyping, type class instances should not simply be applicable by substitution but blend into upper and lower bounds typically used for type inference with subtyping.
+In order to preserve the substitution principle essential for subtyping, type class instances should not simply be applicable by substitution but blend into upper and lower bounds typically used for type inference with subtyping.
 That means that we may be able to use the instance of a supertype to resolve an instance for one of its subtypes or vice versa.
 E.g. consider the type class $\Showable$ of showable types.
 By declaring an instance for $\Showable(\Int)$ for integers, we already know how to show any term of type $\Nat$ as $\Nat$ is a subtype of $\Int$.
 There are even type classes which behave dually, like $\Readable$, where we can declare an instance for a subtype and can resolve an instance for any of its supertypes.
 
 Being able to resolve instances rather liberally, however, makes ensuring type class coherence the more challenging.
-That means we have to still be somewhat limited in what instances may be derivable from each other as not to derive ambiguous instances too easily, which ultimately make the semantics of our programs ambiguous.\
+Type class coherence ensures that the resolution of type class constraints does not result in ambiguous program behavior which should always be avoided.
+That means we have to still be somewhat limited in what instances may be derivable from each other as not to derive ambiguous instances too easily, which ultimately make the semantics of our programs ambiguous and reasoning about them impossible.
 
-In the following, we are going to introduce three principles of polymorphic type systems, outline the theoretic foundation of type classes as predicates on types with regards to subtyping and finally discuss the implications for type class coherence.
+In the following, we are going to examine three notions of polymorphic type systems, outline the theoretic foundation of type classes as predicates on types with regards to subtyping and finally discuss the implications for type class coherence before inspecing possible applications of this approach to type classes with subtyping.
 In the end, we will examine simple programs which make use of this notion of type classes.
-
-\todo{perhaps organize this section better}

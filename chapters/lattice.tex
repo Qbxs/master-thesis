@@ -15,14 +15,17 @@ We use the following syntax of types (fig. \ref{fig:type-syntax}) with the simpl
 Additionally, we introduce the singleton types $\Singleton{0}, \Singleton{1}, \Singleton{2}, \dots$ which each are only inhabited by the term in their index, e.g. $1 : \Singleton{1}$.
 We extend the syntax of types with extensible record types. \cite{leijen2005extensible}
 Extensible records are a form of codata as they are defined via thair destructors or field labels.
-Because they are extensible, they are in an interesting subtyping relation. By adding fields a record becomes more specific and is therefore a subtype of a record which only contains a subset of these fields.
+Because they are extensible, they are in an interesting subtyping relation.
+By adding fields, a record becomes more specific and is therefore a subtype of a record which only contains a subset of these fields.
 E.g. the record type $\{ x : \Singleton{1}, y : \Nat \}$ is a subtype of the type $\{ y : \Nat \}$ as it simply represents the same type with one addtional field $x$. \\
 Furthermore, for subtyping we consider the lattice types constructed by $\top, \bot, \meet, \join$.
 $\top$ stands for the greatest type which is a supertype of all other types.
 Dually, $\bot$ is the smallest type which is a subtype of all other types.
 Types constructed by the $\join$ and $\meet$ operators stand for the union and intersection types, respectively.
-\todo{clarify recursive types and type schemes}
-
+Semantically, $\tau \join \sigma$ means that for any term $e : \tau \join \sigma$, we have $e : \tau$ or $e : \sigma$.
+Dually, $\tau \meet \sigma$ means that for any term $e : \tau \join \sigma$, we have $e : \tau$ and $e : \sigma$.
+Finally, we have recursive types $\mu\alpha.\tau$. \todo{motivate what they are and why they are relevant here}
+% is this a list? mu a.{ head : Nat, tail : a }
 \begin{figure}[ht]
   \begin{flalign*}
     ts          := & \; \forall \alpha_1 \dots \alpha_n. \tau                                 & \textit{Type schemes}             \\
@@ -31,7 +34,6 @@ Types constructed by the $\join$ and $\meet$ operators stand for the union and i
                    & \; \top \; | \; \bot \; | \; \tau \meet \sigma \; | \; \tau \join \sigma & \textit{Lattice types}            \\
                    & \; \tau \to \sigma                                                       & \textit{Function types}           \\
                    & \; \{ \ell_i : \tau_i \}                                                 & \textit{Record types}             \\
-    % remove recursive types?
                    & \; \mu\alpha.\tau                                                        & \textit{Recursive types}          \\
                    & \; \alpha                                                                & \textit{Recursive type variables}
   \end{flalign*}
@@ -185,7 +187,7 @@ As an example, we can show that an extended record of type $\{ \mathit{x} : \Nat
   \label{fig:subtyping-example}
 \end{figure}
 
-Using the \textsc{Trans} rule and the introduction rules, we can derive corresponding elimination rules. (fig. \ref{fig:subtyping-derived})
+Finally, using the \textsc{Trans} rule and the introduction rules, we can derive additional elimination rules dual to the ones defined above. (fig. \ref{fig:subtyping-derived})
 
 \begin{figure}[ht]
   % join elim

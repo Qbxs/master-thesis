@@ -217,6 +217,13 @@ Resolution already guarantees that there is at most one instance resolved for an
 This instance has to be uniquely determined in order for type class coherence to be satisfied.
 Thus, we need to enforce that there is at no point more than one instance in scope to witness a predicate application.
 
+If multiple instances can be resolved for the same type, then this type should not be inhabited.
+In this special case, incoherent instances cannot result in ambiguous behavior in a program because there are no terms to be used in an ambiguous manner.
+We say a type is \emph{uninhabited} if there are no producers of that type, i.e. no terms of that types that can occur as arguments.
+E.g. an algebraic data type without any constructors has no producers and is therefore uninhabited.
+A type is \emph{couninhabited} if there are no consumers of that type, i.e. we cannot define a total function that accepts this type as an argument.
+For example, any codata type without any destructors has no consumers and is therefore couninhabited.
+
 \subsection{Covariant Predicates}
 
 Covariant predicates allow resolution 'downwards', i.e. instances for subtypes can be resolved from instances for supertypes.
@@ -251,19 +258,20 @@ That means the types that we declare instances for have to be \emph{non-overlapp
 
 This condition is equivalent to the union $\tau \join \sigma$ being couninhabited.
 That means it should be impossible to define a consumer for this union. % Taking polar types into account, this would only be possible if we can simplify the union
-In our type system, $\top$ is couninhabited because... \todo{is it?}
 
 \subsection{Invariant Predicates}
 
 Invariant predicates allow resolution neither 'upwards' nor 'downwards', thus no such restriction is required for them.
 In other words, the set of types for which an invariant instance can be resolved for a type $\tau$ is just a singleton-set.
-We only need to enforce that there is no instance for an equivalent type declared.
+Analogously to type systems without subtyping, we only need to enforce that there is no instance for an equivalent type declared.
 
 
 
 \section{Simplified type universes}
 
-Consider the type universe $\mathcal{U} := \{ \Bool, \mathbb{T}, \mathbb{F} \}$.
+We can examine which instances may be overlapping by considering sublattices or simplified closed type universes.
+
+For example, consider the type universe $\mathcal{U} := \{ \Bool, \mathbb{T}, \mathbb{F} \}$.
 We define the subtyping relation by $\mathbb{T} \sub \Bool$ and $\mathbb{F} \sub \Bool$.
 In $\mathcal{U}$, we can conclude that $\Bool = \top$ and still have the empty type $\bot$ as a subtype of all other types.
 This can be seen as a simplified version of boolean refinement types. \cite{springer}

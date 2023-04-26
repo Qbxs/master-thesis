@@ -3,7 +3,7 @@
 
 We generalise the notion of type classes as \emph{qualified types}. \cite{jones2003qualified}
 When types instantiate a type class, we say that they satisfy a predicate which is given by the type class declaration.
-E.g. if a type $\tau$ instantiates the type class $\mathit{Show}$, we can derive the judgement $\mathit{Showable}(\tau)$.
+E.g. if a type $\tau$ instantiates the type class $\Showable$, we can derive the judgement $\Showable(\tau)$.
 
 \section{Theory of Predicates}
 \label{sec:theory-predicates}
@@ -147,14 +147,15 @@ If $e : \tau$ is a showable term and $\tau \sub \sigma$, then $e : \sigma$ can b
 \subsection{Contravariant Predicates}
 \label{sec:contravariant-predicates}
 
-Contravariant predicates describe properties about the lower bounds of types.
-That means they are inherited by all supertypes of a type that they satisfy.
-In the lattice of types, the types that satisfy a contravariant predicate form an \emph{upwards closed set}.
-E.g. if a type is defaultable, i.e. we can define a default value of that type, then all of its supertypes are defaulttable as well because we can simply 'reuse' the default value for all supertypes.
-
 \begin{definition}
   A \emph{contravariant type class predicate} $\Phi^>$ is a predicate preserved by the supertyping or flipped subtyping relation, i.e. it adheres to the following rule:
 \end{definition}
+
+Contravariant predicates describe properties about the lower bounds of types.
+That means they are inherited by all supertypes of a type that they satisfy.
+In the lattice of types, the types that satisfy a contravariant predicate form an \emph{upwards closed set}.
+E.g. if a type is defaultable, i.e. we can define a default value of that type, then all of its supertypes are defaultable as well because we can simply 'reuse' the default value for all supertypes.
+
 
 \begin{prooftree}
   \alwaysNoLine
@@ -167,7 +168,6 @@ E.g. if a type is defaultable, i.e. we can define a default value of that type, 
 
 The rules for contravariant predicates are dual to those for covariant predicates.
 The monotonicity of $\Phi^>$ motivates the following rule preserving the predicate for supertypes:
-From the definition of contravariant predicates it follows that $\phi$ holds for some term of $\sigma$ and because every witness of $\sigma$ is also a witness of $\tau$ there is at least one witness of $\tau$ for which the characteristic property $\phi$ holds.
 
 With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can again derive several useful rules. (fig. \ref{fig:contravariant-derived-rules})
 
@@ -265,7 +265,7 @@ With \textsc{ContraV} and the subtyping rules in fig. \ref{fig:subtyping} we can
 \end{figure}
 
 A typical example for covariant predicates is $\Defaultable$: all types for which some default value can be predefined, which also generally rules out function types and empty types.
-The \textsc{ContraV} rule, again, seems intuitive for this:
+The \textsc{ContraV} rule, again, seems intuitive for this: \todo{repeat from above}
 % fix:
 If $e : \tau$ is a default value for $\tau$ and $\sigma \sub \tau$, then $e : \sigma$ can be used as a default value for $\sigma$ as well.
 
@@ -299,7 +299,7 @@ The rule for axioms is trivial: We can resolve known facts directly from the con
 \subsection{Invariant Predicates}
 \label{sec:invariant-predicates}
 
-Invariant predicates describe properties about the lower and upper bounds of types.
+Invariant predicates describe properties about the lower \emph{and} upper bounds of types.
 
 \begin{definition}
   An \emph{invariant type class predicate} $\Phi$ is a predicate preserved by the subtyping \emph{and} flipped subtyping relation, i.e. it adheres to the following rule:
@@ -321,6 +321,7 @@ Hence, there are no interesting derivable rules for them.
 
 A typical example for invariant predicates is $\Monoid$, satisfied by any type for which we can define a monoid, i.e. there is a total function combining two values of the type to a new one and a neutral element corresponding to this operation.
 A monoid is represented by an invariant type class because the function both consumes and produces terms of the type to be declared a monoid.
+\todo{give more theoretical explanation}
 
 \subsection{Predicate Implications}
 \label{sec:predicate-implications}
@@ -508,6 +509,13 @@ The witness rules in fig. \ref{fig:subtyping-witnesses} are an expansion of the 
     \BinaryInfC{$\funcW(f,g) : \tau \to \sigma \sub \tau' \to \sigma'$}
   \end{prooftree}
 
+  \begin{prooftree}
+    \AxiomC{$\forall j. w_j : \tau_j \sub \sigma_j$}
+    \AxiomC{$\{ \overline{\ell_j} \} \subseteq \{ \overline{\ell_i} \}$}
+    \RightLabel{\textsc{Extend}}
+    \BinaryInfC{$\mathit{extend}(\{ w_j \}, \{ \overline{\ell_i} \} \setminus \{ \overline{\ell_j} \}) : \{\overline{\ell_i : \tau_i} \} \sub \{ \overline{\ell_j : \sigma_j} \}$}
+  \end{prooftree}
+
   % recursive types
   \begin{center}
     \AxiomC{}
@@ -524,34 +532,12 @@ The witness rules in fig. \ref{fig:subtyping-witnesses} are an expansion of the 
   \label{fig:subtyping-witnesses}
 \end{figure}
 
-We use mappings $triv, in_{1/2}, proj_{1/2}$ to construct witnesses from given witnesses.
-\todo{add rules for records}
-
-% \begin{figure}[ht]
-%   \[
-%     \begin{tikzcd}
-%       & \tau \meet \sigma \arrow[lddd, "proj_1"'] \arrow[rddd, "proj_2"] & \\
-%       & & \\
-%       & & \\
-%       \tau & & \sigma
-%     \end{tikzcd}
-%   \]
-
-%   \[
-%     \begin{tikzcd}
-%       \tau \arrow[rddd, "in_1"'] & & \sigma \arrow[lddd, "in_2"] \\
-%       & & \\
-%       & & \\
-%       & \tau \join \sigma &
-%     \end{tikzcd}
-%   \]
-%   \caption{Witnesses for union \& intersection types}
-%   \label{fig:cd-proj/in}
-% \end{figure}\todo{figure 4.7 can probably be removed}
-
 $triv$ is the trivial mapping corresponding to the $\top$ and $\bot$ rules.
 $in_{1/2}$ correspond to the construction (injection) of an union type from either the first type $\tau$ or the second type $\sigma$ of the union $\tau \join \sigma$.
-$proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet \sigma$ to one of its constituent types $\tau$ or $\sigma$. We can interpret these morphisms as the supertype relation.
+$proj_{1/2}$ correspond to the projection from an intersection type $\tau \meet \sigma$ to one of its constituent types $\tau$ or $\sigma$.
+$\mathit{extend}$
+We can interpret these morphisms as the supertype relation.
+\todo{in-depth description of witness constructions (reconstruct)}
 
 If there exists some instance declaration of type class $\Psi$ for a type $\tau$, we can directly resolve $\Psi(\tau)$.
 
@@ -941,7 +927,7 @@ Adding lattice types $\bot \rightsquigarrow \emptyset$ and $\top \rightsquigarro
 Given inclusive subtyping, we may be motivated to introduce some additional rules.
 E.g. given $\Showable(\Bool)$ and $\Showable(\Nat)$, it may seem tempting to derive $\Showable(\Bool \join \Nat)$,
 so that the term $\lambda b. \showTerm(\ifthenelseTerm b \; b \; 42)$ is typeable.
-Introducing union types can only be done with some restrictions:
+Introducing union types can only be done with some restrictions: \todo{rework}
 
 \begin{prooftree}
   \AxiomC{$\ctx \Phi^<(\rho)$}
@@ -969,7 +955,7 @@ Since every term of type $\tau \join \sigma$ is a term of type $\tau$ or $\sigma
   \BinaryInfC{$\ctx \Phi^<(\tau\join\sigma)$}
 \end{prooftree}
 
-Dually, introducing a rule for covariant predicates on intersection types can also only be done with some restrictions:
+Dually, introducing a rule for contravariant predicates on intersection types can also only be done with some restrictions:
 
 \begin{prooftree}
   \AxiomC{$\ctx \Phi^>(\tau)$}
