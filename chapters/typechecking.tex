@@ -2,15 +2,16 @@
 \label{ch:type-system}
 % explain type inference with algebraic subtyping/bounds/bisubstitutions
 
-Using the resolution rules for qualified types in chapter \ref{ch:qualified-types}, we present typing rules for the presented language extended with type classes.
+Using the resolution rules for qualified types in chapter \ref{ch:qualified-types}, we briefly present typing rules for the presented language extended with type classes.
 
 \section{Type Class Methods}
 
-Instance resolution only takes place when a type class method is applied at some point in a program to be typechecked.
+Instance resolution only takes place when a type class method is called at some point in a program to be typechecked.
 
-E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved for the invocation of the type class method in the application $\showTerm \; 42 : \Nat$.
+E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved for the invocation of the type class method in the application $\showTerm \; 42 : \Nat$
+by constructing a witness $w : \Showable(\Nat)$.
 
-\todo{more specific}
+Based on the result of type class resolution, we can identify the correct implementation as a pointer to an instance and use this information for evaluation of the type class method.
 
 % We make continuations explicit by passing them as arguments to the method.
 % Not only makes this typechecking more straight-forward, it is in fact neccessary because of two reasons:
@@ -18,6 +19,12 @@ E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved fo
 % For invariant type classes, we need both a producer and a consumer or continuation to enact as upper and lower bounds for type class resolution.
 
 \section{Typing Rules}
+
+We introduce type checking rules for our core language without type classes (fig. \ref{fig:typing-rules}) before introducing the rules for type class methods.
+Firstly, we introduce typing rules for numeric and string literals.
+Following are the typical rules for the lambda calculus given by variables, lambda abstractions and function applications.
+We use an explicit rule to allow the coercion from a subtype to a supertype.
+Finally, we introduce type checking rules for constructing a new record and selecting a field from a record.
 
 \begin{figure}[ht]
     \begin{center}
@@ -76,14 +83,14 @@ E.g. in a context with $\Showable(\Int)$ a suitable instance will be resolved fo
 \end{figure}
 
 The resolution rules for type class witnesses in section \ref{sec:witnesses} provide us with means to implement type checking for type class methods.
-For every call to a type class method resolution either fails or provides a dictionary, i.e. a witness, for the type class constraint.
+For every call to a type class method, resolution either fails which leads to an error in the whole typechecking algorithm or succeeds and provides a witness as evidence that the type in fact instantiates the type class.
 
 What makes this kind of typing derivation special is that it not only decomposes judgements upwards,
 but fills in the hole displayed by the type class constraint downwards by resolving a fitting witness.
 This resolved hole stands for the concrete witness that will be passed to the type class method for evaluation.
 
-Type checking for type class method calls (fig. \ref{fig:showable-example}):
-$w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution and $\tau$ is the type of the producer argument.
+For example, consider the type checking rule for the type class method $\mathbf{show}$. (fig. \ref{fig:showable-example})
+Here, $w$ is the implicit witness for the type class constraint $\Showable(\tau)$ which is inferred by type class resolution and $\tau$ is the type of the producer argument.
 
 The argument $w$ is implicit and stands for the inferred witness of the type class.
 At compilation it will be filled with a resolved instance, so that the evaluation of the method is well defined.
@@ -100,7 +107,7 @@ At compilation it will be filled with a resolved instance, so that the evaluatio
 \end{figure}
 
 For contravariant type classes such as $\Readable$ the type checking looks slightly different:
-In this case, the type class constraint is applied to the argument type of the continuation.
+When type checking the correspondend method $\mathbf{read}$, the type class constraint is applied to the argument type of the continuation.
 
 \begin{figure}[ht]
     \centering
@@ -123,23 +130,29 @@ In this case, the type class constraint is applied to the argument type of the c
     \RightLabel{\textsc{T-Class}$^+$}
     \TrinaryInfC{$\ctx \mathbf{m}_\Phi[w]\; x : \alpha$}
     \DisplayProof
-    \caption{Typing rule for covariant type classes}
-    \label{fig:cov-typing}
-\end{figure}
 
-\begin{figure}[ht]
-    \centering
+    {\vskip.2in}
+
     \AxiomC{$\ctx w : \Phi(\tau)$}
     \AxiomC{$\ctx x : \alpha$}
     \AxiomC{$P(\mathbf{m}_\Phi) = \alpha$}
     \RightLabel{\textsc{T-Class}$^-$}
     \TrinaryInfC{$\ctx \mathbf{m}_\Phi[w]\; x : \tau$}
     \DisplayProof
-    \caption{Typing rule for contravariant type classes}
-    \label{fig:contrav-typing}
+
+    {\vskip.2in}
+
+    \AxiomC{$\ctx w : \Phi(\alpha)$}
+    \AxiomC{$\ctx x : \alpha$}
+    \AxiomC{$P(\mathbf{m}_\Phi) = \alpha$}
+    \RightLabel{\textsc{T-Class}$^\textsc{Inv}$}
+    \TrinaryInfC{$\ctx \mathbf{m}_\Phi[w]\; \alpha : \tau$}
+    \DisplayProof
+    \caption{Typing rule for type class methods}
+    \label{fig:method-typing}
 \end{figure}
 
-Generally, when encountering a type class method $\mathbf{m}_\Phi$, we type check it with the type given by the class declaration in the program $P(\mathbf{m}_\Phi)$ while substituting the argument type for the type variable in the declaration.
+Generally, when encountering a type class method $\mathbf{m}_\Phi$, we type check it with the type given by the class declaration in the program $P(\mathbf{m}_\Phi)$ while substituting the argument type for the type variable in the declaration. (fig. \ref{fig:method-typing})
 Based on the substitution, we perform type class resolution and place in a witness for the type class constraint.
 
 %DELETE:

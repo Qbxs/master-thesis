@@ -369,6 +369,9 @@ Using the notion of upward and downward closed sets in relation to sublattices, 
 
 For a covariant instance of type $\{ fst : \Singleton{0} \}$ we are looking for its downward closed set as shown in fig. \ref{fig:downset}.
 Since no type in this sublattice is uninhabited, any other instance in this sublattice would be incoherent.
+However, we can also conclude from this, that the intersection of two downsets would lead to incoherent type class resolution.
+In this case, if we have an additional instance for the type $\{ snd : \Singleton{1} \}$, we can use both instances coherently
+with the condition that we do not attempt to resolve an instance for the type $\{ fst : \Singleton{0}, snd : \Singleton{1} \}$ which is an element of the intersection of both downsets.
 
 \begin{figure}[ht]
   \centering
@@ -385,6 +388,7 @@ Since no type in this sublattice is uninhabited, any other instance in this subl
 For a contravariant instance for a record type $\{ \ell_2 : \tau_2, \ell_3 : \tau_3 \}$, looking at the lattice, we can identify its upset as shown in fig. \ref{fig:upsets}.
 Knowing the upset and assuming $\{\}$ to be couninhabited, we can identify compatible and incompatible instances in the sublattice.
 In this case, any instance for records that do not contain $\ell_2$ or $\ell_3$ are compatible with this instance.
+Analogously to above, we can also identify instances potentially violating coherence by inspecting the intersection of upsets.
 
 \begin{figure}[ht]
   \centering
@@ -399,7 +403,7 @@ In this case, any instance for records that do not contain $\ell_2$ or $\ell_3$ 
   \label{fig:upsets}
 \end{figure}
 
-Generally, the compability of instances in a sublattice is more critical than in the whole lattice.
+Generally, the compability of instances within a sublattice may be more critical than in the whole lattice.
 We may want to be restrictive in an open lattice like that of extensible records but more liberal in a lattice of nominal types.
 
 E.g. if we have contravariant instances for $\Defaultable(\Bool)$ and $\Defaultable(\Nat)$, they would be incompatible because $\Defaultable(\Bool \join \Nat)$ can be resolved from both instances.

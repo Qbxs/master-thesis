@@ -24,7 +24,7 @@ Dually, $\bot$ is the smallest type which is a subtype of all other types.
 Types constructed by the $\join$ and $\meet$ operators stand for the union and intersection types, respectively.
 Semantically, $\tau \join \sigma$ means that for any term $e : \tau \join \sigma$, we have $e : \tau$ or $e : \sigma$.
 Dually, $\tau \meet \sigma$ means that for any term $e : \tau \join \sigma$, we have $e : \tau$ and $e : \sigma$.
-Finally, we have recursive types $\mu\alpha.\tau$. \todo{motivate what they are and why they are relevant here}
+Finally, we have recursive types $\mu\alpha.\tau$ which introduce a type variable that can be used to construct arbitrarily nested types.
 % is this a list? mu a.{ head : Nat, tail : a }
 \begin{figure}[ht]
   \begin{flalign*}
@@ -270,7 +270,6 @@ Since the function is assumed to be total any input needs to be of both types (i
 Therefore, we introduce \emph{polar types} in fig. \ref{fig:polar-type-syntax} as a means to distinguish positive types (for outputs) and negative types (for inputs).
 Since functions are covariant in their output and contravariant in their input, the polarity of types in the input position is flipped.
 Nominal types can occur both in positive and negative positions.
-\todo{clarify role of polar types}
 
 \section{Terms}
 \label{sec:terms}

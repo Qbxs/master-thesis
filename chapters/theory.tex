@@ -926,7 +926,7 @@ Adding lattice types $\bot \rightsquigarrow \emptyset$ and $\top \rightsquigarro
 Given inclusive subtyping, we may be motivated to introduce some additional rules.
 E.g. given $\Showable(\Bool)$ and $\Showable(\Nat)$, it may seem tempting to derive $\Showable(\Bool \join \Nat)$,
 so that the term $\lambda b. \showTerm(\ifthenelseTerm b \; b \; 42)$ is typeable.
-Introducing union types can only be done with some restrictions: \todo{rework}
+Introducing union types can only be done with some restrictions:
 
 \begin{prooftree}
   \AxiomC{$\ctx \Phi^<(\rho)$}
@@ -939,11 +939,10 @@ Introducing union types can only be done with some restrictions: \todo{rework}
   \BinaryInfC{$\ctx \Phi^<(\tau \join \sigma)$}
 \end{prooftree}
 
-The \textsc{Join} rule can not be derived with the subtyping rules because $\tau \join \sigma$ is neither a subtype of $\tau$ nor of $\sigma$.
+The \textsc{Join}$^<$  rule can not be derived with the subtyping rules because $\tau \join \sigma$ is neither a subtype of $\tau$ nor of $\sigma$.
 In fact, only the opposite holds.
-However, there is a motivation for it:
-% With the definition of covariant predicates the premises express that for all terms of type $\tau$ and $\sigma$ the characteristic property holds.
-Since every term of type $\tau \join \sigma$ is a term of type $\tau$ or $\sigma$, $\Phi(\tau \join \sigma)$ holds.
+We might motivate this rule because $\Phi^<$ already satisfies both components of the union type.
+However, rule is not derivable and therefore not sound, so instead we have to use the more restricted version above.
 
 \begin{prooftree}
   \alwaysNoLine
@@ -967,11 +966,11 @@ Dually, introducing a rule for contravariant predicates on intersection types ca
   \BinaryInfC{$\ctx \Phi^>(\sigma \meet \rho)$}
 \end{prooftree}
 
-However, the \textsc{Meet} rule can not be derived with the subtyping rules because $\tau \meet \sigma$ is neither a supertype of $\tau$ nor of $\sigma$.
+The \textsc{Meet}$^>$ rule can not be derived with the subtyping rules either because $\tau \meet \sigma$ is neither a supertype of $\tau$ nor of $\sigma$.
 % With the definition of contravariant predicates the premises express that for some witnesses of $\tau$ and $\sigma$ the characteristic property holds.
 But even though this rule is dual to the \textsc{Join}-rule above, we cannot motivate it.
 If some witness of $\tau \meet \sigma$ is a witness of both $\tau$ and $\sigma$, $\Phi(\tau \meet \sigma)$ holds.
-However, there is no guarantee that a term of type $\tau$ or of type $\sigma$ is also of type $\tau \meet \sigma$, e.g. if $\tau \meet \sigma = \bot$.
+However, generally a term of type $\tau$ or of type $\sigma$ is not of type $\tau \meet \sigma$.
 % this rule is bogus:
 % if \tau and \sigma are disjoint there is no possible witness in \tau \meet \sigma...
 
@@ -1011,7 +1010,7 @@ however we have no information available on how to compare a term of type $\Bool
 In this example, it would be easy to provide $false$ as a default value but constructing default values is going to be complicated for more sophisticated type classes.
 In fact the $\Ordable$ type class already would be problematic using default values.
 
-Therefore, these non-derivable rules cannot be used for type class resolution.
+Therefore, these non-derivable rules cannot be used for type class resolution and should be rejected.
 
 % not a good counterexample: here we should just choose the "smaller" instance
 % even though this is undecidable in other cases, see above

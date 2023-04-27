@@ -111,7 +111,6 @@ However, since our resolution rules do not permit this, passing a single diction
 
 With subtyping, these dictionaries have to preserve subtyping properties.
 That means, if $\tau \sub \sigma$ and we have a dictionary $\mathit{Dict}(\sigma)$, then $\mathit{Dict}(\tau) \sub \mathit{Dict}(\sigma)$.
-\todo{how does it work with subtyping?}
 
 
 \section{Example}
@@ -150,7 +149,7 @@ Given a definition for non-empty lists, we can also use an instance recursively 
      & \mathbf{instance} \; \mathit{Summable} \; \mathit{NonEmpty} \{                          \\
      & \;\;\; \mathbf{sum} := \lambda l. \mathbf{case} \; l \; of                              \\
      & \;\;\;\;\; \mathit{Singleton}(n) \Rightarrow n                                          \\
-     & \;\;\;\;\; \mathit{Cons}(n, ns) \Rightarrow n + (\mathbf{sum}[\mathit{NonEmpty}] \; ns) \\
+     & \;\;\;\;\; \mathit{Cons}(n, ns) \Rightarrow n + (\mathbf{sum} \; ns) \\
      & \}
 \end{flalign*}
 
@@ -167,11 +166,9 @@ Similarily, we can define a $\mathit{Summable}$ instance for leaf-oriented trees
      & \mathbf{instance} \; \mathit{Summable} \; \mathit{NatTree} \{                                                              \\
      & \;\;\; \mathbf{sum} := \lambda t. \mathbf{case} \; t \; of                                                                 \\
      & \;\;\;\;\; \mathit{Leaf}(n) \Rightarrow n                                                                                  \\
-     & \;\;\;\;\; \mathit{Branch}(l, r) \Rightarrow (\mathbf{sum}[\mathit{NatTree}] \; l) + (\mathbf{sum}[\mathit{NatTree}] \; r) \\
+     & \;\;\;\;\; \mathit{Branch}(l, r) \Rightarrow (\mathbf{sum} \; l) + (\mathbf{sum} \; r) \\
      & \}
 \end{flalign*}
-
-\todo{add examples for usage of type class methods}
 
 \section{Duo}
 
@@ -248,16 +245,11 @@ instance natTreeSummable : Summable NatTree {
 
 \end{lstlisting}
 
-% Outline the duo language
-Several checks have been implemented to ensure type class coherence in \emph{duo}:
-For modularity, we use the common approach to disallow orphan instances. \cite{Kilpatrick2019-cy}
-That means, an instance declaration is required to be placed in the same module as the data or class declaration.
-When declaring an instance, we check for all instances of the same type class in scope whether the overlap with the type the instance is being declared for is empty.
-
+% For modularity, we use the common approach to disallow orphan instances. \cite{Kilpatrick2019-cy}
 
 \section{Refinement Types}
 \label{sec:refinement-types}
-\todo{unfinished section, maybe remove}
+
 Refinement types can be viewed as a specialisation of nominal types.
 Using them, we can impose additional constraints on types and therefore obtain a more precise typing judgement. \cite{springer} %FIXME wrong citation
 In \emph{duo} refinement types are declared very similarily to nominal types:
@@ -273,7 +265,7 @@ refinement data Nat {
 
 The type inference algorithm in duo is expanded to refinement types and therefore able to infer very precise types for terms. \cite{binder22refinement}
 As we can see in listing \ref{code:duo-refinement-example} the type for the simple term \lstinline{Z} reflects that it can only be constructed by \lstinline{Z}, therefore we know from looking at the type alone, that the only value of this term can be zero.
-We also need recursive types to allow recursive refinement types as seen in \lstinline{double}.
+We also need recursive types to allow recursive refinement types as seen in the function \lstinline{double}.
 Here we can see that any natural number is permitted as input but only numbers constructed by an even number of \lstinline{S} constructors will be in the output.
 In this case refinement types can assure us that this function will only produce even numbers.
 
@@ -290,4 +282,7 @@ def rec prd double : (rec a.(<Nat | Z, S(a)>))
     
 \end{lstlisting}
 
-\todo{bring type classes and refinement types together}
+Using refinement types and type classes jointly, we can declare instances for refinement types and use them for more or less refined versions of the type.
+E.g. given an instance for \lstinline{Summable rec  a.(<Nat | Z, S(< Nat | S(a)>)>)}  we can use it to resolve the constraint \lstinline{Summable rec  a.(<Nat | Z, S(< Nat | S(a)>)>)} as well.
+
+Since refinement types form sublattices it may be more feasible to ensure coherence within a sublattice for a refinement type.
