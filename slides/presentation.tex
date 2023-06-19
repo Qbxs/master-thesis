@@ -13,6 +13,142 @@
 
 \usetikzlibrary{babel}
 
+%\usepackage{reportpage}
+\usepackage{amsmath}
+\usepackage{bbold}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{mathrsfs}
+\usepackage{scalerel}
+\usepackage{multirow}
+\usepackage{epsf}
+\usepackage{graphics, graphicx}
+\usepackage{latexsym}
+\usepackage[margin=10pt,font=small,labelfont=bf]{caption}
+\usepackage[utf8]{inputenc}
+\usepackage[toc,page]{appendix}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\tikzcdset{scale cd/.style={every label/.append style={scale=#1},
+    cells={nodes={scale=#1}}}}
+\usepackage{xcolor}
+\usetikzlibrary{cd}
+
+\usepackage{amsthm}
+
+\usepackage{lineno}
+% \linenumbers
+
+\usepackage{listings}
+% basic duo style
+\lstdefinestyle{duoStyle}{%
+  otherkeywords={case,cocase,def,of,forall,data,codata,rec,mu,import,module,return,set,Top,Bot,CBV,CBN,refinement,constructor,destructor,type,operator,leftassoc,rightassoc,cmd,prd,cns,class,instance,:=,=>,=<,>>,\\\\/,/\\\\,<:,\[,\]},
+  morekeywords=[1]{case,cocase,def,of,forall,data,codata,rec,mu,import,module,return,set,Top,Bot,CBV,CBN,refinement,constructor,destructor,type,operator,leftassoc,rightassoc,cmd,prd,cns,class,instance},
+  morekeywords=[2]{:=,=>,=<,>>,\\\\/,/\\\\,<:,\[,\]},
+  keywordstyle=[1]{\bf\color{blue}},
+  keywordstyle=[2]{\bf\color{black}},
+  comment=[l]{--},
+  commentstyle=\color{gray},
+  keywordstyle=\ttfamily\bfseries\color{blue!80!black},
+  mathescape=true
+  %moredelim=**[is][\bfseries]{|}{|}
+}
+\lstset{style=duoStyle}
+
+
+\newenvironment{code}{\captionsetup{type=listing, position=bottom}}{}
+
+% mathbb String
+\usepackage{bussproofs}
+\EnableBpAbbreviations
+\def\ScoreOverhang{0pt}
+\def\buildNoScoreTight{% Make an hbox with no score
+ \global\setbox\myBoxD=\hbox{\vbox{\vskip0pt}}% 0pt instead of 1pt
+}
+\def\noLine{% noLine with less space between lines
+ \gdef\buildScore{\buildNoScoreTight}%
+ \ignorespaces%
+}
+
+% noindent on new paragraph
+\setlength\parindent{0pt}
+
+% Inference rules
+\newcommand{\subPosRule}{\RightLabel{\textsc{Sub}$^+$}}
+\newcommand{\subNegRule}{\RightLabel{\textsc{Sub}$^-$}}
+\newcommand{\instanceDeclRule}{\RightLabel{\textsc{Decl}}}
+\newcommand{\meetRule}{\RightLabel{\textsc{Meet}}}
+\newcommand{\joinRule}{\RightLabel{\textsc{Join}}}
+\newcommand{\axiomPos}{\RightLabel{\textsc{Axiom}$^+$}}
+\newcommand{\axiomNeg}{\RightLabel{\textsc{Axiom}$^-$}}
+\newcommand{\topRule}{\RightLabel{\textsc{Top}}}
+\newcommand{\botRule}{\RightLabel{\textsc{Bot}}}
+
+\newcommand\deriveRule{
+  {\hskip.1in}
+  $\stackrel{\mathit{drv}}{\rightsquigarrow}$
+  {\hskip.1in}}
+
+\newcommand{\ctx}{\ensuremath{\Gamma \; \vdash \;}}
+\newcommand{\opeq}{\ensuremath{\stackrel{op}{\simeq}}}
+
+% Symbols
+\newcommand\join{\vee}
+\newcommand\meet{\wedge}
+\newcommand\sub{\ensuremath{\leqslant}}
+\newcommand\transition[1]{\ensuremath{\xrightarrow[]{#1}}}
+
+% Text
+\newcommand\Showable{\ensuremath{\Psi_\mathit{Show}}}
+\newcommand\Readable{\ensuremath{\Psi_\mathit{Read}}}
+\newcommand\Defaultable{\ensuremath{\Psi_\mathit{Default}}}
+\newcommand\Ordable{\ensuremath{\Psi_\mathit{Ord}}}
+\newcommand\Eq{\ensuremath{\Psi_\mathit{Eq}}}
+\newcommand\Monoid{\ensuremath{\Psi_\mathit{Monoid}}}
+\newcommand\instance[2]{{\bf instance} \; #1(#2)}
+\newcommand\class[2]{{\bf class} \; #1(#2)}
+
+% Terms
+\newcommand\caseof[1]{{\bf case}\; #1 \;{\bf of}}
+\newcommand\showTerm{{\bf show}}
+\newcommand\readTerm{{\bf read}}
+\newcommand\ifthenelseTerm{{\bf ifthenelse}\;}
+\newcommand\eq{{\bf eq}\;}
+
+% Types
+\newcommand\Nat{\mathbb{N}}
+\newcommand\Int{\mathbb{Z}}
+\newcommand\Unit{\mathbb{U}}
+\newcommand\Bool{\mathbb{B}}
+\newcommand\Singleton[1]{\mathbb{1}_#1}
+\newcommand\String{\mathbb{S}}
+
+% Witnesses
+\newcommand\cov{\mathit{cov}}
+\newcommand\contrav{\mathit{contrav}}
+\newcommand\inv{\mathit{inv}}
+% relational composition operator
+\newcommand*{\comp}{\mathbin{\raise 0.6ex\hbox{\oalign{\hfil$\scriptscriptstyle
+            		 \rm o$\hfil\cr\hfil$\scriptscriptstyle\rm 9$\hfil}}}}
+\newcommand\refl{\mathit{refl}}
+\newcommand\topW{\mathit{top}}
+\newcommand\natPrim{\mathit{natPrim}}
+\newcommand\botW{\mathit{bot}}
+\newcommand\meetW{\mathit{meet}}
+\newcommand\joinW{\mathit{join}}
+\newcommand\inW[1]{\mathit{in}_{#1}}
+\newcommand\proj[1]{\mathit{proj}_{#1}}
+\newcommand\funcW{\mathit{func}}
+\newcommand\unfoldL{\mathit{unfold}_{L}}
+\newcommand\unfoldR{\mathit{unfold}_{R}}
+
+\newcommand\constraintGen[1]{\ensuremath{\llbracket #1 \rrbracket}}
+\newcommand\toConstr{\ensuremath{\hookrightarrow}}
+\newcommand\decompose[2]{\ensuremath{{\mathbf{decompose}}(#1 \sub #2)}}
+
+\usepackage{mathpartir}
+
 \setminted{fontsize=\footnotesize}
 
 \title{Type Class Coherence with Subtyping}
@@ -45,24 +181,143 @@
 
 \begin{frame}
     \frametitle{Polymorphism}
+
+    \begin{itemize}
+      \item Parametricity: Theorems for free
+      \item Subtyping: Liskov substitution
+      \item Type classes: Coherent overloading/resolution
+    \end{itemize}
 \end{frame}
 
 \section{The Lattice of Types}
 
 \begin{frame}
     \frametitle{The Lattice of Types}
+
+    \begin{prooftree}
+        \AxiomC{}
+        \RightLabel{\textsc{Refl}}
+        \UnaryInfC{$\tau \sub \tau$}
+      \end{prooftree}
+    
+      % trans
+      \begin{prooftree}
+        \AxiomC{$\tau \sub \sigma$}
+        \AxiomC{$\sigma \sub \rho$}
+        \RightLabel{\textsc{Trans}}
+        \BinaryInfC{$\tau \sub \rho$}
+      \end{prooftree}
+    
+      % top/bot
+      \begin{center}
+        \AxiomC{}
+        \RightLabel{\textsc{Top}}
+        \UnaryInfC{$\tau \sub \top$}
+        \DisplayProof
+        {\hskip.2in}
+        \AxiomC{}
+        \RightLabel{\textsc{Bot}}
+        \UnaryInfC{$\bot \sub \tau$}
+        \DisplayProof
+      \end{center}
+    
+      % join intro
+      \begin{center}
+        \AxiomC{$\tau \sub \sigma$}
+        \RightLabel{\textsc{JoinI}$_1$}
+        \UnaryInfC{$\tau \sub \sigma \join \rho$}
+        \DisplayProof
+        {\hskip.2in}
+        \AxiomC{$\tau \sub \sigma$}
+        \RightLabel{\textsc{JoinI}$_2$}
+        \UnaryInfC{$\tau \sub \rho \join \sigma$}
+        \DisplayProof
+      \end{center}
+    
+      \begin{prooftree}
+        \AxiomC{$\tau \sub \rho$}
+        \AxiomC{$\sigma \sub \rho$}
+        \RightLabel{\textsc{JoinI}}
+        \BinaryInfC{$\tau \join \sigma \sub \rho$}
+      \end{prooftree}
+    
+      % meet intro
+      \begin{center}
+        \AxiomC{$\tau \sub \rho$}
+        \RightLabel{\textsc{MeetI}$_1$}
+        \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+        \DisplayProof
+        {\hskip.2in}
+        \AxiomC{$\sigma \sub \rho$}
+        \RightLabel{\textsc{MeetI}$_2$}
+        \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+        \DisplayProof
+      \end{center}
+    
+      \begin{prooftree}
+        \AxiomC{$\tau \sub \rho$}
+        \AxiomC{$\tau \sub \sigma$}
+        \RightLabel{\textsc{MeetI}}
+        \BinaryInfC{$\tau \sub \sigma \meet \rho$}
+      \end{prooftree}
+    
+      \begin{prooftree}
+        \AxiomC{$\tau' \sub \tau$}
+        \AxiomC{$\sigma \sub \sigma'$}
+        \RightLabel{\textsc{Func}}
+        \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
+      \end{prooftree}
+    
+      \begin{prooftree}
+        \AxiomC{$\forall j. \tau_j \sub \sigma_j$}
+        \AxiomC{$\{ \overline{\ell_j} \} \subseteq \{ \overline{\ell_i} \}$}
+        \RightLabel{\textsc{Extend}}
+        \BinaryInfC{$\{ \overline{\ell_i : \tau_i} \} \sub \{ \overline{\ell_j : \sigma_j} \}$}
+      \end{prooftree}
+    
+      % recursive types
+      \begin{center}
+        \AxiomC{}
+        \RightLabel{\textsc{Rec}$_1$}
+        \UnaryInfC{$\mu\rho.\tau \sub \tau [\mu\rho.\tau\ / \rho]$}
+        \DisplayProof
+        {\hskip.2in}
+        \AxiomC{}
+        \RightLabel{\textsc{Rec}$_2$}
+        \UnaryInfC{$\tau[\mu\rho.\tau / \rho] \sub \mu\rho.\tau$}
+        \DisplayProof
+      \end{center}
 \end{frame}
 
 \section{Predicates on Types}
 
 \begin{frame}
     \frametitle{Predicates on Types}
+    A subset of propositions about types that is transferable via the subtyping lattice.
+    \begin{prooftree}
+      \AxiomC{$\ctx \Phi^<(\sigma)$}
+      \AxiomC{$\tau \sub \sigma$}
+      \alwaysSingleLine
+      \RightLabel{\textsc{CoV}}
+      \BinaryInfC{$\ctx \Phi^<(\tau)$}
+    \end{prooftree}
+
+    \begin{prooftree}
+      \alwaysNoLine
+      \AxiomC{$\ctx \Phi^>(\sigma)$}
+      \AxiomC{$\sigma \sub \tau$}
+      \alwaysSingleLine
+      \RightLabel{\textsc{ContraV}}
+      \BinaryInfC{$\ctx \Phi^>(\tau)$}
+    \end{prooftree}
 \end{frame}
 
 \section{Type Class Coherence}
 
 \begin{frame}
     \frametitle{Type Class Coherence}
+
+    Resolution can't go wrong, evidence is to a certain degree unique (behavioral equality)
 \end{frame}
 
 \begin{frame}
