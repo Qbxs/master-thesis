@@ -177,6 +177,12 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Introduction}
+
+  $\Phi_{\mathit{Read}}(\{ x : \Nat, y : \Int \}) \Rightarrow  \Phi_{\mathit{Read}}(\{ x : \Nat \})$
+\end{frame}
+
 \section{Polymorphism}
 
 \begin{frame}
@@ -312,6 +318,13 @@
     \end{prooftree}
 \end{frame}
 
+\section{Predicates on Types}
+
+\begin{frame}
+    \frametitle{Predicates on Types}
+    Examples of co-/contravariant type classes (Show, Eq, Ord, Read, Default)
+\end{frame}
+
 \section{Type Class Coherence}
 
 \begin{frame}
@@ -321,11 +334,25 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Type Class Coherence}
+
+%   \begin{tikzcd}
+%     &                                                      & {\color{blue}\{\}} \arrow[lld] \arrow[ld] \arrow[d] \arrow[rrd]   &       &                                     \\
+%     \{ \ell_1 : \tau_1 \} \arrow[d] \arrow[rrd]           & {\color{blue}\{ \ell_2 : \tau_2 \}} \arrow[d] \arrow[ld]           & {\color{blue}\{ \ell_3 : \tau_3 \}} \arrow[d] \arrow[ld]          & \dots & \{ \ell_n : \tau_n \} \arrow[llddd] \\
+%     {\{ \ell_1 : \tau_1, \ell_2 : \tau_2 \}} \arrow[rrdd] & {\color{blue}\{ \ell_2 : \tau_2, \ell_3 : \tau_3 \}} \arrow[rdd] & {\{ \ell_1 : \tau_1, \ell_3 : \tau_3 \}} \arrow[dd] & \dots &                                     \\
+%     &                                                      & \dots                                               &       &                                     \\
+%     &                                                      & {\{ \ell_1 : \tau_1, \dots \ell_n : \tau_n \}}      &       &
+%   \end{tikzcd}
+
+\end{frame}
+
+\begin{frame}
     \frametitle{Examples}
 \end{frame}
 
 \begin{frame}
     \frametitle{Summary and Future Work}
+    Type simplification, emptiness check
 
     Example ref
     \cite{kiselyov}
