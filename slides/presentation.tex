@@ -183,6 +183,7 @@
 \begin{frame}
   \frametitle{Introduction}
 
+  $\Phi_{\mathit{Show}}(\{ x : \Nat \}) \Rightarrow  \Phi_{\mathit{Show}}(\{ x : \Nat, y : \Int \})$
   $\Phi_{\mathit{Read}}(\{ x : \Nat, y : \Int \}) \Rightarrow  \Phi_{\mathit{Read}}(\{ x : \Nat \})$
 \end{frame}
 
@@ -192,9 +193,9 @@
     \frametitle{Polymorphism}
 
     \begin{itemize}
-      \item Parametricity: Theorems for free
-      \item Subtyping: Liskov substitution
-      \item Type classes: Coherent overloading/resolution
+      \item Parametricity: Theorems for free \cite{wadlertheorems}
+      \item Subtyping: Liskov substitution \cite{liskov}
+      \item Type classes: Coherent overloading/resolution \cite{reynolds_coherence}
     \end{itemize}
 \end{frame}
 
@@ -334,6 +335,7 @@
     \frametitle{Type Class Coherence}
 
     Resolution can't go wrong, evidence is to a certain degree unique (behavioral equality)
+    % TODO add formal definition
 \end{frame}
 
 \begin{frame}
@@ -357,8 +359,6 @@
     \frametitle{Summary and Future Work}
     Type simplification, emptiness check
 
-    Example ref
-    \cite{kiselyov}
 \end{frame}
 
 \begin{frame}
