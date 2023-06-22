@@ -161,210 +161,420 @@
 \begin{document}
 
 \begin{frame}
-    \maketitle
+  \centering
+  University of T\"ubingen\\
+  Department of Computer Science\\
+  \maketitle
 \end{frame}
 
 \begin{frame}
-    \frametitle{Structure}
-    \tableofcontents
+  \frametitle{Structure}
+  \tableofcontents
 \end{frame}
 
 \section{Introduction}
 
 \begin{frame}
-    \frametitle{Introduction}
+  \frametitle{Introduction}
 
-    \begin{itemize}
-        \item Existing forms of polymorphism to achieve different kinds of program abstraction: Parametricity, subtyping and overloading
-        \item New: Combining type classes with subtyping
-    \end{itemize}
+  \begin{itemize}
+    \item Existing forms of polymorphism to achieve different kinds of program abstraction: Parametricity, subtyping and overloading
+    \item New: Combining type classes with subtyping
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Introduction}
 
-  $\Phi_{\mathit{Show}}(\{ x : \Nat \}) \Rightarrow  \Phi_{\mathit{Show}}(\{ x : \Nat, y : \Int \})$
-  $\Phi_{\mathit{Read}}(\{ x : \Nat, y : \Int \}) \Rightarrow  \Phi_{\mathit{Read}}(\{ x : \Nat \})$
+  Given $\Phi_{\mathit{Show}}(\{ x : \Nat \})$, do we have an instance for $\Phi_{\mathit{Show}}(\{ x : \Nat, y : \Int \})$?
+  \\
+
+  \pause
+  Given $\Phi_{\mathit{Read}}(\{ x : \Nat, y : \Int \})$, do we have an instance for  $\Phi_{\mathit{Read}}(\{ x : \Nat \})$?
 \end{frame}
 
 \section{Polymorphism}
 
 \begin{frame}
-    \frametitle{Polymorphism}
+  \frametitle{Polymorphism}
 
-    \begin{itemize}
-      \item Parametricity: Theorems for free \cite{wadlertheorems}
-      \item Subtyping: Liskov substitution \cite{liskov}
-      \item Type classes: Coherent overloading/resolution \cite{reynolds_coherence}
-    \end{itemize}
+  \begin{itemize}
+    \item Parametricity: Theorems for free \cite{wadlertheorems}
+    \item Subtyping: Liskov substitution \cite{liskov}
+    \item Type classes: Coherent overloading/resolution \cite{reynolds_coherence}
+  \end{itemize}
 \end{frame}
 
 \section{The Lattice of Types}
 
 \begin{frame}
-    \frametitle{The Lattice of Types}
+  \frametitle{The Lattice of Types}
 
-    \begin{prooftree}
-        \AxiomC{}
-        \RightLabel{\textsc{Refl}}
-        \UnaryInfC{$\tau \sub \tau$}
-      \end{prooftree}
-    
-      % trans
-      \begin{prooftree}
-        \AxiomC{$\tau \sub \sigma$}
-        \AxiomC{$\sigma \sub \rho$}
-        \RightLabel{\textsc{Trans}}
-        \BinaryInfC{$\tau \sub \rho$}
-      \end{prooftree}
-    
-      % top/bot
-      \begin{center}
-        \AxiomC{}
-        \RightLabel{\textsc{Top}}
-        \UnaryInfC{$\tau \sub \top$}
-        \DisplayProof
-        {\hskip.2in}
-        \AxiomC{}
-        \RightLabel{\textsc{Bot}}
-        \UnaryInfC{$\bot \sub \tau$}
-        \DisplayProof
-      \end{center}
-    
-      % join intro
-      \begin{center}
-        \AxiomC{$\tau \sub \sigma$}
-        \RightLabel{\textsc{JoinI}$_1$}
-        \UnaryInfC{$\tau \sub \sigma \join \rho$}
-        \DisplayProof
-        {\hskip.2in}
-        \AxiomC{$\tau \sub \sigma$}
-        \RightLabel{\textsc{JoinI}$_2$}
-        \UnaryInfC{$\tau \sub \rho \join \sigma$}
-        \DisplayProof
-      \end{center}
-    
-      \begin{prooftree}
-        \AxiomC{$\tau \sub \rho$}
-        \AxiomC{$\sigma \sub \rho$}
-        \RightLabel{\textsc{JoinI}}
-        \BinaryInfC{$\tau \join \sigma \sub \rho$}
-      \end{prooftree}
-    
-      % meet intro
-      \begin{center}
-        \AxiomC{$\tau \sub \rho$}
-        \RightLabel{\textsc{MeetI}$_1$}
-        \UnaryInfC{$\tau \meet \sigma \sub \rho$}
-        \DisplayProof
-        {\hskip.2in}
-        \AxiomC{$\sigma \sub \rho$}
-        \RightLabel{\textsc{MeetI}$_2$}
-        \UnaryInfC{$\tau \meet \sigma \sub \rho$}
-        \DisplayProof
-      \end{center}
-    
-      \begin{prooftree}
-        \AxiomC{$\tau \sub \rho$}
-        \AxiomC{$\tau \sub \sigma$}
-        \RightLabel{\textsc{MeetI}}
-        \BinaryInfC{$\tau \sub \sigma \meet \rho$}
-      \end{prooftree}
-    
-      \begin{prooftree}
-        \AxiomC{$\tau' \sub \tau$}
-        \AxiomC{$\sigma \sub \sigma'$}
-        \RightLabel{\textsc{Func}}
-        \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
-      \end{prooftree}
-    
-      \begin{prooftree}
-        \AxiomC{$\forall j. \tau_j \sub \sigma_j$}
-        \AxiomC{$\{ \overline{\ell_j} \} \subseteq \{ \overline{\ell_i} \}$}
-        \RightLabel{\textsc{Extend}}
-        \BinaryInfC{$\{ \overline{\ell_i : \tau_i} \} \sub \{ \overline{\ell_j : \sigma_j} \}$}
-      \end{prooftree}
-    
-      % recursive types
-      \begin{center}
-        \AxiomC{}
-        \RightLabel{\textsc{Rec}$_1$}
-        \UnaryInfC{$\mu\rho.\tau \sub \tau [\mu\rho.\tau\ / \rho]$}
-        \DisplayProof
-        {\hskip.2in}
-        \AxiomC{}
-        \RightLabel{\textsc{Rec}$_2$}
-        \UnaryInfC{$\tau[\mu\rho.\tau / \rho] \sub \mu\rho.\tau$}
-        \DisplayProof
-      \end{center}
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Refl}}
+    \UnaryInfC{$\tau \sub \tau$}
+  \end{prooftree}
+
+  % trans
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma$}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{Trans}}
+    \BinaryInfC{$\tau \sub \rho$}
+  \end{prooftree}
+
+  % top/bot
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{Top}}
+    \UnaryInfC{$\tau \sub \top$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{Bot}}
+    \UnaryInfC{$\bot \sub \tau$}
+    \DisplayProof
+  \end{center}
+
+  % join intro
+  \begin{center}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_1$}
+    \UnaryInfC{$\tau \sub \sigma \join \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_2$}
+    \UnaryInfC{$\tau \sub \rho \join \sigma$}
+    \DisplayProof
+  \end{center}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \rho$}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{JoinI}}
+    \BinaryInfC{$\tau \join \sigma \sub \rho$}
+  \end{prooftree}
+
+  % meet intro
+  \begin{center}
+    \AxiomC{$\tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_1$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$\sigma \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_2$}
+    \UnaryInfC{$\tau \meet \sigma \sub \rho$}
+    \DisplayProof
+  \end{center}
+
+  \begin{prooftree}
+    \AxiomC{$\tau \sub \sigma$}
+    \AxiomC{$\tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}}
+    \BinaryInfC{$\tau \sub \sigma \meet \rho$}
+  \end{prooftree}
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Lattice of Types}
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{NatPrim}}
+    \UnaryInfC{$\Nat \sub \Int$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\tau' \sub \tau$}
+    \AxiomC{$\sigma \sub \sigma'$}
+    \RightLabel{\textsc{Func}}
+    \BinaryInfC{$\tau \to \sigma \sub \tau' \to \sigma'$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\forall j. \tau_j \sub \sigma_j$}
+    \AxiomC{$\{ \overline{\ell_j} \} \subseteq \{ \overline{\ell_i} \}$}
+    \RightLabel{\textsc{Extend}}
+    \BinaryInfC{$\{ \overline{\ell_i : \tau_i} \} \sub \{ \overline{\ell_j : \sigma_j} \}$}
+  \end{prooftree}
 \end{frame}
 
 \section{Predicates on Types}
 
 \begin{frame}
-    \frametitle{Predicates on Types}
-    A subset of propositions about types that is transferable via the subtyping lattice.
-    \begin{prooftree}
-      \AxiomC{$\ctx \Phi^<(\sigma)$}
-      \AxiomC{$\tau \sub \sigma$}
-      \alwaysSingleLine
-      \RightLabel{\textsc{CoV}}
-      \BinaryInfC{$\ctx \Phi^<(\tau)$}
-    \end{prooftree}
+  \frametitle{Predicates on Types}
+  \begin{definition}
+    Given a universe of types $\mathcal{U}$, a \emph{predicate over types} $\Phi$ is an element of $\mathcal{P}(\mathcal{U})$.
+  \end{definition}
 
-    \begin{prooftree}
-      \alwaysNoLine
-      \AxiomC{$\ctx \Phi^>(\sigma)$}
-      \AxiomC{$\sigma \sub \tau$}
-      \alwaysSingleLine
-      \RightLabel{\textsc{ContraV}}
-      \BinaryInfC{$\ctx \Phi^>(\tau)$}
-    \end{prooftree}
+  For our purposes a predicate should additionally be:
+  \begin{itemize}
+    \item preserved over the subtyping lattice
+    \item monotonous, i.e. only depend on the terms of a type
+  \end{itemize}
 \end{frame}
 
-\section{Predicates on Types}
+\begin{frame}
+  \frametitle{Predicates on Types}
+  
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Axiom}}
+    \UnaryInfC{$\Gamma, \Phi(\tau) \vdash \Phi(\tau)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\ctx \Phi^<(\sigma)$}
+    \AxiomC{$\tau \sub \sigma$}
+    \alwaysSingleLine
+    \RightLabel{\textsc{CoV}}
+    \BinaryInfC{$\ctx \Phi^<(\tau)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$\ctx \Phi^>(\sigma)$}
+    \AxiomC{$\sigma \sub \tau$}
+    \alwaysSingleLine
+    \RightLabel{\textsc{ContraV}}
+    \BinaryInfC{$\ctx \Phi^>(\tau)$}
+  \end{prooftree}
+\end{frame}
 
 \begin{frame}
-    \frametitle{Predicates on Types}
-    Examples of co-/contravariant type classes (Show, Eq, Ord, Read, Default)
+  \frametitle{Predicates on Types}
+  Examples of co-/contravariant type classes (Show, Eq, Ord, Read, Default, ...)\\
+  Let $\Gamma := \{ \Showable(\Int), \Defaultable(\Nat) \}$
+
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Axiom}}
+    \UnaryInfC{$\ctx \Showable(\Int)$}
+    \RightLabel{\textsc{Prim}$^<$}
+    \UnaryInfC{$\ctx \Showable(\Nat)$}
+    \RightLabel{\textsc{Meet}$^<_2$}
+    \UnaryInfC{$\ctx \Showable(\Singleton{1} \meet \Nat)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Axiom}}
+    \UnaryInfC{$\ctx \Defaultable(\Nat)$}
+    \RightLabel{\textsc{Prim}$^>$}
+    \UnaryInfC{$\ctx \Defaultable(\Int)$}
+    \alwaysSingleLine
+    \RightLabel{\textsc{Join}$^>_1$}
+    \UnaryInfC{$\ctx \Defaultable(\Int \join \Bool)$}
+  \end{prooftree}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Witnesses}
+  We extend the resolution calculus by witness annotations in order to construct evidence that a type satisfies a predicate, i.e. it is an instance of the type class.
+
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Witnesses}
+  \begin{prooftree}
+    \AxiomC{$w : \instance{\Phi}{\tau}$}
+    \RightLabel{\textsc{Decl}}
+    \UnaryInfC{$i_\tau(w) : \Phi(\tau)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$w : \Phi^<(\sigma)$}
+    \AxiomC{$m : \tau \sub \sigma$}
+    \alwaysSingleLine
+    \RightLabel{\textsc{CoV}}
+    \BinaryInfC{$\cov(w,m) : \Phi^<(\tau)$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \alwaysNoLine
+    \AxiomC{$w : \Phi^>(\sigma)$}
+    \AxiomC{$m : \sigma \sub \tau$}
+    \alwaysSingleLine
+    \RightLabel{\textsc{ContraV}}
+    \BinaryInfC{$\contrav(w,m) : \Phi^>(\tau)$}
+  \end{prooftree}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Witnesses}
+
+  % refl
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{Refl}}
+    \UnaryInfC{$\refl_\tau : \tau \sub \tau$}
+  \end{prooftree}
+
+  % trans
+  \begin{prooftree}
+    \AxiomC{$f : \tau \sub \sigma$}
+    \AxiomC{$g : \sigma \sub \rho$}
+    \RightLabel{\textsc{Trans}}
+    \BinaryInfC{$f \comp g : \tau \sub \rho$}
+  \end{prooftree}
+
+  % top/bot
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{\textsc{Top}}
+    \UnaryInfC{$\topW_\tau : \tau \sub \top$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{}
+    \RightLabel{\textsc{Bot}}
+    \UnaryInfC{$\botW_\tau : \bot \sub \tau$}
+    \DisplayProof
+  \end{center}
+
+  % join intro
+  \begin{center}
+    \AxiomC{$f : \tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_1$}
+    \UnaryInfC{$\inW{1}(f) : \tau \sub \sigma \join \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$f: \tau \sub \sigma$}
+    \RightLabel{\textsc{JoinI}$_2$}
+    \UnaryInfC{$\inW{2}(f) : \tau \sub \rho \join \sigma$}
+    \DisplayProof
+  \end{center}
+
+  \begin{prooftree}
+    \AxiomC{$f : \tau \sub \rho$}
+    \AxiomC{$g : \sigma \sub \rho$}
+    \RightLabel{\textsc{JoinI}}
+    \BinaryInfC{$\joinW(f,g) : \tau \join \sigma \sub \rho$}
+  \end{prooftree}
+
+  % meet intro
+  \begin{center}
+    \AxiomC{$f : \tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_1$}
+    \UnaryInfC{$\proj{1}(f) : \tau \meet \sigma \sub \rho$}
+    \DisplayProof
+    {\hskip.2in}
+    \AxiomC{$f : \sigma \sub \rho$}
+    \RightLabel{\textsc{MeetI}$_2$}
+    \UnaryInfC{$\proj{2}(f) : \tau \meet \sigma \sub \rho$}
+    \DisplayProof
+  \end{center}
+
+  \begin{prooftree}
+    \AxiomC{$f : \tau \sub \sigma$}
+    \AxiomC{$g : \tau \sub \rho$}
+    \RightLabel{\textsc{MeetI}}
+    \BinaryInfC{$\meetW(f,g) : \tau \sub \sigma \meet \rho$}
+  \end{prooftree}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Witnesses}
+
+  \begin{prooftree}
+    \AxiomC{}
+    \RightLabel{\textsc{NatPrim}}
+    \UnaryInfC{$\natPrim : \Nat \sub \Int$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$f : \tau' \sub \tau$}
+    \AxiomC{$g : \sigma \sub \sigma'$}
+    \RightLabel{\textsc{Func}}
+    \BinaryInfC{$\funcW(f,g) : \tau \to \sigma \sub \tau' \to \sigma'$}
+  \end{prooftree}
+
+  \begin{prooftree}
+    \AxiomC{$\forall j. w_j : \tau_j \sub \sigma_j$}
+    \AxiomC{$\{ \overline{\ell_j} \} \subseteq \{ \overline{\ell_i} \}$}
+    \RightLabel{\textsc{Extend}}
+    \BinaryInfC{$\mathit{extend}(\{ w_j \}, \{ \overline{\ell_i} \} \setminus \{ \overline{\ell_j} \}) : \{\overline{\ell_i : \tau_i} \} \sub \{ \overline{\ell_j : \sigma_j} \}$}
+  \end{prooftree}
+
+
 \end{frame}
 
 \section{Type Class Coherence}
 
 \begin{frame}
-    \frametitle{Type Class Coherence}
+  \frametitle{Coherence}
+  Reynolds \cite{reynolds_coherence}:
+  \begin{quote}
+    When a programming language has a sufficiently rich type structure, there can be more than one proof of the same
+    typing judgment; potentially this can lead to semantic ambiguity since the semantics of a typed language is a function
+    of such proofs. When no such ambiguity arises, we say that the language is coherent.
+  \end{quote}
+\end{frame}
 
-    Resolution can't go wrong, evidence is to a certain degree unique (behavioral equality)
-    % TODO add formal definition
+\begin{frame}
+  \frametitle{Type Class Coherence}
+  Type class resolution decides program semantics
+  $\Rightarrow$ To ensure coherence of a program we need to ensure coherence of resolution
+
+  \begin{definition}
+    Type class resolution is coherent if and only if for any pair of witnesses $i,j : \Phi(\tau)$ that witness the same predicate application we have $i \opeq j$, i.e. $i$ and $j$ exhibit the same behavior.
+  \end{definition}
+
+  Here, it suffices to show that for any pair of witnesses, they contain the same instance declaration.
 \end{frame}
 
 \begin{frame}
   \frametitle{Type Class Coherence}
 
-%   \begin{tikzcd}
-%     &                                                      & {\color{blue}\{\}} \arrow[lld] \arrow[ld] \arrow[d] \arrow[rrd]   &       &                                     \\
-%     \{ \ell_1 : \tau_1 \} \arrow[d] \arrow[rrd]           & {\color{blue}\{ \ell_2 : \tau_2 \}} \arrow[d] \arrow[ld]           & {\color{blue}\{ \ell_3 : \tau_3 \}} \arrow[d] \arrow[ld]          & \dots & \{ \ell_n : \tau_n \} \arrow[llddd] \\
-%     {\{ \ell_1 : \tau_1, \ell_2 : \tau_2 \}} \arrow[rrdd] & {\color{blue}\{ \ell_2 : \tau_2, \ell_3 : \tau_3 \}} \arrow[rdd] & {\{ \ell_1 : \tau_1, \ell_3 : \tau_3 \}} \arrow[dd] & \dots &                                     \\
-%     &                                                      & \dots                                               &       &                                     \\
-%     &                                                      & {\{ \ell_1 : \tau_1, \dots \ell_n : \tau_n \}}      &       &
-%   \end{tikzcd}
+  % \includegraphics[width=\textwidth]{images/cov_compatible.png}
+  % \includegraphics[width=\textwidth]{images/contrav_compatible.png}
+
+  % \[
+  % \begin{tikzcd}
+  %                                                      & \{ \} \arrow[ld] \arrow[rd]                                  &                                      \\
+  %   {\color{blue}\{ fst : \Singleton{0} \}} \arrow[rd] &                                                              & \{ snd : \Singleton{1} \} \arrow[ld] \\
+  %                                                      & {\color{blue}\{ fst : \Singleton{0}, snd : \Singleton{1} \}} &
+  % \end{tikzcd}
+  % \]
+
+  \includegraphics[width=\textwidth]{images/lower_set.png.png}
+
+
+  % \begin{tikzcd}
+  %   &                                                      & {\color{blue}\{\}} \arrow[lld] \arrow[ld] \arrow[d] \arrow[rrd]   &       &                                     \\
+  %   \{ \ell_1 : \tau_1 \} \arrow[d] \arrow[rrd]           & {\color{blue}\{ \ell_2 : \tau_2 \}} \arrow[d] \arrow[ld]           & {\color{blue}\{ \ell_3 : \tau_3 \}} \arrow[d] \arrow[ld]          & \dots & \{ \ell_n : \tau_n \} \arrow[llddd] \\
+  %   {\{ \ell_1 : \tau_1, \ell_2 : \tau_2 \}} \arrow[rrdd] & {\color{blue}\{ \ell_2 : \tau_2, \ell_3 : \tau_3 \}} \arrow[rdd] & {\{ \ell_1 : \tau_1, \ell_3 : \tau_3 \}} \arrow[dd] & \dots &                                     \\
+  %   &                                                      & \dots                                               &       &                                     \\
+  %   &                                                      & {\{ \ell_1 : \tau_1, \dots \ell_n : \tau_n \}}      &       &
+  % \end{tikzcd}
+  \includegraphics[width=\textwidth]{images/upper_set.png.png}
+
+  \end{frame}
+
+% \begin{frame}
+%   \frametitle{Examples}
+% \end{frame}
+
+\begin{frame}
+  \frametitle{Summary and Future Work}
+  Shown that type classes in a lattice of types are possible
+  Coherence is a challenging problem, have to restrict many instance declarations and take (co-)inhabitance of types into consideration
+  Resolution for invariant type classes is more limited, making coherence less challenging
+
+  Type simplification, inhabitance check
 
 \end{frame}
 
 \begin{frame}
-    \frametitle{Examples}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Summary and Future Work}
-    Type simplification, emptiness check
-
-\end{frame}
-
-\begin{frame}
-    \frametitle{Bibliography}
-    \bibliographystyle{alpha}
-    \bibliography{../literature}
+  \frametitle{Bibliography}
+  \footnotesize
+  \bibliographystyle{alpha}
+  \bibliography{../literature}
 \end{frame}
 
 \end{document}
