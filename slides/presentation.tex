@@ -186,6 +186,10 @@
 \begin{frame}
   \frametitle{Introduction}
 
+  Possible extensions/expected behavior of type classes with subtyping:
+  \\
+
+  \pause
   Given $\Phi_{\mathit{Show}}(\{ x : \Nat \})$, do we have an instance for $\Phi_{\mathit{Show}}(\{ x : \Nat, y : \Int \})$?
   \\
 
@@ -374,6 +378,9 @@
 \begin{frame}
   \frametitle{Witnesses}
   We extend the resolution calculus by witness annotations in order to construct evidence that a type satisfies a predicate, i.e. it is an instance of the type class.
+  \\
+
+  Required for evaluation of programs and to reason about coherence.
 
   
 \end{frame}
