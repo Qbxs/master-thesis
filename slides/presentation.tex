@@ -531,6 +531,8 @@
 \begin{frame}
   \frametitle{Type Class Coherence}
 
+  Covariant predicate: Downwards closed set
+
   % \includegraphics[width=\textwidth]{images/cov_compatible.png}
   % \includegraphics[width=\textwidth]{images/contrav_compatible.png}
 
@@ -550,6 +552,8 @@
 \begin{frame}
   \frametitle{Type Class Coherence}
 
+  Contravariant predicate: Upwards closed set
+
   % \begin{tikzcd}
   %   &                                                      & {\color{blue}\{\}} \arrow[lld] \arrow[ld] \arrow[d] \arrow[rrd]   &       &                                     \\
   %   \{ \ell_1 : \tau_1 \} \arrow[d] \arrow[rrd]           & {\color{blue}\{ \ell_2 : \tau_2 \}} \arrow[d] \arrow[ld]           & {\color{blue}\{ \ell_3 : \tau_3 \}} \arrow[d] \arrow[ld]          & \dots & \{ \ell_n : \tau_n \} \arrow[llddd] \\
@@ -567,12 +571,11 @@
 
 \begin{frame}
   \frametitle{Summary and Future Work}
-  Shown that type classes in a lattice of types are possible
-  Coherence is a challenging problem, have to restrict many instance declarations and take (co-)inhabitance of types into consideration
-  Resolution for invariant type classes is more limited, making coherence less challenging
-
-  Type simplification, inhabitance check
-
+  \begin{itemize}
+    \item Type classes in a lattice of types are possible
+    \item Coherence is even more challenging when resolution is more liberal with co- and contravariant predicates (invariant predicates behave in the usual way)
+    \item Further work: Dictionary passing, type schemes with constraints, type inference \& simplification
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
